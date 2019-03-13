@@ -1,0 +1,126 @@
+
+@inproceedings{gallaba_dont_2015,
+	title = {Don't {Call} {Us}, {We}'ll {Call} {You}: {Characterizing} {Callbacks} in {Javascript}},
+	shorttitle = {Don't {Call} {Us}, {We}'ll {Call} {You}},
+	doi = {10.1109/ESEM.2015.7321196},
+	abstract = {JavaScript is a popular language for developing web applications and is increasingly used for both client-side and server-side application logic. The JavaScript runtime is inherently event-driven and callbacks are a key language feature. Unfortunately, callbacks induce a non-linear control flow and can be deferred to execute asynchronously, declared anonymously, and may be nested to arbitrary levels. All of these features make callbacks difficult to understand and maintain. We perform an empirical study to characterize JavaScript callback usage across a representative corpus of 138 JavaScript programs, with over 5 million lines of JavaScript code. We find that on average, every 10th function definition takes a callback argument, and that over 43\% of all callback-accepting function callsites are anonymous. Furthermore, the majority of callbacks are nested, more than half of all callbacks are asynchronous, and asynchronous callbacks, on average, appear more frequently in client-side code (72\%) than server-side (55\%). We also study three well-known solutions designed to help with the complexities associated with callbacks, including the error-first callback convention, Async.js library, and Promises. Our results inform the design of future JavaScript analysis and code comprehension tools.},
+	booktitle = {2015 {ACM}/{IEEE} {International} {Symposium} on {Empirical} {Software} {Engineering} and {Measurement} ({ESEM})},
+	author = {Gallaba, K. and Mesbah, A. and Beschastnikh, I.},
+	month = oct,
+	year = {2015},
+	keywords = {Async.js library, Best practices, Browsers, callback argument, callback-accepting function, client-side application logic, code comprehension tool, Complexity theory, error-first callback convention, Games, Java, JavaScript analysis, JavaScript callback usage, JavaScript code, JavaScript language, JavaScript runtime feature, Libraries, program diagnostics, Protocols, Reactive power, server-side application logic, Web applications},
+	pages = {1--10},
+	file = {IEEE Xplore Abstract Record:/home/vili/Zotero/storage/EK8VUP6V/7321196.html:text/html;IEEE Xplore Full Text PDF:/home/vili/Zotero/storage/3BNKID4H/Gallaba et al. - 2015 - Don't Call Us, We'll Call You Characterizing Call.pdf:application/pdf}
+}
+
+@inproceedings{davis_case_2017,
+	address = {New York, NY, USA},
+	series = {{EuroSec}'17},
+	title = {The {Case} of the {Poisoned} {Event} {Handler}: {Weaknesses} in the {Node}.{Js} {Event}-{Driven} {Architecture}},
+	isbn = {978-1-4503-4935-2},
+	shorttitle = {The {Case} of the {Poisoned} {Event} {Handler}},
+	url = {http://doi.acm.org/10.1145/3065913.3065916},
+	doi = {10.1145/3065913.3065916},
+	abstract = {Node.js has seen rapid adoption in industry and the open-source community. Unfortunately, its event-driven architecture exposes Node.js applications to Event Handler-Poisoning denial of service attacks. Our evaluation of the state of practice in Node.js--- combining a study of 353 publicly reported security vulnerabilities and a survey of 151 representative npm modules --- demonstrates that the community is not equipped to combat this class of attack. We recommend several changes to the state of practice and propose both programming language and runtime approaches to defend against Event Handler-Poisoning attacks.},
+	urldate = {2019-02-14},
+	booktitle = {Proceedings of the 10th {European} {Workshop} on {Systems} {Security}},
+	publisher = {ACM},
+	author = {Davis, James and Kildow, Gregor and Lee, Dongyoon},
+	year = {2017},
+	note = {event-place: Belgrade, Serbia},
+	keywords = {Denial of service, Event-driven architecture, Node.js, ReDoS},
+	pages = {8:1--8:6},
+	annote = {Tietoturva kohtainen, mutta lähteet arvokkaat myös minulle.},
+	file = {ACM Full Text PDF:/home/vili/Zotero/storage/DX3958A8/Davis et al. - 2017 - The Case of the Poisoned Event Handler Weaknesses.pdf:application/pdf}
+}
+
+@article{pai_flash:_nodate,
+	title = {Flash: {An} {Efficient} and {Portable} {Web} {Server}},
+	abstract = {This paper presents the design of a new Web server architecture called the asymmetric multi-process eventdriven (AMPED) architecture, and evaluates the performance of an implementation of this architecture, the Flash Web server. The Flash Web server combines the high performance of single-process event-driven servers on cached workloads with the performance of multiprocess and multi-threaded servers on disk-bound workloads. Furthermore, the Flash Web server is easily portable since it achieves these results using facilities available in all modern operating systems.},
+	language = {en},
+	author = {Pai, Vivek S and Druschel, Peter and Zwaenepoel, Willy},
+	pages = {14},
+	annote = {Tärkeä: Tässä esitellään malli johon Node.js toteutus perustuu.},
+	file = {Pai et al. - Flash An Efficient and Portable Web Server.pdf:/home/vili/Zotero/storage/XTTJDMYX/Pai et al. - Flash An Efficient and Portable Web Server.pdf:application/pdf}
+}
+
+@inproceedings{madsen_static_2015,
+	address = {New York, NY, USA},
+	series = {{OOPSLA} 2015},
+	title = {Static {Analysis} of {Event}-driven {Node}.{Js} {JavaScript} {Applications}},
+	isbn = {978-1-4503-3689-5},
+	url = {http://doi.acm.org/10.1145/2814270.2814272},
+	doi = {10.1145/2814270.2814272},
+	abstract = {Many JavaScript programs are written in an event-driven style. In particular, in server-side Node.js applications, operations involving sockets, streams, and files are typically performed in an asynchronous manner, where the execution of listeners is triggered by events. Several types of programming errors are specific to such event-based programs (e.g., unhandled events, and listeners that are registered too late). We present the event-based call graph, a program representation that can be used to detect bugs related to event handling. We have designed and implemented three analyses for constructing event-based call graphs. Our results show that these analyses are capable of detecting problems reported on StackOverflow. Moreover, we show that the number of false positives reported by the analysis on a suite of small Node.js applications is manageable.},
+	urldate = {2019-02-21},
+	booktitle = {Proceedings of the 2015 {ACM} {SIGPLAN} {International} {Conference} on {Object}-{Oriented} {Programming}, {Systems}, {Languages}, and {Applications}},
+	publisher = {ACM},
+	author = {Madsen, Magnus and Tip, Frank and Lhoták, Ondřej},
+	year = {2015},
+	note = {event-place: Pittsburgh, PA, USA},
+	keywords = {event-based systems, JavaScript, static analysis},
+	pages = {505--519},
+	file = {ACM Full Text PDF:/home/vili/Zotero/storage/JFUW953C/Madsen et al. - 2015 - Static Analysis of Event-driven Node.Js JavaScript.pdf:application/pdf}
+}
+
+@article{praphamontripong_analytical_2007,
+	title = {An {Analytical} {Approach} to {Performance} {Analysis} of an {Asynchronous} {Web} {Server}},
+	volume = {83},
+	issn = {0037-5497},
+	url = {https://doi.org/10.1177/0037549707080891},
+	doi = {10.1177/0037549707080891},
+	abstract = {Concurrency can be implemented in a Web server using synchronous or asynchronous mechanisms provided by the underlying operating system. Compared to the synchronous mechanisms, asynchronous mechanisms are attractive because they provide the benefit of concurrency while alleviating much of the overhead and compleXity of multi-threading. The Proactor pattern in middleware, which encapsulates the asynchronous mechanisms provided by the operating system, can be used to implement a high performance Web server. The performance eXpectations imposed on a Web server make it necessary to analyze its performance prior to deployment. While the performance of a server can be measured after implementation, design-time performance analysis, conducted early in the life cycle, can enable informed configuration and provisioning choices. A model-based approach can be used for such design-time performance analysis. In this paper we present a performance model of the architecture of an asynchronous Web server which uses the Proactor pattern. We discuss the implementation of the performance model using the Stochastic Reward Net (SRN) modeling paradigm. A model decomposition strategy along with its SRN implementation to facilitate the application of the model to practical Web servers is then described. We demonstrate the use of the model to guide key provisioning and configuration decisions with several eXamples.},
+	language = {en},
+	number = {8},
+	urldate = {2019-02-21},
+	journal = {SIMULATION},
+	author = {Praphamontripong, U. and Gokhale, S. and Gokhale, Aniruddha and Gray, Jeff},
+	month = aug,
+	year = {2007},
+	pages = {571--586},
+	file = {SAGE PDF Full Text:/home/vili/Zotero/storage/AUWYUBIV/Praphamontripong et al. - 2007 - An Analytical Approach to Performance Analysis of .pdf:application/pdf}
+}
+
+@inproceedings{gokhale_performance_2006,
+	title = {Performance {Analysis} of the {Reactor} {Pattern} in {Network} {Services}},
+	doi = {10.1109/IPDPS.2006.1639639},
+	abstract = {The growing reliance on services provided by software applications places a high premium on the reliable and efficient operation of these applications. A number of these applications follow the event-driven software architecture style since this style fosters evolvability by separating event handling from event demultiplexing and dispatching functionality. The event demultiplexing capability, which appears repeatedly across a class of event-driven applications, can be codified into a reusable pattern, such as the reactor pattern. In order to enable performance analysis of event-driven applications at design time, a model is needed that represents the event demultiplexing and handling functionality that lies at the heart of these applications. In this paper, we present a model of the reactor pattern based on the well-established stochastic reward net (SRN) modeling paradigm. We discuss how the model can be used to obtain several performance measures such as the throughput, loss probability and upper and lower bounds on the response time. We illustrate how the model can be used to obtain the performance metrics of a virtual private network (VPN) service provided by a virtual router (VR). We validate the estimates of the performance measures obtained from the SRN model using simulation},
+	booktitle = {Proceedings 20th {IEEE} {International} {Parallel} {Distributed} {Processing} {Symposium}},
+	author = {Gokhale, S. and Gokhale, A. and Gray, J. and Vandal, P. and Praphamontripong, U.},
+	month = apr,
+	year = {2006},
+	keywords = {Application software, Demultiplexing, Dispatching, dispatching functionality, event demultiplexing, event handling, event-driven software architecture, Heart, Inductors, middleware, middleware performance analysis, network services, object-oriented programming, Performance analysis, Performance loss, reactor pattern, reusable pattern, Software architecture, software performance evaluation, Stochastic processes, stochastic reward net modeling, virtual private network service, Virtual private networks, virtual router},
+	pages = {1--9},
+	annote = {Vaikuttaa erittäin lupaavalta.
+ },
+	file = {IEEE Xplore Abstract Record:/home/vili/Zotero/storage/XVDN35D2/1639639.html:text/html;IEEE Xplore Full Text PDF:/home/vili/Zotero/storage/Q7VHSN3V/Gokhale et al. - 2006 - Performance Analysis of the Reactor Pattern in Net.pdf:application/pdf}
+}
+
+
+@inproceedings{hu_applying_1998,
+	title = {Applying {The} {Proactor} {Pattern} {To} {High}-{Performance} {Web} {Servers}},
+	abstract = {Modern operating systems provide multiple concurrency mechanisms to develop high-performance Web servers. Synchronous multi-threading is a popular mechanism for developing Web servers that must perform multiple operations simultaneously to meet their performance requirements. In addition, an increasing number of operating systems support asynchronous mechanisms that provide the benefits of concurrency, while alleviating much of the performance overhead of synchronous multi-threading. This paper provides two contributions to the study of high-performance Web servers. First, it examines how synchronous and asynchronous event dispatching mechanisms impact the design and performance of JAWS, which is our high-performance Web server framework. The results reveal significant performance improvements when a proactive concurrency model is used to combine lightweight concurrency with asynchronous event dispatching. In general, however, the complexity of the proactive concurrency model makes it ...},
+	booktitle = {In {Proceedings} of the 10th {International} {Conference} on {Parallel} and {Distributed} {Computing} and {Systems}},
+	author = {Hu, James and Pyarali, Irfan and Schmidt, Douglas C.},
+	year = {1998},
+	file = {Citeseer - Full Text PDF:/home/vililipo/Zotero/storage/59DS4828/Hu et al. - 1998 - Applying The Proactor Pattern To High-Performance .pdf:application/pdf;Citeseer - Snapshot:/home/vililipo/Zotero/storage/LJS9NUTX/summary.html:text/html}
+}
+
+
+@incollection{easton_developing_2004,
+	address = {Berkeley, CA},
+	title = {Developing {Distributed} {Applications}},
+	isbn = {978-1-4302-5365-5 978-1-4302-0746-7},
+	url = {http://link.springer.com/10.1007/978-1-4302-0746-7_6},
+	abstract = {The ADAPTIVE Service eXecutive (ASX) is a highly modular and extensible object-oriented framework that simpliﬁes the development and conﬁguration of distributed applications on shared memory multi-processor platforms. This paper describes the structure and functionality of the ASX framework’s object-oriented architecture. In addition, the paper presents the results of performance experiments conducted using ASX-based implementations of connection-oriented and connectionless protocols from the TCP/IP protocol family. These experiments measure the performance impact of alternative methods for parallelizing communication protocol stacks. Throughout the paper, examples are presented to indicate how the use of object-oriented techniques facilitate application extensibility, component reuse, and performance enhancement.},
+	language = {en},
+	urldate = {2019-03-05},
+	booktitle = {Cross-{Platform} .{NET} {Development}: {Using} {Mono}, {Portable}.{NET}, and {Microsoft} .{NET}},
+	publisher = {Apress},
+	author = {Easton, M. J. and King, Jason},
+	collaborator = {Easton, M. J. and King, Jason},
+	year = {2004},
+	doi = {10.1007/978-1-4302-0746-7_6},
+	pages = {201--266},
+	file = {Easton and King - 2004 - Developing Distributed Applications.pdf:/home/vililipo/Zotero/storage/BM2QUBGB/Easton and King - 2004 - Developing Distributed Applications.pdf:application/pdf}
+}

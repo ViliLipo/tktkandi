@@ -1,0 +1,55 @@
+\documentclass[12pt]{article}
+\usepackage{cite}
+
+\begin{document}
+\section{}
+\section{Ongelman esittely}
+
+Palvelimen roolin kannalta olisi toivottavaa, että
+se pystyisi käsittelemään mahdollisimman paljon pyyntöjä
+ajan yksikössä. Sen tulisi pystyä myös käsittelemään pyyntöjä
+luotettavasti eli lopulta kaikki pyynnöt käsitellään ja niihin vastataan.
+Yksittäiselle asiakkaalle tärkein suorituskyvyn mittari on se kuinka kauan
+yksittäiseen pyyntöön vastaaminen vie. Pyynnön matala vasteaika saa
+palvelun käyttökokemuksen tuntumaan responsiivisemmalta.
+Skaalautuvuus on tärkeää palvelinta ylläpitävälle taholle, sillä 
+näin käyttäjämäärän kasvaessa voidaan suorituskykyä parantaa
+lisäämällä laitteistoresursseja. Järjestelmän tulisi myös
+olla resilientti hyökkäyksiä vastaan.
+
+Näiden ajatusten ja aikaisemman tutkimuksen perusteella
+tutkielmassa vertailtavia järjestelmiä arvioidaan seuraavien 
+kriteerien valossa\cite{gokhale_performance_2006}.
+\begin{itemize}
+    \item käsiteltyjen pyyntöjen määrä
+    \item menetysprosentti
+    \item skaalautuvuus laitteistoresursseihin
+    \item vasteaika
+    \item vakaus
+\end{itemize}
+Asynkronisten ja tapahtumavetoisten palvelinsovelluksien suunnittelun keskiössä
+ovat vasteajan pienentäminen ja laitteistoresurssien tehokas hyödyntäminen. 
+Tavoitteena on hyödyntää I/O-resursseja mahdollisimman tehokkaasti
+rinnakkain ja välttää I/O:n odottamista ohjelman suorituksessa~\cite{pai_flash:_nodate}. Palvelinsovelluksissa
+laitteiston verkkoliikennekapasiteetti on usein rajoittava tekijä ja tämän takia
+sen tehokas hyödyntäminen on kriittistä. I/O-resurssien asynkronisella hyödyntämisellä on todettu
+olevan suorituskykyä parantava vaikutus~\cite{hu_applying_1998}.
+Tämän tapaisissa järjestelmissä suoritinsidonnaisien
+toimitusten rinnakkaistamiseen ei ole keskitetty erityistä huomiota, ja tälläisten operaatioiden
+kanssa järjestelmän käsiteltyjen pyyntöjen määrä ajan yksikössä on keskimäärin heikompi
+kuin monisäikeisten järjestelmien~\cite{davis_case_2017}.
+
+Monisäikeisissä palvelinsovelluksissa keskitytään hyödyntämään laitteiston ominaista
+rinnakkaisuutta tehokkaasti luomalla jokaisesta pyynnöstä oma säie. Suunnittelun keskeisenä
+tavoitteena on käsitellä mahdollisimman monta pyyntöä ajan yksikössä. Yksittäisen pyynnön
+vasteaika saattaa tässä
+järjestelmässä kärsiä säikeiden hallinnoimiseen kuluvasta suoritinajasta~\cite{easton_developing_2004}.
+Menetelmässä pyyntöjen käsittely on hyvin eristetty toisistaan ja
+yhden säikeen lukittava tapahtuma ei vaikuta muihiin säikeisiin negatiivisesti~\cite{davis_case_2017}.
+Tämä edistää monisäikeisen mallin vakautta ja kykyä vastustaa hyökkäyksiä.
+
+
+\bibliography{kandi_zot}
+\bibliographystyle{plain}
+
+\end{document}
