@@ -33,6 +33,11 @@ järjestelmillä, mutta tälläiset järjestelyt jätetään vertailun ulkopuole
 Koejärjestelyissä pyritään simuloimaan riittävällä tarkkuudella todellista
 verkkopalvelimen työtaakkaa.
 
+Asynkronisessa ja tapahtumavetoisessa mallissa pyyntöjen alustavasta käsittelystä
+vastaa tapahtumasäie. Tapahtumasäie jakaa keskeyttävät operaatiot
+työntekijäreservin säikeille. Myös raskasta laskentaa voidaan 
+ohjelmoida työntekijäreservin vastuulle. Suurin osa laskentatyöstä
+on kuitenkin tapahtumasäikeen vastuulla~\cite{pai_flash:_nodate}.
 Asynkronisten ja tapahtumavetoisten palvelinsovelluksien suunnittelun keskiössä
 ovat vasteajan pienentäminen ja laitteistoresurssien tehokas hyödyntäminen. 
 Tavoitteena on hyödyntää I/O-resursseja mahdollisimman tehokkaasti
@@ -44,16 +49,50 @@ Tämän tapaisissa järjestelmissä suoritinsidonnaisien
 toimitusten rinnakkaistamiseen ei ole keskitetty erityistä huomiota, ja tälläisten operaatioiden
 kanssa järjestelmän käsiteltyjen pyyntöjen määrä ajan yksikössä on keskimäärin heikompi
 kuin monisäikeisten järjestelmien~\cite{davis_case_2017}.
+Asynkronisten-mallien skaalautumien kasvaviin laitteistoresursseihin on hyvin
+implementaatiosidonnaista.
 
+Monisäikeisiä palvelinmalleja on useita, mutta tässä tutkielmassa keskitytään
+yksi säie pyyntöä kohti, sekä säiereservimalliin.
 Monisäikeisissä palvelinsovelluksissa keskitytään hyödyntämään laitteiston ominaista
-rinnakkaisuutta tehokkaasti luomalla jokaisesta pyynnöstä oma säie. Suunnittelun keskeisenä
+rinnakkaisuutta tehokkaasti suorittamalla jokaista pyyntöä omalla säikeellään. Suunnittelun keskeisenä
 tavoitteena on käsitellä mahdollisimman monta pyyntöä ajan yksikössä. Yksittäisen pyynnön
 vasteaika saattaa tässä
 järjestelmässä kärsiä säikeiden hallinnoimiseen kuluvasta suoritinajasta~\cite{easton_developing_2004}.
+Pääsääntöisesti nämä mallit skaalautuvat hyvin laitteistoresursseihin,
+mutta jos hallinnoitavien säikeiden määrä on huomattavasti suurempi kuin laitteiston
+fyysisten suorittimien määrä, aiheuttaa hallinointi ylimääräistä taakkaa.
+Tähän ongelmaan on kehitetty säiereservimalli, jossa yhtäaikaa käytössä
+olevien säikeiden määrä on rajoitettu esimerkiksi laitteiston fyysisten
+suorittimien määrän mukaan.
 Menetelmässä pyyntöjen käsittely on hyvin eristetty toisistaan ja
 yhden säikeen lukittava tapahtuma ei vaikuta muihiin säikeisiin negatiivisesti~\cite{davis_case_2017}.
 Tämä edistää monisäikeisen mallin vakautta ja kykyä vastustaa hyökkäyksiä.
+Tämä malli on myös ohjelmoijalle yksinkertainen sillä, pyyntöjen jakama tila
+on vähän ja täten myös synkronoinnin tarve pyyntöjen välilä minimoituu~\cite{hu_applying_1998}.
 
+Asynkronisen tapahtumavetoisen palvelimeen voi kohdistaa hyökkäyksiä, jolla pyritään 
+lukittamaan tapahtumia käsittelevä säie, joka käytännössä vastaa koko ohjelman hallinnasta.
+Tähän tarkoitukseen sopivat pyynnöt,
+joiden käsittelyyn liittyy kompleksista säännöllisten lauseiden käsittelyä.
+Osoitepolkujen selvittämiseen liittyy usein säännöllisiä lausekkeita,
+joten verkkopalvelimet ja niiden
+kehykset voivat olla altiitta tämänkaltaisille hyökkäyksille~\cite{davis_case_2017}.
+
+Järjestelmien ominaisuuksien perusteella voimme siis päätellä että,
+säie pyyntöä kohden järjestelmä
+tulisi pärjäämään paremmin, jos palvelimen tehtävän pullonkaula on suoritinaika.
+Asynkroninen järjestelmä
+taas luultavasti kykenee pienmpään viiveeseen, jos I/O-kutsujen käsittely on suurin rajoittava tekiä.
+\section{Koejärjestely}
+Koejärjestelyssä on tärkeää seuraavat seikat
+
+\begin{itemize}
+    \item Säädettävä työmäärä pyynnön sisällöllä
+    \item Kyky mitata menetysprosentti
+    \item mahdollisuus muuttaa laitteistoresursseja?
+    \item mahdollisuus mitata vasteaika
+\end{itemize}
 
 \bibliography{kandi_zot}
 \bibliographystyle{plain}
