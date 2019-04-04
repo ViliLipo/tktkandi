@@ -158,3 +158,23 @@
 	author = {libuv},
 	file = {Design overview — libuv documentation:/home/vililipo/Zotero/storage/5J8RL67K/design.html:text/html}
 }
+
+
+@article{ling_analysis_2000,
+	title = {Analysis of optimal thread pool size},
+	volume = {34},
+	issn = {01635980},
+	url = {http://portal.acm.org/citation.cfm?doid=346152.346320},
+	doi = {10.1145/346152.346320},
+	abstract = {The success of e-commerce, messaging middleware, and other lnternet-based applications depends in part on the ability of network servers to respond in a timely and reliable manner to simultaneous service requests. Multithreaded systems, due to their efficient use of system resources and the popularity of shared-memory multi-processor architectures, have become the server implementation of choice. However, creating and destroying a thread is far from free, requiring run-time memory allocation and deallocation. These overheads become especially onerous during periods of high load and can be a major factor behind system slowdowns. A thread-pool architecture addresses this problem by prespawning and then managing a pool of threads. Threads in the pool are reused, so that thread creation and destruction overheads are incurred only once per thread, and not once per request. However, efficient thread management for a given system load highly depends on the thread pool size, which is currently determined heuristically. In this paper, we characterize several system resource costs associated with thread pool size. If the thread pool is too large, and threads go unused, then processing and memory resources are wasted maintaining the thread pool. If the thread pool is too small, then additional threads must be created and destroyed on the fly to handle new requests. We analytically determine the optimal thread pool size to maximize the expected gain of using a thread.},
+	language = {en},
+	number = {2},
+	urldate = {2019-04-03},
+	journal = {ACM SIGOPS Operating Systems Review},
+	author = {Ling, Yibei and Mullen, Tracy and Lin, Xiaola},
+	month = apr,
+	year = {2000},
+	pages = {42--55},
+	file = {Ling et al. - 2000 - Analysis of optimal thread pool size.pdf:/home/vililipo/Zotero/storage/HYG48C4U/Ling et al. - 2000 - Analysis of optimal thread pool size.pdf:application/pdf}
+}
+

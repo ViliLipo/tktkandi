@@ -21,7 +21,7 @@ Asynkroninen reactor-malli on kasvattanut suosiotaan pitkään verkkokehityksess
 Sitä vastaan vertailussa on säiereservimalli sillä se on perinteisistä
 monisäikeisistä palvelinmalleista relevantein ja siinä on onnistuttu korjaamaan
 joitakin näiden mallien ongelmia.
-\section{Ongelman Esittely}
+\section{Ongelman esittely}
 \subsection{Taustatietoa}
 \subsubsection{Asiakas-palvelin malli}
 Asiakas-palvelin malli on yksi yksi keskeisimpiä malleja nykypäivän Internetissä,
@@ -47,7 +47,7 @@ Asiakasohjelma voi olla myös verkkosivu. 2000-luvun alussa
 pelkkään staattiseen HTML-standardiin perustuvat verkkosivut pystyivät
 tarjoamaan käyttöliittymiä esimerkisi keskustelualustoille sekä verkkokaupoille.
 Näissä järjestelmissä valtaosa suorittamisesta on palvelimen vastuulla,
-sillä sen pitää tiedonkäsittelemisen lisäksi renderöidä tieto
+sillä sen pitää tiedonkäsittelemisen lisäksi kirjoittaa tieto
 esitettävään HTML-muotoon käyttöliittymän näkymäksi.[lähde?] Palvelin
 siis vastaa selaimen pyyntöön lähettämällä kokonaisen HTML-tiedoston.
 
@@ -55,7 +55,7 @@ Javascript-ohjelmakoodin suorittaminen selaimessa on kuitenkin mahdollistanut
 yhä monimutkaisempien asiakasohjelmien siirtämisen selaimeen.
 Nykyään palvelimen ja asiakkaan
 välisessä tiedonvälityksessä on muodikasta käyttää REST-rajapintaa, jossa
-tieto on rakenteisessa muodossa. Asiakas osa tämän jälkeen renderöi siitä
+tieto on rakenteisessa muodossa. Asiakasosa tämän jälkeen piirtää siitä
 itsenäisesti käyttöliittymän näkymän. [lähde?]
 
 Palvelin tarjoaa rajapinnan läpi palveluita asiakasohjelmille.
@@ -122,6 +122,42 @@ Yleisesti verkkopalvelimet toteutetaan käyttäen valmista sovelluskehystä eli 
 joka implementoi palvelinmallin, ja tarjoaa rajapinnat sovelluslogiikan
 kehittämistä varten.
 
+Käyttöjärjestelmät tarjoavat kehittäjälle työkaluja, joilla rinnakkaisuutta
+voi luoda ohjelmaan. Niistä tärkeimpiä ovat prosessit ja säikeet.
+Prosessi yksi ohjelma, joka on ajossa järjestelmässä. Sen suoritustilatiedot, ja tunniste on
+tallennettu käyttöjärjestelmässä prosessin kuvaajaan. Jokaisella
+prosessilla on oma muistiavaruus, ja prosessien välinen keskustelu
+tapahtuu ainoastaan käyttöjärjestelmän tarjoamien rajapintojen läpi.
+Prosessi siis käsitteenä mahdollistaa sen että, käyttöjärjestelmä
+voi ajaa useaa ohjelmaa samanaikaisesti ja käyttöjärjestelmän
+vuoron antaja jakaa niille suoritusaikaa. Kun prosessi vaihtuu
+käyttöjärjestelmä asettaa suorittimen suoritusympäristöksi
+uuden prosessin kuvaajaan tallennetun ympäristön. Tätä kutsutaan kontekstin
+vaihdoksi. Vanhan prosessin suoritin ympäristö puolestaan talletetaan sen 
+kuvaajaan.
+
+Nykyisissä käyttäjärjestelmissä voi prosessin suoritusta jakaa
+säikeille. Säikeet jakavat prosessin muistiavaruuden, sekä tiedostoresurssit.
+Säikeet voivat jakaa tietoa muistiavaruuden läpi. Säikeiden kuvaajiin
+tallennetaan niiden suoritustilatieto, kuten rekisterien ja pinon arvot.
+
+Koska säikeisiin liittyy huomattavasti vähemmän tietoa, kuin prosessehin,
+on niiden luominen ja tuhoaminen kohtalaisen nopeaa. Säikeiden välinen
+kommunikointi on myös huomattavasti nopeampaa kuin prosessien. Nopea
+kommunikointi tekee rinnakkaisen ohjelman synkronointivaiheista
+sujuvampia. Säikeiden vaihdossa suoritinympäristö pitää vaihtaa 
+samaan tapaan kuin prosessienkin kohdalla, mutta keskusmuistissa olevia
+tietoja ei tarvitse vaihtaa, sillä saman prosessin säikeet jakavat
+muistin.
+
+Ytimentasonsäikeet ovat säikeitä joiden aikatauluttamisesta vastaa
+käyttöjärjestelmän ydin. Käyttäjätasonsäikeet ovat sellaisia säikeitä,
+joiden aikatauluttamisesta vastaa jokin käyttäjätason ohjelma kuten
+säiekirjasto. Käyttäjätason aikatauluttamisen puutteista johtuen
+kaksi saman prosessin käyttäjätason säiettä ei voi olla suorituksessa
+samaan aikaan. Täten ytimentasonsäikeet palvelevat rinnakkaisuuden tavoitteita
+paremmin, mutta niiden hallinnointi on raskaampaa.
+% Voiko taustatietoa lainata oppikirjoista huoletta ?
 \subsection{Järjestelmien esittely}
 
 \subsubsection{Asynkroninen tapahtumavetoinen palvelinmalli}
@@ -135,10 +171,10 @@ Tämän luokittelun malleista vanhin on AMPED, jossa
 samanaikaisuutta luodaan tapahtumakäsittelijöillä, joita
 ajetaan omissa prosesseissaan~\cite{pai_flash:_1999}.
 Myöhempiä malleja on reactor ja proactor, joissa samanaikaisuutta
-saadaan säikeillä. Nämä mallit ovat yleisiä tapahtumavetoisia malleja
+saadaan säikeillä. Nämä mallit ovat yleisiä tapahtumavetoisia malleja,
 joita voidaan soveltaa myös muuhunkin kuin palvelimiin.
 
-Reacor mallissa pyyntöjen käsittelystä
+Reactor mallissa pyyntöjen käsittelystä
 vastaa tapahtumasäie.
 Tapahtumasäie kutsuu jokaista tapahtumaa kohden, sille
 määriteltyä tapahtumankäsittelijää.
@@ -174,24 +210,48 @@ Monisäikeisiä palvelinmalleja on useita, mutta tässä tutkielmassa keskitytä
 Monisäikeiset mallit ovat käytännössä syrjäyttäneet moniprosessimallin, sillä pääosa
 palvelimien käyttöjärjestelmistä tukee säikeitä, ja säikeiden hallinnointiin
 kuluu vähemmän resursseja kuin prosessien.
+
 Monisäikeisissä palvelinsovelluksissa keskitytään hyödyntämään laitteiston ominaista
-rinnakkaisuutta tehokkaasti suorittamalla jokaista pyyntöä omalla säikeellään. Suunnittelun keskeisenä
+rinnakkaisuutta tehokkaasti suorittamalla pyyntöjä, niiden omilla säikeellään. Suunnittelun keskeisenä
 tavoitteena on käsitellä mahdollisimman monta pyyntöä ajan yksikössä. Yksittäisen pyynnön
 vasteaika saattaa tässä
 järjestelmässä kärsiä säikeiden hallinnoimiseen kuluvasta suoritinajasta~\cite{easton_developing_2004}.
+
 Pääsääntöisesti nämä mallit skaalautuvat hyvin laitteistoresursseihin,
 mutta jos hallinnoitavien säikeiden määrä on huomattavasti suurempi kuin laitteiston
 fyysisten suorittimien määrä, aiheuttaa hallinointi ylimääräistä taakkaa.
-Säiereservimalli pyrkii estämään tämän ongelman rajoittamalla
+Kalleimmat hallinnointitehtävät ovat säikeiden luonti ja tuhoaminen, sillä
+muistin varaus- ja vapautusoperaatiot vievät paljon aikaa.
+Näihin operaatioihin kuluva aika onkin suurin säie-yhteyttä-kohti mallin
+ongelma, jossa jokaista pyyntöä kohti
+luodaa uusi säie, joka vastaamisen jälkeen tuhotaan.
+Tämän mallin ongelmia on pyritty ratkaisemaan säiereservimallilla.
+
+Säiereservimalli pyrkii minimoimaan tämän ongelman rajoittamalla
 säikeiden määrän johonkin järkevään arvoon, kuten fyysisten suorittimien
-määrään.
+määrään. Se käyttää samoja säikeitä uudestaan, eli se ei tuhoa säiettä
+pyynnön käsittelyn päätteeksi vaan jättää sen vapaaksi säikeeksi reserviin.
+
+Säiereservi mallissa kutsujen käsittely tapahtuu seuraavasti.
+Kun kutsu saapuu, se osoitetaan vapaalle säikeelle. Säie käsittelee pyyntöä ja,
+jos se jää odottamaan I/O:ta asetetaan säikeen tila suorittaa-tilasta odottaa-tilaan,
+jolloin käyttöjärjestelmän vuoronantaja voi antaa suoritinaikaa toiselle säikeelle,
+kunnes I/O-pyyntö valmistuu. Kun pyyntö on käsitelty ja siihen on vastattu, niin
+säie siirretään takaisin reserviin~\cite{ling_analysis_2000}.
+
 Menetelmässä pyyntöjen käsittely on hyvin eristetty toisistaan ja
 yhden säikeen lukittava tapahtuma ei vaikuta muihiin säikeisiin negatiivisesti~\cite{davis_case_2017}.
 Tämä edistää monisäikeisen mallin vakautta ja kykyä vastustaa hyökkäyksiä.
-Tämä malli on myös ohjelmoijalle yksinkertainen sillä, pyyntöjen jakama tilatietoa
+Tämä malli on myös ohjelmoijalle yksinkertainen sillä, pyyntöjen jakamaa tilatietoa
 on vähän ja täten myös synkronoinnin tarve pyyntöjen välilä minimoituu~\cite{hu_applying_1998}.
 
+Säiereservin oikean kapasiteetin valitseminen on erittäin kriittinen 
+järjestelmän suorituskyvylle.
+Väärin valittu reservin koko kumoaa kaiken hyödyn, mitä luomis
+ja tuhoamisoperaatioiden välttämisellä on saavutettu.
 
+Joissain implementaatioissa kokoa voi myös muuttaa dynaamisesti ajon aikana vastaamaan
+reaaliaikaiseen tarpeeseen.
 
 \subsection{Arviontikriteerit}
 Palvelimen roolin kannalta olisi toivottavaa, että
@@ -216,7 +276,7 @@ kriteerien valossa~\cite{gokhale_performance_2006}.
     \item vasteaika
     \item vakaus
 \end{itemize}
-\subsection{Järjestelmien arviointi kriteerien perusteella}
+\subsection{Alustava järjestelmien arviointi kriteerien perusteella}
 Molempien mallien puutteita voidaan paikata useamman laitteiston hajautetuilla
 järjestelmillä, mutta tälläiset järjestelyt jätetään vertailun ulkopuolelle.
 
@@ -247,8 +307,9 @@ järjestelmä ei kykenisi enää vastaamaan asiakkaiden pyyntöihin~\cite{davis_
 Järjestelmien ominaisuuksien perusteella voimme siis päätellä että,
 säiereservimalli
 tulisi pärjäämään paremmin, jos palvelimen tehtävän pullonkaula on suoritinaika.
-Asynkroninen järjestelmä
-taas luultavasti kykenee pienempään viiveeseen, jos I/O-kutsujen käsittely on suurin rajoittava tekijä.
+Reactor-järjestelmä
+taas luultavasti kykenee pienempään viiveeseen,
+jos I/O-kutsujen käsittely on suurin rajoittava tekijä.
 \section{Järjestelmät testeissä}
 \subsection{Järjestelmien staattinen analyysi}
 
