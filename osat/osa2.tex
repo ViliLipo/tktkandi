@@ -9,50 +9,47 @@
 \newpage
 \tableofcontents
 \newpage
-\section{Johdanto}
-\subsection{Tiivistelmä}
+\section*{Tiivistelmä}
 Tässä tutkielmassa vertaillaan verkkopalvelimien toteutusmalleja
 ja niiden suorityskykyä. Verkkopalvelin on ohjelma, joka vastaa useiden asiakkaiden pyyntöihin
 verkkosivuilla tai verkkosovelluksissa. Pyyntöihin vastaamiseen
 voi liittyä laskentaa, tietokantaoperaatioita tai muita toimenpiteitä.
 
-Vertailuun valittiin asynkroninen tapahtumavetoinen reactor palvelinmalli, sekä säiereservimalli.
-Asynkroninen reactor-malli on kasvattanut suosiotaan pitkään verkkokehityksessä.
-Sitä vastaan vertailussa on säiereservimalli sillä se on perinteisistä
-monisäikeisistä palvelinmalleista relevantein ja siinä on onnistuttu korjaamaan
-joitakin näiden mallien ongelmia.
-\section{Ongelman esittely}
-\subsection{Taustatietoa}
-\subsubsection{Asiakas-palvelin malli}
-Asiakas-palvelin malli on yksi yksi keskeisimpiä malleja nykypäivän Internetissä,
-sillä HTTP-protokolla nojaa vahvasti siihen. Asiakas-palvelin mallissa
+Vertailuun valittiin asynkroninen tapahtumaohjattu reactor palvelinmalli, sekä säiereservimalli.
+Asynkroninen reactor-malli on kasvattanut suosiotaan pitkään verkkosovelluskehityksessä.
+Sitä vastaan vertailussa on säiereservimalli sillä siinä on
+onnistuttu korjaamaan joitakin yksi-säie-yhteyttä-kohti-mallin ongelmia.
+\section{Verkkopalvelinsovellus}
+\subsection{Asiakas-palvelin malli}
+Asiakas-palvelin mallissa
 asiakasosa tarjoaa käyttäjälle käyttöliittymän sovellukseen. Palvelinosa taas
-tarjoaa määritellyn rajapinnan kautta verkon yli
-palveluita asiakas-osalle~\cite{sinha_client-server_1992}.
-Tieto välittyy osien välillä kutsuina ja vastauksina ja näin palvelinosa ja asiakasosa
+tarjoaa määritellyn rajapinnan
+palveluita asiakas-osalle verkkoyhteyden yli~\cite{sinha_client-server_1992}.
+Tieto välittyy osien välillä pyyntöinä ja vastauksina ja näin palvelinosa ja asiakasosa
 muodostavat löysästi yhdistetyn järjestelmän.
 
 Asiakasosa siis yhdistää käyttöliittymässä tapahtuvat toimet palvelimen
-rajapinnan kutsuiksi. Se voi hyödyntää pyyntöjen tulosten tallentamista
+rajapinnan pyynnöiksi. Se voi hyödyntää pyyntöjen tulosten tallentamista
 muistiin. Näin tarvittavia pyyntöjä voidaan vähentää, jos sen tulos
 on jo paikallisessa muistissa. Asiakasosa voi myös suorittaa
 laskentaa tai muita toimenpiteitä paikallisesti~\cite{sinha_client-server_1992}.
 
 Asiakasosat voivat olla työpöytäsovelluksia, jotka hyödyntävät käyttöjärjestelmän
-ikkunointi ja käyttöliittymä ominaisuuksia~\cite{sinha_client-server_1992}.
-Tälläisen asiakasohjelman toteuttamisessa voidaan käyttää mitä tahansa ohjelmointikieltä,
+ikkunointi-ja käyttöliittymäominaisuuksia~\cite{sinha_client-server_1992}.
+Tämänkaltaisen asiakasohjelman toteuttamisessa voidaan käyttää mitä tahansa ohjelmointikieltä,
 ja asiakasohjelman toiminnallisuutta voi laajentaa lähes rajatta.
 
 Asiakasohjelma voi olla myös verkkosivu. 2000-luvun alussa
 pelkkään staattiseen HTML-standardiin perustuvat verkkosivut pystyivät
-tarjoamaan käyttöliittymiä esimerkisi keskustelualustoille sekä verkkokaupoille.
+tarjoamaan käyttöliittymiä esimerkiksi keskustelualustoille ja verkkokaupoille.
 Näissä järjestelmissä valtaosa suorittamisesta on palvelimen vastuulla,
 sillä sen pitää tiedonkäsittelemisen lisäksi kirjoittaa tieto
 esitettävään HTML-muotoon käyttöliittymän näkymäksi.[lähde?] Palvelin
 siis vastaa selaimen pyyntöön lähettämällä kokonaisen HTML-tiedoston.
 
-Javascript-ohjelmakoodin suorittaminen selaimessa on kuitenkin mahdollistanut
-yhä monimutkaisempien asiakasohjelmien siirtämisen selaimeen.
+Nykyisten selainten JavaScript suoritustuen ansiosta yhä
+monimutkaisempia asiakassovelluksia voidaan toteuttaa
+selaimella saavutettavilla verkkosovelluksina.
 Nykyään palvelimen ja asiakkaan
 välisessä tiedonvälityksessä on muodikasta käyttää REST-rajapintaa, jossa
 tieto on rakenteisessa muodossa. Asiakasosa tämän jälkeen piirtää siitä
@@ -72,8 +69,23 @@ tuloksen vastauksena.
 
 Yleisesti palvelin vastaa järjestelmän turvallisuudesta sillä,
 sen toiminnan vääristäminen on haastavampaa paha-aikeisille
-toimijoille, kun taas asiakasosan toiminnan muuntelu, tai kutsujen
-lähtettäminen toisella ohjelmistolla on kohtalaisen helppoa.
+toimijoille, kun taas asiakasosan toiminnan muuntelu, pyyntöjen
+lähtettäminen toisella ohjelmistolla on suoraviivaisempaa.
+
+Asiakasohjelmaa ajetaan laitteella, joka ei ole verkkosovelluksen
+ylläpitäjän hallussa. Paha-aikeiset toimijat voitat käyttää tätä hyväkseen
+ja tarkkailla asiakasosan lähettämiä pyyntöjä tai sen
+suorituskäyttäytymistä kuten resurssien käyttöä.
+Tarkkailusta selvinneiden tietojen avulla on mahdollista
+kiertää asiakasosaan toteutettuja suojauksia.
+
+Palvelinsovelluksen toimintaa vääristääkseen 
+paha-aikeisten toimijoiden tulisi päästä
+käsiksi sitä suorittavan järjestelmän hallintatoimintoihin, tai
+löytää haavoittuvuus sen rajapinnasta. Nämä hyökkäsvektorit
+ovat huomattavasti kapeampia kuin sovelluksella jota
+suoritetaan hyökkääjien omalla laitteistolla.
+
 Palvelin vastaa myös tunnistautumisesta sekä käyttöoikeuksien hallinnasta.
 Monen palvelun toteuttamisen kannalta on kriittistä, että
 tiedon käyttöoikeuksia voidaan rajata käyttäjän tunnistautumisen perusteella.
@@ -82,44 +94,46 @@ Yksinkertainen esimerkki asiakas-palvelin mallista on tietokantapalvelin,
 jossa tietokannan tiedot on tallennettu palvelimelle, josta voidaan
 asiakasohjelmalla tehdä verkon yli tietokantakyselyitä.
 
-Web-tai verkkopalvelin on palvelin, jonka tehtävä on vastata Internetin
+Verkkopalvelin on palvelin, jonka tehtävä on vastata Internetin
 selaamiseen liittyviin pyyntöihin eli lähettämään tietyn HTTP-pyynnön
 perusteella oikea HTML-tiedosto, tekstimuotoista dataa, kuva-tiedosto
 tai videotiedosto.
-\subsubsection{Rinnakkaisuus palvelinympäristössä}
+\subsection{Rinnakkaisuus palvelinympäristössä}
 
 Rinnakkaisuudella tarkoitetaan tietojenkäsittelytieteessä useiden
-eri toimitusten suorittamista järjestelmässä samaan aikaan.
+eri operaatioiden suorittamista järjestelmässä samaan aikaan.
 Nykyisissä palvelintietokoneissa on kymmeniä suorittimia ja niiden tehokkaaseen
 hyödyntämiseen tarvitaan rinnakkaisuuden hallintaa.
 
 On täysin tehtäväkohtaista
 kuinka hyvin rinnakkaisuuden tavoitteet voidaan saavuttaa.
-Tähän vaikuttaa kuinka suuri osa tehtävästä on olemukseltaan sekventaalista.
-Sekventaaliset osat ovat sellaisia, jossa ohjelman vaiheet ovat täysin
+Tähän vaikuttaa kuinka suuri osa tehtävästä on olemukseltaan peräkkäistä.
+Peräkkäiset osat ovat sellaisia, jossa ohjelman vaiheet ovat täysin
 riippuvaisia toisistaan ja seuraavaan vaiheeseen ei voida mennä ennen edellisen
-valmistumista. Jos suuri osa ohjelmasta on sekventaalista, ei rinnakaistamalla
+valmistumista. Jos suuri osa ohjelmasta on peräkkäistä, ei rinnakaistamalla
 saada hyötyä. Tälläisessä tapauksessa rinnakkaisuuden hallinnasta aiheutuvat
 rasitteet saattavat jopa heikentää suorituskykyä.
 
 Riippumatta tehtävästä rinnakkaisuuden saavuuttaminen on vaikeaa,
 sillä se tuo ohjelmoijalle uusia haasteita, jotka eroavat tavallisesta
-ohjelmoinnista. Ohjelmointivirheen riski on rinnakkaisissa osissa hyvin suuri.
+ohjelmoinnista. Ohjelmointivirheen riski on rinnakkaisissa osissa hyvin suuri,
+koska ohjelmanoikeellisuuden varmistaminen kaikissa mahdollisissa synkronointi
+järjestyksissä on erittäin työlästä.
 Keskeisiä ongelmia, joita rinnakkaisuus tuo ohjelmointiin on eri vaiheiden
 synkronointi, tietorakenteiden suojaaminen ja lukkiutumisen hallinta.
 
-Web-palvelinympäristössä yksi asiakaspyyntö http-protokollan välityksellä
+Verkkopalvelinsovelluksessa yksi asiakkaan pyyntö http-protokollan välityksellä
 muodostaa mielekkään kokonaisuuden.
 Järjestelmässä on toivoittavaa, että pyyntöjä voitaisiin suorittaa
 rinnakkain kaikilla järjestelmässä olevilla suorittimilla, tai muuten 
 saavuttaa korkea resurssien käyttöaste.
 Näin ohjelmistojärjestelmä skaalautuu saatavilla oleviin resursseihin
-mielekkäällä tasolla. Palvelimien pyynnöt eivät yleisesti ole riippuvaisia
+mielekkäällä tasolla. Käsiteltävät pyynnöt eivät yleisesti ole riippuvaisia
 toisistaan ja niiden täyttäminen usein vaatii I/O-laitteiden odottamista.
-Näistä syistä web-palvelin on hyvä kohde rinnakkaistamiselle.
+Näistä syistä verkkopalvelinsovellus on hyvä kohde rinnakkaistamiselle.
 
 Yleisesti verkkopalvelimet toteutetaan käyttäen valmista sovelluskehystä eli kirjastoa,
-joka implementoi palvelinmallin, ja tarjoaa rajapinnat sovelluslogiikan
+joka toteuttaa palvelinmallin, ja tarjoaa rajapinnat sovelluslogiikan
 kehittämistä varten.
 
 Käyttöjärjestelmät tarjoavat kehittäjälle työkaluja, joilla rinnakkaisuutta
@@ -129,7 +143,7 @@ tallennettu käyttöjärjestelmässä prosessin kuvaajaan. Jokaisella
 prosessilla on oma muistiavaruus, ja prosessien välinen keskustelu
 tapahtuu ainoastaan käyttöjärjestelmän tarjoamien rajapintojen läpi.
 Prosessi siis käsitteenä mahdollistaa sen että, käyttöjärjestelmä
-voi ajaa useaa ohjelmaa samanaikaisesti ja käyttöjärjestelmän
+voi suorittaa useaa ohjelmaa samanaikaisesti ja käyttöjärjestelmän
 vuoron antaja jakaa niille suoritusaikaa. Kun prosessi vaihtuu
 käyttöjärjestelmä asettaa suorittimen suoritusympäristöksi
 uuden prosessin kuvaajaan tallennetun ympäristön. Tätä kutsutaan kontekstin
@@ -158,37 +172,23 @@ kaksi saman prosessin käyttäjätason säiettä ei voi olla suorituksessa
 samaan aikaan. Täten ytimentasonsäikeet palvelevat rinnakkaisuuden tavoitteita
 paremmin, mutta niiden hallinnointi on raskaampaa.
 % Voiko taustatietoa lainata oppikirjoista huoletta ?
-\subsection{Järjestelmien esittely}
+\subsection{Asynkroninen tapahtumaohjattu palvelinmalli}
 
-\subsubsection{Asynkroninen tapahtumavetoinen palvelinmalli}
-
-Asynkronisessa tapahtumavetoisessa palvelimessa yhdistetään
-käyttöliittymäohjelmoinnista aiemmin tuttu tapahtumavetoinen malli
-verkkopalvelimeen. Tapahtumavetoinen malli sopii hyvin verkkopalvelimeen,
-sillä sen toiminnan määrittää asiakaspyynnöt, jotka
-kuvautuvat mallissa tapahtumiksi hyvin.
-Tämän luokittelun malleista vanhin on AMPED, jossa
-samanaikaisuutta luodaan tapahtumakäsittelijöillä, joita
+Asynkronisessa tapahtumaohjatussa palvelimessa yhdistetään
+käyttöliittymäohjelmoinnista lähtöisin oleva tapahtumaohjattu malli
+verkkopalvelimeen~\cite{pai_flash:1999}. Tapahtumaohjattu malli sopii verkkopalvelinsovellukseen,
+sillä sen toiminnan rytmittää pyynnöt, jotka
+kuvautuvat mallissa tapahtumiksi.
+Tämän luokittelun malleista vanhin on AMPED. Siinä
+samanaikaisuutta luodaan apukäsittelijöillä, joita
 ajetaan omissa prosesseissaan~\cite{pai_flash:_1999}.
-Myöhempiä malleja on reactor ja proactor, joissa samanaikaisuutta
-saadaan säikeillä. Nämä mallit ovat yleisiä tapahtumavetoisia malleja,
+Myöhempiä malleja on reactor~\cite{schmidt_reactor:_1995}
+ja proactor~\cite{hu_applying_1998}, joissa
+rinnakkaisuutta luodaan asynkronisilla I/O-operaatiolla
+ja säikeillä.Nämä mallit ovat yleisiä tapahtumaohjattuja malleja,
 joita voidaan soveltaa myös muuhunkin kuin palvelimiin.
 
-Reactor mallissa pyyntöjen käsittelystä
-vastaa tapahtumasäie.
-Tapahtumasäie kutsuu jokaista tapahtumaa kohden, sille
-määriteltyä tapahtumankäsittelijää.
-Tapahtumakäsittelijöissä rinnakaisuuteen päästään
-vain I/O:n osalta, kun käytetään estämättömiä
-I/O-kutsuja.
-Estäviä kutsuja tulee välttää,
-sillä niiden käyttäminen laskee sovelluksen
-vastaavuutta huomattavasti~\cite{schmidt_reactor:_1995}.
-Asynkronisia estämättömiä I/O-kutsuja 
-voidaan suorittaa niitä tarjoavien käyttöjärjestelmä kutsujen
-avulla, tai siirtämälläl I/O:n kutsumisen toisen säikeen tehtäväksi.
-Itse reactor malli ei ota kantaa miten Asynkroninen kutsu toteutetaan.
-Asynkronisten ja tapahtumavetoisten palvelinsovelluksien suunnittelun keskiössä
+Asynkronisten ja tapahtumaohjattujen palvelinsovelluksien suunnittelun keskiössä
 ovat vasteajan pienentäminen ja laitteistoresurssien tehokas hyödyntäminen.
 Tavoitteena on hyödyntää I/O-resursseja mahdollisimman tehokkaasti
 rinnakkain ja välttää I/O:n odottamista ohjelman suorituksessa~\cite{pai_flash:_1999}.
@@ -197,23 +197,47 @@ laitteiston verkkoliikennekapasiteetti on usein rajoittava tekijä ja tämän ta
 sen tehokas hyödyntäminen on kriittistä. I/O-resurssien asynkronisella hyödyntämisellä on todettu
 olevan suorituskykyä parantava vaikutus~\cite{hu_applying_1998}.
 
-Proactor mallissa on paljon yhtäläisyyksiä reactor malliin, mutta myös sen
-tapahtuma käsittelijä on asynkroninen.
+Reactor mallissa pyyntöjen käsittelystä
+vastaa tapahtumasäie.
+Tapahtumasäie kutsuu jokaista tapahtumaa kohden, sille
+määriteltyä tapahtumakäsittelijää.
+Tapahtumakäsittelijöissä rinnakaisuuteen päästään
+vain I/O:n osalta, kun käytetään estämättömiä
+I/O-kutsuja.
+Estäviä kutsuja tulee välttää,
+sillä niiden käyttäminen laskee sovelluksen
+vastaavuutta huomattavasti~\cite{schmidt_reactor:_1995}.
+Asynkronisia estämättömiä I/O-kutsuja 
+voidaan suorittaa niitä tarjoavien käyttöjärjestelmä kutsujen
+avulla, tai siirtämällä I/O:n kutsumisen toisen säikeen tehtäväksi.
+Itse reactor malli ei ota kantaa miten asynkroninen kutsu toteutetaan.
+Jos tapahtumakäsittelijässä tarvitaan pitkäkestoista laskentaa
+kannattaa sitä varten luoda uusi prosessi tai säie. Tämä
+prosessi tai säie saattaa pyynnön loppuun rinnakkain 
+reactorin tapahtumasäikeen kanssa~\cite{schmidt_reactor:_1995}.
+
+
+Proactor mallissa on paljon yhtäläisyyksiä reactor malliin, mutta sen
+tapahtumasäie mahdollistaa sellaisten tapahtumakäsittelijöiden 
+luomisen, jotka aktivoituvat asynkronisten tapahtumien päättymisestä~\cite{pyryali_proactor_1997}.
+
 
  Tässä tutkielmassa keskitytään erityisesti
 reactor-malliin, sillä se on sisäänrakennettu Node.js ohjelmaympäristöön ja
-täten paljon käytetty. Node.js:n reactor-mallin implementoimisesta vastaa
+täten paljon käytetty. Node.js:n reactor-mallin toteuttamisesta vastaa
 libuv-kirjasto~\cite{libuv_design_2019}.
 
-\subsubsection{Säiereservimalli}
+\subsection{Säiereservimalli}
 Monisäikeisiä palvelinmalleja on useita, mutta tässä tutkielmassa keskitytään säiereservimalliin.
 Monisäikeiset mallit ovat käytännössä syrjäyttäneet moniprosessimallin, sillä pääosa
 palvelimien käyttöjärjestelmistä tukee säikeitä, ja säikeiden hallinnointiin
 kuluu vähemmän resursseja kuin prosessien.
 
-Monisäikeisissä palvelinsovelluksissa keskitytään hyödyntämään laitteiston ominaista
-rinnakkaisuutta tehokkaasti suorittamalla pyyntöjä, niiden omilla säikeellään. Suunnittelun keskeisenä
-tavoitteena on käsitellä mahdollisimman monta pyyntöä ajan yksikössä. Yksittäisen pyynnön
+Monisäikeisissä palvelinsovelluksissa hyödynnetään laitteiston
+rinnakkaisuutta tehokkaasti suorittamalla pyyntöjä usealla säikeellä samaan
+aikaan. Suunnittelun keskeisenä
+tavoitteena on käsitellä mahdollisimman monta pyyntöä rinnakkain ja 
+näin saavuttaa korkea volyymi. Yksittäisen pyynnön
 vasteaika saattaa tässä
 järjestelmässä kärsiä säikeiden hallinnoimiseen kuluvasta suoritinajasta~\cite{easton_developing_2004}.
 
@@ -243,16 +267,17 @@ Menetelmässä pyyntöjen käsittely on hyvin eristetty toisistaan ja
 yhden säikeen lukittava tapahtuma ei vaikuta muihiin säikeisiin negatiivisesti~\cite{davis_case_2017}.
 Tämä edistää monisäikeisen mallin vakautta ja kykyä vastustaa hyökkäyksiä.
 Tämä malli on myös ohjelmoijalle yksinkertainen sillä, pyyntöjen jakamaa tilatietoa
-on vähän ja täten myös synkronoinnin tarve pyyntöjen välilä minimoituu~\cite{hu_applying_1998}.
+ja synkronointia on vähän~\cite{hu_applying_1998}.
 
 Säiereservin oikean kapasiteetin valitseminen on erittäin kriittinen 
 järjestelmän suorituskyvylle.
 Väärin valittu reservin koko kumoaa kaiken hyödyn, mitä luomis
 ja tuhoamisoperaatioiden välttämisellä on saavutettu.
 
-Joissain implementaatioissa kokoa voi myös muuttaa dynaamisesti ajon aikana vastaamaan
+Joissain toteutuksissa kokoa voi myös muuttaa dynaamisesti ajon aikana vastaamaan
 reaaliaikaiseen tarpeeseen.
 
+\section{Mallit testeissä}
 \subsection{Arviontikriteerit}
 Palvelimen roolin kannalta olisi toivottavaa, että
 se pystyisi käsittelemään mahdollisimman paljon pyyntöjä
@@ -260,17 +285,17 @@ ajan yksikössä. Sen tulisi pystyä myös käsittelemään pyyntöjä
 luotettavasti eli lopulta kaikki pyynnöt käsitellään ja niihin vastataan.
 Yksittäiselle asiakkaalle tärkein suorituskyvyn mittari on se kuinka kauan
 yksittäiseen pyyntöön vastaaminen vie. Pyynnön matala vasteaika saa
-palvelun käyttökokemuksen tuntumaan responsiivisemmalta.
+palvelun käyttökokemuksen tuntumaan sujuvammalta.
 Skaalautuvuus on tärkeää palvelinta ylläpitävälle taholle, sillä
 näin käyttäjämäärän kasvaessa voidaan suorituskykyä parantaa
 lisäämällä laitteistoresursseja. Järjestelmän tulisi myös
-olla resilientti hyökkäyksiä vastaan.
+olla vastustuskykyinen hyökkäyksille.
 
 Näiden ajatusten ja aikaisemman tutkimuksen perusteella
 tutkielmassa vertailtavia järjestelmiä arvioidaan seuraavien
 kriteerien valossa~\cite{gokhale_performance_2006}.
 \begin{itemize}
-    \item käsiteltyjen pyyntöjen määrä
+    \item käsiteltyjen pyyntöjen määrä eli volyymi
     \item menetysprosentti
     \item skaalautuvuus laitteistoresursseihin
     \item vasteaika
@@ -281,17 +306,17 @@ Molempien mallien puutteita voidaan paikata useamman laitteiston hajautetuilla
 järjestelmillä, mutta tälläiset järjestelyt jätetään vertailun ulkopuolelle.
 
 Reactor-mallin järjestelmissä suoritinsidonnaisien
-toimitusten rinnakkaistamiseen ei ole keskitetty erityistä huomiota, ja tälläisten operaatioiden
+operaatioiden rinnakkaistamiseen ei ole keskitetty erityistä huomiota, ja tälläisten operaatioiden
 kanssa järjestelmän käsiteltyjen pyyntöjen määrä ajan yksikössä on keskimäärin heikompi
 kuin monisäikeisten järjestelmien~\cite{davis_case_2017}.
 
-Asynkronisten-mallien skaalautumien kasvaviin laitteistoresursseihin on hyvin
-implementaatiosidonnaista, kun taas
+Reactor-mallin skaalautuvuus kasvaviin laitteistoresursseihin on hyvin
+toteutussidonnaista, kun taas
 säiereservimallin skaalautuvuus suoritinresursseihin on hyvin suoraviivaista,
 vaikkakin kilpailutilanteiden havaitsemiseen ja estämiseen kuluu enemmän aikaa,
 jos säikeita on paljon.
 
-Asynkronisen tapahtumavetoisen palvelimeen voi kohdistaa hyökkäyksiä, jolla pyritään
+Reactor-mallin palvelimeen voi kohdistaa hyökkäyksiä, jolla pyritään
 lukittamaan tapahtumia käsittelevä säie, joka käytännössä vastaa koko ohjelman hallinnasta.
 Tähän tarkoitukseen sopivat pyynnöt,
 joiden käsittelyyn liittyy kompleksista säännöllisten lauseiden käsittelyä.
@@ -310,7 +335,6 @@ tulisi pärjäämään paremmin, jos palvelimen tehtävän pullonkaula on suorit
 Reactor-järjestelmä
 taas luultavasti kykenee pienempään viiveeseen,
 jos I/O-kutsujen käsittely on suurin rajoittava tekijä.
-\section{Järjestelmät testeissä}
 \subsection{Järjestelmien staattinen analyysi}
 
 \subsection{Järjestelmien testit simulaatiolla}
@@ -318,6 +342,9 @@ jos I/O-kutsujen käsittely on suurin rajoittava tekijä.
 
 
 \section{Johtopäätökset}
+%Reactor mallin rajallisuudet rinnakkaisuudessa
+%eivät ole haitaksi, jos järjestelmässä on rinnakkaisuutta
+%korkeammalla tai matalammalla tasolla.
 \bibliography{kandi_zot}
 \bibliographystyle{plain}
 
