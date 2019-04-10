@@ -19,6 +19,7 @@ Vertailuun valittiin asynkroninen tapahtumaohjattu reactor palvelinmalli, sekä 
 Asynkroninen reactor-malli on kasvattanut suosiotaan pitkään verkkosovelluskehityksessä.
 Sitä vastaan vertailussa on säiereservimalli sillä siinä on
 onnistuttu korjaamaan joitakin yksi-säie-yhteyttä-kohti-mallin ongelmia.
+\section{Johdanto}
 \section{Verkkopalvelinsovellus}
 \subsection{Asiakas-palvelin malli}
 Asiakas-palvelin mallissa
@@ -44,7 +45,7 @@ pelkkään staattiseen HTML-standardiin perustuvat verkkosivut pystyivät
 tarjoamaan käyttöliittymiä esimerkiksi keskustelualustoille ja verkkokaupoille.
 Näissä järjestelmissä valtaosa suorittamisesta on palvelimen vastuulla,
 sillä sen pitää tiedonkäsittelemisen lisäksi kirjoittaa tieto
-esitettävään HTML-muotoon käyttöliittymän näkymäksi.[lähde?] Palvelin
+esitettävään HTML-muotoon käyttöliittymän näkymäksi~\cite{tatsubori_html_2009}. Palvelin
 siis vastaa selaimen pyyntöön lähettämällä kokonaisen HTML-tiedoston.
 
 Nykyisten selainten JavaScript suoritustuen ansiosta yhä
@@ -96,8 +97,8 @@ asiakasohjelmalla tehdä verkon yli tietokantakyselyitä.
 
 Verkkopalvelin on palvelin, jonka tehtävä on vastata Internetin
 selaamiseen liittyviin pyyntöihin eli lähettämään tietyn HTTP-pyynnön
-perusteella oikea HTML-tiedosto, tekstimuotoista dataa, kuva-tiedosto
-tai videotiedosto.
+perusteella oikea HTML-tiedosto, tekstimuotoinen data-tiedosto~\cite{Berners-Lee_1994}
+,tai kuva-tiedosto.
 \subsection{Rinnakkaisuus palvelinympäristössä}
 
 Rinnakkaisuudella tarkoitetaan tietojenkäsittelytieteessä useiden
@@ -117,8 +118,8 @@ rasitteet saattavat jopa heikentää suorituskykyä.
 Riippumatta tehtävästä rinnakkaisuuden saavuuttaminen on vaikeaa,
 sillä se tuo ohjelmoijalle uusia haasteita, jotka eroavat tavallisesta
 ohjelmoinnista. Ohjelmointivirheen riski on rinnakkaisissa osissa hyvin suuri,
-koska ohjelmanoikeellisuuden varmistaminen kaikissa mahdollisissa synkronointi
-järjestyksissä on erittäin työlästä.
+koska ohjelman oikeellisuuden varmistaminen kaikissa mahdollisissa
+suoritusjärjestyksissä järjestyksissä on erittäin työlästä.
 Keskeisiä ongelmia, joita rinnakkaisuus tuo ohjelmointiin on eri vaiheiden
 synkronointi, tietorakenteiden suojaaminen ja lukkiutumisen hallinta.
 
@@ -136,30 +137,37 @@ Yleisesti verkkopalvelimet toteutetaan käyttäen valmista sovelluskehystä eli 
 joka toteuttaa palvelinmallin, ja tarjoaa rajapinnat sovelluslogiikan
 kehittämistä varten.
 
-Käyttöjärjestelmät tarjoavat kehittäjälle työkaluja, joilla rinnakkaisuutta
-voi luoda ohjelmaan. Niistä tärkeimpiä ovat prosessit ja säikeet.
+Käyttöjärjestelmät tarjoavat kehittäjälle työkaluja, joilla rinnakkaisuuden hallintaan.
+Niistä tärkeimpiä ovat prosessit ja säikeet.
 Prosessi yksi ohjelma, joka on ajossa järjestelmässä. Sen suoritustilatiedot, ja tunniste on
-tallennettu käyttöjärjestelmässä prosessin kuvaajaan. Jokaisella
+tallennettu käyttöjärjestelmässä prosessin kuvaajaan~\cite{stallings_operating_2018}.
+Jokaisella
 prosessilla on oma muistiavaruus, ja prosessien välinen keskustelu
-tapahtuu ainoastaan käyttöjärjestelmän tarjoamien rajapintojen läpi.
+tapahtuu ainoastaan käyttöjärjestelmän tarjoamien rajapintojen läpi~\cite{stallings_operating_2018}.
 Prosessi siis käsitteenä mahdollistaa sen että, käyttöjärjestelmä
 voi suorittaa useaa ohjelmaa samanaikaisesti ja käyttöjärjestelmän
-vuoron antaja jakaa niille suoritusaikaa. Kun prosessi vaihtuu
+vuoronantaja jakaa niille suoritusaikaa. Kun prosessi vaihtuu
 käyttöjärjestelmä asettaa suorittimen suoritusympäristöksi
 uuden prosessin kuvaajaan tallennetun ympäristön. Tätä kutsutaan kontekstin
-vaihdoksi. Vanhan prosessin suoritin ympäristö puolestaan talletetaan sen 
-kuvaajaan.
+vaihdoksi. Vanhan prosessin suoritinympäristö puolestaan talletetaan sen 
+kuvaajaan~\cite{stallings_operating_2018}.
 
-Nykyisissä käyttäjärjestelmissä voi prosessin suoritusta jakaa
-säikeille. Säikeet jakavat prosessin muistiavaruuden, sekä tiedostoresurssit.
-Säikeet voivat jakaa tietoa muistiavaruuden läpi. Säikeiden kuvaajiin
-tallennetaan niiden suoritustilatieto, kuten rekisterien ja pinon arvot.
+Nykyisissä käyttäjärjestelmissä voi prosessin suoritusta jakaa usealle
+säikeelle. Prosessissa on silloin yksi tai useampia säikeitä.
+Säikeet jakavat prosessin muistiavaruuden, sekä tiedostoresurssit.
+Säikeiden kuvaajiin
+tallennetaan niiden suoritustilatieto,
+kuten rekisterien ja pinon arvot~\cite{stallings_operating_2018}.
 
-Koska säikeisiin liittyy huomattavasti vähemmän tietoa, kuin prosessehin,
-on niiden luominen ja tuhoaminen kohtalaisen nopeaa. Säikeiden välinen
-kommunikointi on myös huomattavasti nopeampaa kuin prosessien. Nopea
+Koska säikeisiin liittyy vähemmän tietoa, kuin prosessehin,
+on niiden luominen ja tuhoaminen nopeampaa. Säikeiden välinen
+kommunikointi on myös huomattavasti nopeampaa kuin prosessien, koska
+ne voivat välittää tietoa jakamansa muistialueen läpi.
+Prosessit voivat kommunikoida keskenään vain käyttöjärjestelmän 
+avulla~\cite{stallings_operating_2018}.
+Nopea
 kommunikointi tekee rinnakkaisen ohjelman synkronointivaiheista
-sujuvampia. Säikeiden vaihdossa suoritinympäristö pitää vaihtaa 
+sujuvampia~\cite{stallings_operating_2018}. Säikeiden vaihdossa suoritinympäristö pitää vaihtaa 
 samaan tapaan kuin prosessienkin kohdalla, mutta keskusmuistissa olevia
 tietoja ei tarvitse vaihtaa, sillä saman prosessin säikeet jakavat
 muistin.
@@ -170,13 +178,13 @@ joiden aikatauluttamisesta vastaa jokin käyttäjätason ohjelma kuten
 säiekirjasto. Käyttäjätason aikatauluttamisen puutteista johtuen
 kaksi saman prosessin käyttäjätason säiettä ei voi olla suorituksessa
 samaan aikaan. Täten ytimentasonsäikeet palvelevat rinnakkaisuuden tavoitteita
-paremmin, mutta niiden hallinnointi on raskaampaa.
+paremmin, mutta niiden hallinnointi on raskaampaa \cite{stallings_operating_2018}.
 % Voiko taustatietoa lainata oppikirjoista huoletta ?
 \subsection{Asynkroninen tapahtumaohjattu palvelinmalli}
 
 Asynkronisessa tapahtumaohjatussa palvelimessa yhdistetään
 käyttöliittymäohjelmoinnista lähtöisin oleva tapahtumaohjattu malli
-verkkopalvelimeen~\cite{pai_flash:1999}. Tapahtumaohjattu malli sopii verkkopalvelinsovellukseen,
+verkkopalvelimeen~\cite{pai_flash:_1999}. Tapahtumaohjattu malli sopii verkkopalvelinsovellukseen,
 sillä sen toiminnan rytmittää pyynnöt, jotka
 kuvautuvat mallissa tapahtumiksi.
 Tämän luokittelun malleista vanhin on AMPED. Siinä
@@ -202,12 +210,12 @@ vastaa tapahtumasäie.
 Tapahtumasäie kutsuu jokaista tapahtumaa kohden, sille
 määriteltyä tapahtumakäsittelijää.
 Tapahtumakäsittelijöissä rinnakaisuuteen päästään
-vain I/O:n osalta, kun käytetään estämättömiä
+vain I/O:n osalta, kun käytetään asynkronisia
 I/O-kutsuja.
 Estäviä kutsuja tulee välttää,
 sillä niiden käyttäminen laskee sovelluksen
 vastaavuutta huomattavasti~\cite{schmidt_reactor:_1995}.
-Asynkronisia estämättömiä I/O-kutsuja 
+Asynkronisia I/O-kutsuja 
 voidaan suorittaa niitä tarjoavien käyttöjärjestelmä kutsujen
 avulla, tai siirtämällä I/O:n kutsumisen toisen säikeen tehtäväksi.
 Itse reactor malli ei ota kantaa miten asynkroninen kutsu toteutetaan.
@@ -216,10 +224,14 @@ kannattaa sitä varten luoda uusi prosessi tai säie. Tämä
 prosessi tai säie saattaa pyynnön loppuun rinnakkain 
 reactorin tapahtumasäikeen kanssa~\cite{schmidt_reactor:_1995}.
 
+Reactor mallissa tapahtuman käsittely
 
-Proactor mallissa on paljon yhtäläisyyksiä reactor malliin, mutta sen
-tapahtumasäie mahdollistaa sellaisten tapahtumakäsittelijöiden 
-luomisen, jotka aktivoituvat asynkronisten tapahtumien päättymisestä~\cite{pyryali_proactor_1997}.
+Proactor mallissa on paljon yhtäläisyyksiä reactor malliin, mutta siinä
+hyödynnetään käyttöjärjestelmän asynkronisia ominaisuuksia suorittamaan
+operaatiota ennen pyynnön saapumista tapahtumasäikeelle~\cite{pyarali_proactor_1997}.
+Tapahtumasäie käsittelee tässä mallissa asynkronisten operaatioiden
+valmistumistapahtumia, jotka se ohjaa
+niiden tapahtumankäsittelijöille~\cite{pyryali_proactor_1997}.
 
 
  Tässä tutkielmassa keskitytään erityisesti
