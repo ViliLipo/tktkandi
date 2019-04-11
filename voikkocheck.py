@@ -3,6 +3,13 @@ import sys
 import re
 import string
 
+"""
+Module for checking finnish spelling errors
+in latex files.
+@author Vili Lipo
+@licence GPL2
+"""
+
 def removeTexCommandsFromLine(line):
     line = re.sub('\\\\[\w[]*]*\*?(\{[\w -_:]*\})*', ' ', line)
     return line
