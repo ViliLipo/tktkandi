@@ -38,15 +38,28 @@ def analyzeWords( words):
     errors = []
     for word in words:
         if not v.spell(word["value"]):
-            errors.append("in line: " + str(word["linenumber"]) +" Error: " + str(word["value"] + " suggestion: " + str(v.suggest(word['value'])) ))
+            word["suggestions"] = v.suggest(word["value"])
+            errors.append(word)
     v.terminate()
     return errors
+
+def cliOutput(errorDictionaries, printSuggestions=True, onlywithSuggestions=False):
+    for word in errorDictionaries:
+        if onlywithSuggestions and len(word["suggestions"]) == 0:
+            continue
+        if(printSuggestions):
+            print(str(word["linenumber"]) + " error: " + word["value"] + " suggestions: " + str(word["suggestions"]))
+        else:
+            print(str(word["linenumber"]) + " error: " + word["value"])
+
+
 
 
 if __name__ == "__main__":
     filename = sys.argv[1]
     misspellings = analyzeWords(readWords(filename))
     print("---------\n------\n---")
-    for misspelling in misspellings:
-        print(misspelling)
+    printSugs = "-s" in sys.argv
+    onlySugs = "-o"  in sys.argv
+    cliOutput(misspellings, printSuggestions=printSugs, onlywithSuggestions=onlySugs)
 
