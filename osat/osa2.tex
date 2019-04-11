@@ -31,7 +31,7 @@ muodostavat löysästi yhdistetyn järjestelmän.
 
 Asiakasosa siis yhdistää käyttöliittymässä tapahtuvat toimet palvelimen
 rajapinnan pyynnöiksi. Se voi hyödyntää pyyntöjen tulosten tallentamista
-muistiin. Näin tarvittavia pyyntöjä voidaan vähentää, jos sen tulos
+muistii. Näin tarvittavia pyyntöjä voidaan vähentää, jos sen tulos
 on jo paikallisessa muistissa. Asiakasosa voi myös suorittaa
 laskentaa tai muita toimenpiteitä paikallisesti~\cite{sinha_client-server_1992}.
 
@@ -66,7 +66,7 @@ palvelimen rajapintaa~\cite{sinha_client-server_1992}.
 Palvelimen palvelut muodostavat järjestelmän keskeisen
 sovelluslogiikan, jossa asiakaspyynnön parametreilla
 suoritetaan toimintoja ja palvelin lähettää
-tuloksen vastauksena.
+tuloksen vastauksena~\cite{sinha_client-server_1992}.
 
 Yleisesti palvelin vastaa järjestelmän turvallisuudesta sillä,
 sen toiminnan vääristäminen on haastavampaa paha-aikeisille
@@ -86,7 +86,7 @@ käsiksi sitä suorittavan järjestelmän hallintatoimintoihin, tai
 löytää haavoittuvuus sen rajapinnasta. Nämä hyökkäsvektorit
 ovat huomattavasti kapeampia kuin sovelluksella jota
 suoritetaan hyökkääjien omalla laitteistolla.
-
+% etsi jokin tietoturvan perusteos
 Palvelin vastaa myös tunnistautumisesta sekä käyttöoikeuksien hallinnasta.
 Monen palvelun toteuttamisen kannalta on kriittistä, että
 tiedon käyttöoikeuksia voidaan rajata käyttäjän tunnistautumisen perusteella.
@@ -113,13 +113,13 @@ Peräkkäiset osat ovat sellaisia, jossa ohjelman vaiheet ovat täysin
 riippuvaisia toisistaan ja seuraavaan vaiheeseen ei voida mennä ennen edellisen
 valmistumista. Jos suuri osa ohjelmasta on peräkkäistä, ei rinnakaistamalla
 saada hyötyä. Tälläisessä tapauksessa rinnakkaisuuden hallinnasta aiheutuvat
-rasitteet saattavat jopa heikentää suorituskykyä.
+rasitteet saattavat jopa heikentää suorituskykyä~\cite{stallings_operating_2018}.
 
 Riippumatta tehtävästä rinnakkaisuuden saavuuttaminen on vaikeaa,
 sillä se tuo ohjelmoijalle uusia haasteita, jotka eroavat tavallisesta
 ohjelmoinnista. Ohjelmointivirheen riski on rinnakkaisissa osissa hyvin suuri,
 koska ohjelman oikeellisuuden varmistaminen kaikissa mahdollisissa
-suoritusjärjestyksissä järjestyksissä on erittäin työlästä.
+suoritusjärjestyksissä on erittäin työlästä.
 Keskeisiä ongelmia, joita rinnakkaisuus tuo ohjelmointiin on eri vaiheiden
 synkronointi, tietorakenteiden suojaaminen ja lukkiutumisen hallinta.
 
@@ -178,7 +178,7 @@ joiden aikatauluttamisesta vastaa jokin käyttäjätason ohjelma kuten
 säiekirjasto. Käyttäjätason aikatauluttamisen puutteista johtuen
 kaksi saman prosessin käyttäjätason säiettä ei voi olla suorituksessa
 samaan aikaan. Täten ytimentasonsäikeet palvelevat rinnakkaisuuden tavoitteita
-paremmin, mutta niiden hallinnointi on raskaampaa \cite{stallings_operating_2018}.
+paremmin, mutta niiden hallinnointi on raskaampaa~\cite{stallings_operating_2018}.
 % Voiko taustatietoa lainata oppikirjoista huoletta ?
 \subsection{Asynkroninen tapahtumaohjattu palvelinmalli}
 
@@ -186,15 +186,17 @@ Asynkronisessa tapahtumaohjatussa palvelimessa yhdistetään
 käyttöliittymäohjelmoinnista lähtöisin oleva tapahtumaohjattu malli
 verkkopalvelimeen~\cite{pai_flash:_1999}. Tapahtumaohjattu malli sopii verkkopalvelinsovellukseen,
 sillä sen toiminnan rytmittää pyynnöt, jotka
-kuvautuvat mallissa tapahtumiksi.
-Tämän luokittelun malleista vanhin on AMPED. Siinä
-samanaikaisuutta luodaan apukäsittelijöillä, joita
-ajetaan omissa prosesseissaan~\cite{pai_flash:_1999}.
-Myöhempiä malleja on reactor~\cite{schmidt_reactor:_1995}
-ja proactor~\cite{hu_applying_1998}, joissa
-rinnakkaisuutta luodaan asynkronisilla I/O-operaatiolla
-ja säikeillä.Nämä mallit ovat yleisiä tapahtumaohjattuja malleja,
+kuvautuvat mallissa tapahtumiksi~\cite{schmidt_reactor:_1995}.
+Prosessiehin perustuva asynkroninen AMPED\cite{pai_flash:_1999}
+oli aikana jona käyttöjärjestelmät eivät yleisesti tukeneet
+säikeitä tai asynkronisia kutsuja erityisen siirrettävä.
+Myöhemmin näiden ominaisuuksien yleistyessä 
+huomiota saaneita malleja ovat Reactor~\cite{schmidt_reactor:_1995}
+ja Proactor~\cite{pyarali_proactor_1997}, joissa
+rinnakkaisuus saavutetaan asynkronisilla I/O-operaatiolla
+ja säikeillä. Nämä mallit ovat yleisiä tapahtumaohjattuja malleja,
 joita voidaan soveltaa myös muuhunkin kuin palvelimiin.
+
 
 Asynkronisten ja tapahtumaohjattujen palvelinsovelluksien suunnittelun keskiössä
 ovat vasteajan pienentäminen ja laitteistoresurssien tehokas hyödyntäminen.
@@ -204,6 +206,37 @@ Palvelinsovelluksissa
 laitteiston verkkoliikennekapasiteetti on usein rajoittava tekijä ja tämän takia
 sen tehokas hyödyntäminen on kriittistä. I/O-resurssien asynkronisella hyödyntämisellä on todettu
 olevan suorituskykyä parantava vaikutus~\cite{hu_applying_1998}.
+
+% miten tulee toimia kun referoin paljon tekstia jossa malli esitellään ensikerran ?
+Reactor-malli sopii käyttötapauksiin, joissa pyyntöjä voi saapua 
+samanaikaisesti monista lähteistä ja estävästi
+pyyntöjen odottaminen näistä lähteistä olisi tehotonta~\cite{schmidt_reactor:_1995}.
+Käyttötapauksen tapahtumankäsittelijöiden, tulisi
+lähettää ja vastaanottaa rajoitetun kokoisia viestejä
+tarvitsematta estävää I/O:ta. Näiden viestien käsittelyn
+pitäisi tapahtua suhteellisen lyhyessä ajassa~\cite{schmidt_reactor:_1995}.
+Myös jos kohdelaitteistolla ei ole järkevää käyttää monisäikeistä
+ratkaisua pyyntöjen käsittelyn rinnakkaistamiseen tai monisäikeisyys
+on toteutettu muualla järjestelmän arkkitehtuurissa, sopii Reactor-malli
+erottamaan sovelluksen ydinlogiikasta tapahtumienkäsittelyn
+rinnakkaistamiseen liittyvän logiikan~\cite{schmidt_reactor:_1995}.
+
+Reactor-mallin määrittelystä voidaan suoraan huomata, että
+sitä ei ole suunniteltu vastaamaan kaikkien
+verkkopalvelinsovelluksien tarpeisiin. Kuitenkin
+modernissa verkkopalvelinsovelluksessa sen suosioon on
+monta syytä. RESTful-rajapinnan käyttäminen
+verkkopalvelinsovelluksessa viestien välitykseen,
+saa viestien koon pysymään pienenä ja viestien
+käsittelyyn kuluvan ajan lyhyempänä verrattuna
+HTML-vastaukseen[lähde?]. % Etsi joku REST-lähde
+Monisäikeisyys ja rinnakkaistaminen
+voidaan järjestelmän arkkitehtuurissa siirtää tietokantamoottorin vastuulle,
+jolloin verkkopalvelin voi lähettää sille asynkronisia kyselyitä
+ja näin suorittaa useisiin pyyntöihin liittyviä tietokantakyselyitä
+samanaikasesti.
+Tämänkaltaisella toteutuksella verkkopalvelimen käyttötapaus sopii
+hyvin yhteen Reactor-mallin määrittelyn kanssa.
 
 Reactor mallissa pyyntöjen käsittelystä
 vastaa tapahtumasäie.
@@ -218,37 +251,39 @@ vastaavuutta huomattavasti~\cite{schmidt_reactor:_1995}.
 Asynkronisia I/O-kutsuja 
 voidaan suorittaa niitä tarjoavien käyttöjärjestelmä kutsujen
 avulla, tai siirtämällä I/O:n kutsumisen toisen säikeen tehtäväksi.
-Itse reactor malli ei ota kantaa miten asynkroninen kutsu toteutetaan.
+Itse Reactor-malli ei ota kantaa miten asynkroninen kutsu toteutetaan.
 Jos tapahtumakäsittelijässä tarvitaan pitkäkestoista laskentaa
 kannattaa sitä varten luoda uusi prosessi tai säie. Tämä
 prosessi tai säie saattaa pyynnön loppuun rinnakkain 
-reactorin tapahtumasäikeen kanssa~\cite{schmidt_reactor:_1995}.
+Reactorin tapahtumasäikeen kanssa~\cite{schmidt_reactor:_1995}.
 
-Reactor mallissa tapahtuman käsittely
-
-Proactor mallissa on paljon yhtäläisyyksiä reactor malliin, mutta siinä
+Proactor mallissa on paljon yhtäläisyyksiä Reactor malliin, mutta siinä
 hyödynnetään käyttöjärjestelmän asynkronisia ominaisuuksia suorittamaan
 operaatiota ennen pyynnön saapumista tapahtumasäikeelle~\cite{pyarali_proactor_1997}.
-Tapahtumasäie käsittelee tässä mallissa asynkronisten operaatioiden
-valmistumistapahtumia, jotka se ohjaa
-niiden tapahtumankäsittelijöille~\cite{pyryali_proactor_1997}.
+Tapahtumasäie ohjaa tässä mallissa asynkronisten tapahtumien 
+valmistumistapahtumia niitä vastaaville tapahtumankäsittelijöille~\cite{pyarali_proactor_1997}.
 
+Mikään ei kuitenkaan estä luomasta asynkronisten tapahtumien valmistumisille
+tapahtumankäsittelijöitä
+Reactor-mallissa ja näin tehdään monissa implementaatioissa Future-tai Promise nimisillä
+abstraktiolla.
 
- Tässä tutkielmassa keskitytään erityisesti
+Tässä tutkielmassa keskitytään erityisesti
 reactor-malliin, sillä se on sisäänrakennettu Node.js ohjelmaympäristöön ja
 täten paljon käytetty. Node.js:n reactor-mallin toteuttamisesta vastaa
 libuv-kirjasto~\cite{libuv_design_2019}.
 
 \subsection{Säiereservimalli}
 Monisäikeisiä palvelinmalleja on useita, mutta tässä tutkielmassa keskitytään säiereservimalliin.
-Monisäikeiset mallit ovat käytännössä syrjäyttäneet moniprosessimallin, sillä pääosa
-palvelimien käyttöjärjestelmistä tukee säikeitä, ja säikeiden hallinnointiin
-kuluu vähemmän resursseja kuin prosessien.
+Monisäikeiset mallit ovat käytännössä syrjäyttäneet moniprosessimallin,
+sillä palvelimien käyttöjärjestelmät tukevat säikeitä, ja säikeiden hallinnointiin
+kuluu vähemmän resursseja kuin prosessien ja niiden välinen kommunikointi on sujuvampaa.
+Moniprosessimallia käytetään kuitenkin yhä, kun järjestelmä pitää
+saada skaalautumaan uselle laittestolle.
 
 Monisäikeisissä palvelinsovelluksissa hyödynnetään laitteiston
-rinnakkaisuutta tehokkaasti suorittamalla pyyntöjä usealla säikeellä samaan
-aikaan. Suunnittelun keskeisenä
-tavoitteena on käsitellä mahdollisimman monta pyyntöä rinnakkain ja 
+rinnakkaisuutta tehokkaasti suorittamalla pyyntöjä usealla säikeellä rinnakkain.
+Suunnittelun keskeisenä tavoitteena on käsitellä mahdollisimman monta pyyntöä rinnakkain ja 
 näin saavuttaa korkea volyymi. Yksittäisen pyynnön
 vasteaika saattaa tässä
 järjestelmässä kärsiä säikeiden hallinnoimiseen kuluvasta suoritinajasta~\cite{easton_developing_2004}.
@@ -257,7 +292,7 @@ Pääsääntöisesti nämä mallit skaalautuvat hyvin laitteistoresursseihin,
 mutta jos hallinnoitavien säikeiden määrä on huomattavasti suurempi kuin laitteiston
 fyysisten suorittimien määrä, aiheuttaa hallinointi ylimääräistä taakkaa.
 Kalleimmat hallinnointitehtävät ovat säikeiden luonti ja tuhoaminen, sillä
-muistin varaus- ja vapautusoperaatiot vievät paljon aikaa.
+muistin varaus- ja vapautusoperaatiot vievät paljon aikaa~\cite{ling_analysis_2000}.
 Näihin operaatioihin kuluva aika onkin suurin säie-yhteyttä-kohti mallin
 ongelma, jossa jokaista pyyntöä kohti
 luodaa uusi säie, joka vastaamisen jälkeen tuhotaan.
@@ -266,9 +301,9 @@ Tämän mallin ongelmia on pyritty ratkaisemaan säiereservimallilla.
 Säiereservimalli pyrkii minimoimaan tämän ongelman rajoittamalla
 säikeiden määrän johonkin järkevään arvoon, kuten fyysisten suorittimien
 määrään. Se käyttää samoja säikeitä uudestaan, eli se ei tuhoa säiettä
-pyynnön käsittelyn päätteeksi vaan jättää sen vapaaksi säikeeksi reserviin.
+pyynnön käsittelyn päätteeksi vaan jättää sen vapaaksi säikeeksi reserviin~\cite{ling_analysis_2000}.
 
-Säiereservi mallissa kutsujen käsittely tapahtuu seuraavasti.
+Säiereservimallissa kutsujen käsittely tapahtuu seuraavasti.
 Kun kutsu saapuu, se osoitetaan vapaalle säikeelle. Säie käsittelee pyyntöä ja,
 jos se jää odottamaan I/O:ta asetetaan säikeen tila suorittaa-tilasta odottaa-tilaan,
 jolloin käyttöjärjestelmän vuoronantaja voi antaa suoritinaikaa toiselle säikeelle,
@@ -284,7 +319,7 @@ ja synkronointia on vähän~\cite{hu_applying_1998}.
 Säiereservin oikean kapasiteetin valitseminen on erittäin kriittinen 
 järjestelmän suorituskyvylle.
 Väärin valittu reservin koko kumoaa kaiken hyödyn, mitä luomis
-ja tuhoamisoperaatioiden välttämisellä on saavutettu.
+ja tuhoamisoperaatioiden välttämisellä on saavutettu~\cite{ling_analysis_2000}.
 
 Joissain toteutuksissa kokoa voi myös muuttaa dynaamisesti ajon aikana vastaamaan
 reaaliaikaiseen tarpeeseen.
@@ -350,6 +385,17 @@ jos I/O-kutsujen käsittely on suurin rajoittava tekijä.
 \subsection{Järjestelmien staattinen analyysi}
 
 \subsection{Järjestelmien testit simulaatiolla}
+Vuonna 1997 James C. Hu et.al testeissään~\cite{hu_measuring_1997}huomasivat
+että pienillä tiedostoilla säireservimalli oli paras,
+mutta suuremmilla tiedostoilla asynkroninen I/O-kutsujen
+tekeminen tapahtumaohjatulla palvelimella oli kaikista tehokkain.
+Testissä asynkronisia kutsuja hidasti
+erityisesti TransmitFile-funktio, joka oli 
+hidas pienillä tiedostoilla.
+Tästä tuloksesta voidaan kuitenkin huomata,
+että suurilla tiedostoilla saadaan asynkronisilla
+kutsuilla aikaan enemmän I/O:n rinnakkaisuutta, sillä
+työ siirtyy käyttöjärjestelmän vastuulle.
 
 
 
