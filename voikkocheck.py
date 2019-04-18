@@ -1,3 +1,4 @@
+#!/bin/python
 import libvoikko
 import sys
 import re
@@ -51,6 +52,8 @@ def analyzeWords( words):
     return errors
 
 def cliOutput(errorDictionaries, printSuggestions=True, onlywithSuggestions=False):
+    print("---------\n------\n---")
+    print("Found " + str(len(errorDictionaries)) + " errors.")
     for word in errorDictionaries:
         if onlywithSuggestions and len(word["suggestions"]) == 0:
             continue
@@ -64,8 +67,12 @@ def cliOutput(errorDictionaries, printSuggestions=True, onlywithSuggestions=Fals
 
 if __name__ == "__main__":
     filename = sys.argv[1]
+    if "-h" in sys.argv or "--help" in sys.argv:
+        print(" Spellcheck for finnish tex files.\nUsage: voikkocheck.py [inputfile] [flags]")
+        print("option -s : print suggestions")
+        print("option -o : only print errors with suggestions")
+        exit(0)
     misspellings = analyzeWords(readWords(filename))
-    print("---------\n------\n---")
     printSugs = "-s" in sys.argv
     onlySugs = "-o"  in sys.argv
     cliOutput(misspellings, printSuggestions=printSugs, onlywithSuggestions=onlySugs)

@@ -1,8 +1,10 @@
-\documentclass[12pt]{article}
+\documentclass[finnish]{tktltiki}
 \usepackage{cite}
 \usepackage[finnish]{babel}
 \usepackage{makeidx}
-
+\usepackage{epsfig}
+\usepackage{subfigure}
+\usepackage{url}
 \makeindex
 
 \title{Rinnakkaisuus modernissa verkkopalvelinsovelluksessa}
@@ -10,11 +12,8 @@
 
 \begin{document}
 \maketitle
-\newpage
-\tableofcontents
-\newpage
-\index{Tiivistelma}
-\section*{Tiivistelmä}
+
+\begin{abstract}
 Tässä tutkielmassa vertaillaan verkkopalvelimien toteutusmalleja
 ja niiden suorituskykyä. Verkkopalvelin on ohjelma, joka vastaa useiden asiakkaiden pyyntöihin
 verkkosivuilla tai verkkosovelluksissa. Pyyntöihin vastaamiseen
@@ -24,6 +23,11 @@ Vertailuun valittiin tapahtumaohjattu Reactor palvelinmalli, sekä säiereservim
 Reactor-malli on kasvattanut suosiotaan pitkään verkkosovelluskehityksessä.
 Sitä vastaan vertailussa on säiereservimalli sillä siinä on
 onnistuttu korjaamaan joitakin yksi-säie-yhteyttä-kohti-mallin ongelmia.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
 \section{Johdanto}
 \section{Verkkopalvelinsovellus}
 \subsection{Asiakas-palvelin malli}
