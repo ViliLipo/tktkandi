@@ -1,6 +1,10 @@
 \documentclass[12pt]{article}
 \usepackage{cite}
 \usepackage[finnish]{babel}
+\usepackage{makeidx}
+
+\makeindex
+
 \title{Rinnakkaisuus modernissa verkkopalvelinsovelluksessa}
 \author{Vili Lipo}
 
@@ -9,14 +13,15 @@
 \newpage
 \tableofcontents
 \newpage
+\index{Tiivistelma}
 \section*{Tiivistelmä}
 Tässä tutkielmassa vertaillaan verkkopalvelimien toteutusmalleja
 ja niiden suorituskykyä. Verkkopalvelin on ohjelma, joka vastaa useiden asiakkaiden pyyntöihin
 verkkosivuilla tai verkkosovelluksissa. Pyyntöihin vastaamiseen
 voi liittyä laskentaa, tietokantaoperaatioita tai muita toimenpiteitä.
 
-Vertailuun valittiin asynkroninen tapahtumaohjattu Reactor palvelinmalli, sekä säiereservimalli.
-Asynkroninen Reactor-malli on kasvattanut suosiotaan pitkään verkkosovelluskehityksessä.
+Vertailuun valittiin tapahtumaohjattu Reactor palvelinmalli, sekä säiereservimalli.
+Reactor-malli on kasvattanut suosiotaan pitkään verkkosovelluskehityksessä.
 Sitä vastaan vertailussa on säiereservimalli sillä siinä on
 onnistuttu korjaamaan joitakin yksi-säie-yhteyttä-kohti-mallin ongelmia.
 \section{Johdanto}
@@ -99,7 +104,7 @@ Verkkopalvelin on palvelin, jonka tehtävä on vastata Internetin
 selaamiseen liittyviin pyyntöihin eli lähettämään tietyn HTTP-pyynnön
 perusteella oikea HTML-tiedosto, tekstimuotoinen datatiedosto~\cite{Berners-Lee_1994}
 ,tai kuvatiedosto.
-\subsection{Rinnakkaisuus palvelinympäristössä}
+\subsection{Rinnakkaisuus palvelinsovelluksessa}
 
 Rinnakkaisuudella tarkoitetaan tietojenkäsittelytieteessä useiden
 eri operaatioiden suorittamista järjestelmässä samaan aikaan.
@@ -180,25 +185,34 @@ kaksi saman prosessin käyttäjätason säiettä ei voi olla suorituksessa
 samaan aikaan. Täten ytimentasonsäikeet palvelevat rinnakkaisuuden tavoitteita
 paremmin, mutta niiden hallinnointi on raskaampaa~\cite{stallings_operating_2018}.
 % Voiko taustatietoa lainata oppikirjoista huoletta ?
-\subsection{Asynkroninen tapahtumaohjattu palvelinmalli}
 
-Asynkronisessa tapahtumaohjatussa palvelimessa yhdistetään
+Sovelluslogiikan suorittamisen lisäksi rinnakkain voidaan suorittaa I/O-operaatioita.
+Käyttöjärjestelmät tarjoavat asynkronisia I/O-kutsuja, joita kutsumalla
+sovellus voi jatkaa suoritustaan sillä aikaa kun käyttöjärjestelmä
+suorittaa tarvittua I/O-operaatiota. Näitä kutsuja käyttämällä voidaan
+lisätä sovelluksen samanaikasuutta lisäämättä säikeitä
+tai prosesseja ohjelman rakenteeseen.
+
+\subsection{Tapahtumaohjattu palvelinmalli}
+
+Tapahtumaohjatussa palvelimessa yhdistetään
 käyttöliittymäohjelmoinnista lähtöisin oleva tapahtumaohjattu malli
 verkkopalvelimeen~\cite{pai_flash:_1999}. Tapahtumaohjattu malli sopii verkkopalvelinsovellukseen,
 sillä sen toiminnan rytmittää pyynnöt, jotka
 kuvautuvat mallissa tapahtumiksi~\cite{schmidt_reactor:_1995}.
 Prosesseihin perustuva asynkroninen AMPED\cite{pai_flash:_1999}
-oli aikana jona käyttöjärjestelmät eivät yleisesti tukeneet
-säikeitä tai asynkronisia kutsuja erityisen siirrettävä.
+oli erityisen siirrettävä aikana jona, käyttöjärjestelmät
+eivät tukeneet säikeitä tai asynkronisia kutsuja.
 Myöhemmin näiden ominaisuuksien yleistyessä 
 huomiota saaneita malleja ovat Reactor~\cite{schmidt_reactor:_1995}
 ja Proactor~\cite{pyarali_proactor_1997}, joissa
 rinnakkaisuus saavutetaan asynkronisilla I/O-operaatiolla
-ja säikeillä. Nämä mallit ovat yleisiä tapahtumaohjattuja malleja,
-joita voidaan soveltaa myös muuhunkin kuin palvelimiin.
+ja säikeillä. Nämä mallit ovat yleisiä tapahtumaohjattuja malleja, jotka
+vastaavat sovelluksen samanaikaisuuskäytännöstä.
+Näitä voidaan soveltaa myös muuhunkin kuin palvelimiin.
 
 
-Asynkronisten ja tapahtumaohjattujen palvelinsovelluksien suunnittelun keskiössä
+Tapahtumaohjattujen palvelinsovelluksien suunnittelun keskiössä
 ovat vasteajan pienentäminen ja laitteistoresurssien tehokas hyödyntäminen.
 Tavoitteena on hyödyntää I/O-resursseja mahdollisimman tehokkaasti
 rinnakkain ja välttää I/O:n odottamista ohjelman suorituksessa~\cite{pai_flash:_1999}.
@@ -216,42 +230,40 @@ lähettää ja vastaanottaa rajoitetun kokoisia viestejä
 tarvitsematta estävää I/O:ta. Näiden viestien käsittelyn
 pitäisi tapahtua suhteellisen lyhyessä ajassa~\cite{schmidt_reactor:_1995}.
 Myös jos kohdelaitteistolla ei ole järkevää käyttää monisäikeistä
-ratkaisua pyyntöjen käsittelyn rinnakkaistamiseen tai monisäikeisyys
+ratkaisua pyyntöjen käsittelyn rinnakkaistamiseen tai rinnakkaisuus
 on toteutettu muualla järjestelmän arkkitehtuurissa, sopii Reactor-malli
 erottamaan sovelluksen ydinlogiikasta tapahtumienkäsittelyn
 rinnakkaistammiseen liittyvän logiikan~\cite{schmidt_reactor:_1995}.
 
-Reactor-mallin määrittelystä voidaan suoraan huomata, että
-sitä ei ole suunniteltu vastaamaan kaikkien
-verkkopalvelinsovelluksien tarpeisiin. Kuitenkin
-modernissa verkkopalvelinsovelluksessa sen suosioon on
+Modernissa verkkopalvelinsovelluksessa Reactor-mallin suosioon on
 monta syytä. RESTful-rajapinnan käyttäminen
 verkkopalvelinsovelluksessa viestien välitykseen,
 saa viestien koon pysymään pienenä ja viestien
 käsittelyyn kuluvan ajan lyhyempänä verrattuna
-HTML-vastaukseen[lähde?]. % Etsi joku REST-lähde
+HTML-tiedosto vastaukseen[lähde?]. % Etsi joku REST-lähde
 Monisäikeisyys ja rinnakkaistaminen
 voidaan järjestelmän arkkitehtuurissa siirtää tietokantamoottorin vastuulle,
 jolloin verkkopalvelin voi lähettää sille asynkronisia kyselyitä
 ja näin suorittaa useisiin pyyntöihin liittyviä tietokantakyselyitä
 samanaikaisesti.
 Tämänkaltaisella toteutuksella verkkopalvelimen käyttötapaus sopii
-hyvin yhteen Reactor-mallin määrittelyn kanssa.
+hyvin yhteen Reactor-mallin määrittelyn kanssa tukeutuen 
+mallin vahvuuksiin sekä peittäen sen heikkouksia.
 
 Reactor mallissa pyyntöjen käsittelystä
 vastaa tapahtumasäie.
-Tapahtumasäie kutsuu jokaista tapahtumaa kohden, sille
+Tapahtumasäie kutsuu tapahtumajonon jokaista tapahtumaa kohden, sille
 määriteltyä tapahtumakäsittelijää.
 Tapahtumakäsittelijöissä rinnakkaisuuteen päästään
 vain I/O:n osalta, kun käytetään asynkronisia
-I/O-kutsuja.
-Estäviä kutsuja tulee välttää,
+I/O-operaatiota.
+Estäviä operaatioita tulee välttää,
 sillä niiden käyttäminen laskee sovelluksen
 vastaavuutta huomattavasti~\cite{schmidt_reactor:_1995}.
-Asynkronisia I/O-kutsuja 
+Asynkronisia I/O-operaatioita 
 voidaan suorittaa niitä tarjoavien käyttöjärjestelmä kutsujen
-avulla, tai siirtämällä I/O:n kutsumisen toisen säikeen tehtäväksi.
-Itse Reactor-malli ei ota kantaa miten asynkroninen kutsu toteutetaan.
+avulla, tai siirtämällä I/O-operaatiot toisen säikeen tehtäväksi.
+Itse Reactor-malli ei ota kantaa miten asynkroninen operaatio toteutetaan.
 Jos tapahtumakäsittelijässä tarvitaan pitkäkestoista laskentaa
 kannattaa sitä varten luoda uusi prosessi tai säie. Tämä
 prosessi tai säie saattaa pyynnön loppuun rinnakkain 
@@ -268,10 +280,36 @@ tapahtumankäsittelijöitä
 Reactor-mallissa ja näin tehdään monissa implementaatioissa Future-tai Promise nimisillä
 abstraktiolla.
 
+Toinen Reactor mallin laajennus on SEDA (Staged Event Driven Architecture)~\cite{welsh_seda_2001}.
+Siinä pyyntöjen käsittely jaetaan tasoiksi, joissa kaikissa on
+käytännössä reactor-mallin toteuttava rakenne. Jokaisella tasolla
+on oma tapahtumajono sekä tapahtumakäsittelijä, joka ohjaa työtä
+apusäikeille. Tasoilla ei ole tapahtumasäiettä, sillä
+jokaisella tasolla on vain yksi tapahtumakäsittelijä.
+Tapahtumakäsittelijä voi käsittelyn päätteeksi
+lisätä uusia tapahtumia seuraavien tasojen tapahtumajonoihin.
+Tämän lisäksi jokaisella tasolla on resurssiohjaaja,
+joka vastaa resurssien käytön pysymisestä sallitulla tasolla,
+sekä apusäikeiden määrästä kyseisellä tasolla~\cite{welsh_seda_2001}.
+SEDA-arkkitehtuurin suurin ero suoraan Reactor-mallin pohjalta luotuun
+palvelimeen on sen hienojakoisempi resurssien ohjaus sovelluksen eri tasoille.
+
 Tässä tutkielmassa keskitytään erityisesti
 reactor-malliin, sillä se on sisäänrakennettu Node.js ohjelmaympäristöön ja
 täten paljon käytetty. Node.js:n reactor-mallin toteuttamisesta vastaa
-libuv-kirjasto~\cite{libuv_design_2019}.
+libuv-kirjasto~\cite{libuv_design_2019}. Suunnittelufilosofiassa
+libuv:lla on paljon yhteistä AMPED-mallin kanssa, sillä
+sen tarkoitus on taata aina asynkroniset I/O-operaatiot alustasta
+riippumatta. Libuv siirtääkin I/O-kutsun toiselle säikeelle
+jos alustalla ei ole tarjota asynkronista kutsua natiivisti~\cite{libuv_design_2019}.
+Tämä toimintapa saa kutsun näyttämään tapahtumankäsittelijästä
+asynkroniselta.
+
+Reactor-mallia voi laajentaa vielä kolmannella tavalla.
+Jos samaa Reactor-sovellusta ajaa yhdessä eri säikeillä
+ja jokin säie jakaa työn tasaisesti tapahtumasäikeiden välillä
+on kyseessä SYMPED-malli. Tämä malli mahdollistaa
+Reactor pohjaisten sovelluksien skaalaamisen tehokkaasti.
 
 \subsection{Säiereservimalli}
 Monisäikeisiä palvelinmalleja on useita, mutta tässä tutkielmassa keskitytään säiereservimalliin.
@@ -303,8 +341,8 @@ säikeiden määrän johonkin järkevään arvoon, kuten fyysisten suorittimien
 määrään. Se käyttää samoja säikeitä uudestaan, eli se ei tuhoa säiettä
 pyynnön käsittelyn päätteeksi vaan jättää sen vapaaksi säikeeksi reserviin~\cite{ling_analysis_2000}.
 
-Säiereservimallissa kutsujen käsittely tapahtuu seuraavasti.
-Kun kutsu saapuu, se osoitetaan vapaalle säikeelle. Säie käsittelee pyyntöä ja,
+Säiereservimallissa asiakkaan pyyntöjen käsittely tapahtuu seuraavasti.
+Kun pyyntö saapuu, se osoitetaan vapaalle säikeelle. Säie käsittelee pyyntöä ja,
 jos se jää odottamaan I/O:ta asetetaan säikeen tila suorittaa-tilasta odottaa-tilaan,
 jolloin käyttöjärjestelmän vuoronantaja voi antaa suoritinaikaa toiselle säikeelle,
 kunnes I/O-pyyntö valmistuu. Kun pyyntö on käsitelty ja siihen on vastattu, niin
@@ -323,6 +361,7 @@ ja tuhoamisoperaatioiden välttämisellä on saavutettu~\cite{ling_analysis_2000
 
 Joissain toteutuksissa kokoa voi myös muuttaa dynaamisesti ajon aikana vastaamaan
 reaaliaikaiseen tarpeeseen.
+Tunnettuja säiereservimallin toteutuksia ovat MySQL, sekä Apache Tomcat.
 
 \section{Mallit testeissä}
 \subsection{Arviontikriteerit}
@@ -348,9 +387,7 @@ kriteerien valossa~\cite{gokhale_performance_2006}.
     \item vasteaika
     \item vakaus
 \end{itemize}
-\subsection{Alustava järjestelmien arviointi kriteerien perusteella}
-Molempien mallien puutteita voidaan paikata useamman laitteiston hajautetuilla
-järjestelmillä, mutta tällaiset järjestelyt jätetään vertailun ulkopuolelle.
+\subsection{Tietoturva}
 
 Reactor-mallin järjestelmissä suoritinsidonnaisien
 operaatioiden rinnakkaistamiseen ei ole keskitetty erityistä huomiota, ja tällaisten operaatioiden
@@ -359,6 +396,7 @@ kuin monisäikeisten järjestelmien~\cite{davis_case_2017}.
 
 Reactor-mallin skaalautuvuus kasvaviin laitteistoresursseihin on hyvin
 toteutussidonnaista, kun taas
+
 säiereservimallin skaalautuvuus suoritinresursseihin on hyvin suoraviivaista,
 vaikkakin kilpailutilanteiden havaitsemiseen ja estämiseen kuluu enemmän aikaa,
 jos säikeitä on paljon.
@@ -376,20 +414,12 @@ noudattaville järjestelmille, mutta niiden pitäisi onnistua
 lukitsemaan reservin jokainen säie samaan aikaan, jotta
 järjestelmä ei kykenisi enää vastaamaan asiakkaiden pyyntöihin~\cite{davis_case_2017}.
 
-Järjestelmien ominaisuuksien perusteella voimme siis päätellä että,
-säiereservimalli
-tulisi pärjäämään paremmin, jos palvelimen tehtävän pullonkaula on suoritinaika.
-Reactor-järjestelmä
-taas luultavasti kykenee pienempään viiveeseen,
-jos I/O-kutsujen käsittely on suurin rajoittava tekijä.
-\subsection{Järjestelmien staattinen analyysi}
-
-\subsection{Järjestelmien testit simulaatiolla}
+\subsection{Järjestelmien volyymin ja skaalautuvuuden testit simulaatiolla}
 Vuonna 1997 James C. Hu et.al testeissään~\cite{hu_measuring_1997}huomasivat
 että pienillä tiedostoilla säiereservimalli oli paras,
-mutta suuremmilla tiedostoilla asynkroninen I/O-kutsujen
+mutta suuremmilla tiedostoilla asynkroninen I/O-operaatioiden
 tekeminen tapahtumaohjatulla palvelimella oli kaikista tehokkain.
-Testissä asynkronisia kutsuja hidasti
+Testissä asynkronisia operaatioita hidasti
 erityisesti TransmitFile-funktio, joka oli 
 hidas pienillä tiedostoilla.
 Tästä tuloksesta voidaan kuitenkin huomata,
@@ -397,12 +427,48 @@ että suurilla tiedostoilla saadaan asynkronisilla
 kutsuilla aikaan enemmän I/O:n rinnakkaisuutta, sillä
 työ siirtyy käyttöjärjestelmän vastuulle.
 
-
+Ivan Voras ja Mario Zagar totesivat testeissään~\cite{voras_characteristics_2009},
+että heidän SEDA-implementaationsa kahdella tapahtumasäikeellä ja 4 apusäikeellä
+ei saavuttanut huomattavaa
+etua yksinkertaiseen Reactor-toteutukseen. Tämän diagnosoitiin
+johtuvan SEDA:n aiheuttamien suorittimen kontekstinvaihtojen yleisyydestä.
+Testissä molemmat järjestelmien suorituskyky
+oli lähes samalla 120:neen asiakkaaseen asti jonka
+jälkeen SPED-järjestelmän suorituskyky alkoi
+hieman heikentyä. SPED suoritti silloin noin 110 000 toimitusta sekunnissa
+ja SEDA 120 000 sekunnissa. Samassa testissä AMPED-järjestelmä neljällä apuprosessilla
+kykeni 250 000 toimitukseen sekunnissa 120:nellä asiakkaalla. Mielenkiintoista on
+että heidän SEDA-implementaatio, jossa tapahtumasäikeiden ja apusäikeiden
+määrät asetettiin samaksi arvoksi suoritutui huomattavasti paremmin ja
+saavutti 300 000 tapahtumaa sekunnissa 120:nellä asiakkaalla.
+Vertailun selkein voittaja skaalautuvuuden
+osalla oli SYMPED-järjestelmä, jossa on useita SPED-järjestelmiä
+omilla säikeillään. Tällä järjestelmällä neljällä säikeellä
+saavutettiin 440 toimitusta sekunnissa 120:nellä asiakkaalla.
 
 \section{Johtopäätökset}
-% Reactor mallin rajallisuudet rinnakkaisuudessa
-% eivät ole haitaksi, jos järjestelmässä on rinnakkaisuutta
-% korkeammalla tai matalammalla tasolla.
+Reactor mallin rajallisuudet rinnakkaisuudessa
+eivät ole haitaksi, jos järjestelmässä on rinnakkaisuutta
+korkeammalla tai matalammalla tasolla.
+
+Reactor-mallin on erottaa 
+selkeästi pyyntöjen käsittelyn 
+samanaikaistamiseen liittyvän
+logiikan, muusta sovelluskohtaisesta logiikasta.
+Malli on myös suhteessa muihin samanaikaisuutta
+käsitteleviin malleihin yksinkertainen.
+Näistä syistä se on implementoitu useisiin
+kirjastoihin ja saavuttanut vakaan suosion.
+
+Reactor-mallin implentoivalla 
+kirjastolla voidaan kustannustehokkaasti
+toteuttaa palvelin, joka kykenee suoritutumaan
+tehtävistään palvelun alkutaipaleella. Jos
+käyttäjä määrät kasvavat ja skaalautuvuutta
+vaaditaan voidaan järjestelmä muuttaa SYMPED-järjestelmäksi
+joka todetusti skaalautuu hyvin resuresseihin.
+Node.js sovelluksesta voi luoda SYMPED järjestelmän
+cluster-kirjastolla.
 \bibliography{kandi_zot}
 \bibliographystyle{plain}
 
