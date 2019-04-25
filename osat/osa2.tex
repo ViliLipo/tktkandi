@@ -52,12 +52,12 @@
 \author{Vili Lipo}
 \date{\today}
 \level{Kanditaatin tutkielma}
-\abstract{Tässä tutkielmassa vertaillaan verkkopalvelimien toteutusmalleja
+\abstract{Tässä tutkielmassa vertaillaan verkkopalvelimien rinnakkaistamismalleja
 ja niiden suorituskykyä. Verkkopalvelin on ohjelma, joka vastaa useiden asiakkaiden pyyntöihin
 verkkosivuilla tai verkkosovelluksissa. Pyyntöihin vastaamiseen
 voi liittyä laskentaa, tietokantaoperaatioita tai muita toimenpiteitä.
 
-Vertailuun valittiin tapahtumaohjattu Reactor palvelinmalli, sekä säiereservimalli.
+Vertailuun valittiin tapahtumaohjattu Reactor-malli, sekä säiereservimalli.
 Reactor-malli on kasvattanut suosiotaan pitkään verkkosovelluskehityksessä.
 Sitä vastaan vertailussa on säiereservimalli sillä siinä on
 onnistuttu korjaamaan joitakin yksi-säie-yhteyttä-kohti-mallin ongelmia.}
@@ -97,6 +97,22 @@ onnistuttu korjaamaan joitakin yksi-säie-yhteyttä-kohti-mallin ongelmia.}
 \mainmatter       % clear page, start arabic page numbering
 
 \section{Johdanto}
+Verkkopalvelinsovelluksien suorituskyky on keskeinen ominaisuus
+Internetin välityksellä käytettävien palveluiden käyttökokemukseen ja toimivuuteen.
+Verkkopalvelimien taakat ovat vaihtelevia, ja tästä johtuen
+yleispätevän verkkopalvelimen tulisi skaalautua saatavilla oleviin resursseihin.
+Verkkopalvelinsovelluksessa kriittisimmät resurssit ovat I/O,
+jos palvelimen käyttötarkoitus ei ole suorittaa pilvilaskentaa.
+
+Verkkopalvelimen tehokkuuteen ja skaalautumiseen vaikuttaa olennaisesti
+sen samanaikaistamiskäytäntö(concurrency policy). Tässä
+tutkielmassa vertaillaan eri malleja palvelimen samanaikaistamiseen.
+
+Vertailussa perehdytään Reactor-malliin ja sen jatkokehityksiin,
+sekä säiereservimalliin (threadpool-model).
+Vertailun keskeisimmät kriteerit ovat suorituskyky, luotettavuus, ja 
+sovelluslogiikan kehittämiseen liittyvät haasteet.
+
 \section{Verkkopalvelinsovellus}
 \subsection{Asiakas-palvelin malli}
 Asiakas-palvelin mallissa
@@ -183,8 +199,7 @@ eri operaatioiden suorittamista järjestelmässä samaan aikaan.
 Nykyisissä palvelintietokoneissa on kymmeniä suorittimia ja niiden tehokkaaseen
 hyödyntämiseen tarvitaan rinnakkaisuuden hallintaa.
 
-On täysin tehtäväkohtaista
-kuinka hyvin rinnakkaisuuden tavoitteet voidaan saavuttaa.
+On täysin ongelmakohtaista kuinka tehokkaasti se voidaan ratkaista rinnakkain.
 Tähän vaikuttaa kuinka suuri osa tehtävästä on olemukseltaan peräkkäistä.
 Peräkkäiset osat ovat sellaisia, jossa ohjelman vaiheet ovat täysin
 riippuvaisia toisistaan ja seuraavaan vaiheeseen ei voida mennä ennen edellisen
@@ -371,7 +386,7 @@ libuv-kirjasto~\cite{libuv_design_2019}. Suunnittelufilosofiassa
 libuv:lla on paljon yhteistä AMPED-mallin kanssa, sillä
 sen tarkoitus on taata aina asynkroniset I/O-operaatiot alustasta
 riippumatta. Libuv siirtääkin I/O-kutsun toiselle säikeelle
-jos alustalla ei ole tarjota asynkronista kutsua natiivisti~\cite{libuv_design_2019}.
+jos alustalla ei ole tarjota asynkronista kutsua~\cite{libuv_design_2019}.
 Tämä toimintapa saa kutsun näyttämään tapahtumankäsittelijästä
 asynkroniselta.
 
@@ -511,7 +526,7 @@ TransmitFile-funktio aiheutti pienillä 500-tavuisilla tiedostoilla hyvin suuren
 pyynnöille, joka oli noin 200ms. Samalla tiedostokoolla säiereservimallin palvelin
 suoriutui vain noin 50ms viivellä. Menetelmien asetelma vaihtaa paikkaa
 50K-kokoisilla tiedostoilla, joilla Asynkronisia kutsuja käyttävän
-pavelimen viive laski alle säiereservimallin arvon. Suuremmilla tiedostoilla
+palvelimen viive laski alle säiereservimallin arvon. Suuremmilla tiedostoilla
 ero korostui entisestään. Pienillä tiedostoilla säiereservimallilla oli suurempi
 volyymi, mutta myös tämä tilanne kääntyi tiedostokoon kasvaessa.
 
@@ -532,10 +547,20 @@ ei saavuttanut huomattavaa
 etua yksinkertaiseen Reactor-toteutukseen. Tämän diagnosoitiin
 johtuvan SEDA:n aiheuttamien suorittimen ympäristön vaihtojen yleisyydestä.
 Testissä molemmat järjestelmien suorituskyky
-oli lähes samalla 120:neen asiakkaaseen asti jonka
+oli lähes samalla 120:een asiakkaaseen asti jonka
 jälkeen SPED-järjestelmän suorituskyky alkoi
 hieman heikentyä. SPED suoritti silloin noin 110 000 toimitusta sekunnissa
-ja SEDA 120 000 sekunnissa. Samassa testissä AMPED-järjestelmä neljällä apuprosessilla
+ja SEDA 120 000 sekunnissa.
+SEDA-mallissa jokaisella käsittelyn vaiheella on omat apusäikeensä,
+joilla saadaan rinnakkaistettua vaiheeseen liittyvää estävää laskentaa. 
+Muistitietokannan käyttötapauksessa estävää laskentaa on vähäisesti.
+Kuitenkin vaiheesta toiseen siirtyminen aiheuttaa suoritinympäristön vaihdon,
+kun uuden vaiheen apusäie otetaan käytttöön. 
+Apusäikeiden hyödyt
+tulisivat näkyviin selkeämmin käyttötapauksessa, jossa vaaditaan enemmän
+rinnakkaista estävää laskentaa. 
+
+Samassa testissä AMPED-järjestelmä neljällä apuprosessilla
 kykeni 250 000 toimitukseen sekunnissa 120:nellä asiakkaalla. Mielenkiintoista on
 että heidän SEDA-implementaatio, jossa tapahtumasäikeiden ja apusäikeiden
 määrät asetettiin samaksi arvoksi suoritutui huomattavasti paremmin ja
@@ -547,12 +572,13 @@ saavutettiin 440 toimitusta sekunnissa 120:nellä asiakkaalla.
 SYMPED-järjestelmä osoitti myös hyvää skaalautuvuutta 
 sille annettujen säikeiden määrän kasvaessa.
 
+
 \subsection{Sovelluslogiikan kehitystyön haastavuus}
 Rinnakkaistamisen toteutusmallit ovat työkaluja kehittäjälle,
 jotka toteutetaan mielekkäästi kirjastona tai moduulina.
 Jos malli on hyvin toteutettu kehittäjän tulisi pystyä
 keskittymään keskeisen sovelluslogiikan kirjoittamiseen 
-murehtimatta rinnakaisuutta hallitsevasta koodista.
+murehtimatta rinnakkaisuutta hallitsevasta osasta.
 
 Reactor-malli on yksinkertainen ja helpommin toteutettava
 kuin Proactor. Reactor-mallin onnistuu hyvin tavoitteessaan
@@ -567,14 +593,19 @@ korjaaminen on usein työlästä, koska ohjelman
 suoritus ei kulje rivi riviltä, vaan järjestys
 muuttuu tapahtumakäsittelijöiden takaisinkutsujen mukaan.
 
-Reactor-mallin toteutuksissa kehittäjän tuleee huomioida
+Reactor-mallin toteutuksissa kehittäjän tulee huomioida
 asynkronisen I/O:n vaikutukset. Asynkronisuus vaikeuttaa koodin
-luettavuutta, mutta se nostaa ohjelman samanaikaisuutta ja 
-tehokkuutta huomattavasti.
+luettavuutta, mutta se nostaa ohjelman samanaikaisuutta ja täten
+tehokkuutta huomattavasti. 
 
-Reactor-mallia sopivasti laajentamalla voidaan 
-myös mallintaa Proactor-mallin toimintaa, ja 
-näin mallien konkreettiset erot käytännössä jäävät hyvin pieniksi.
+Jos ohjelman tulee käsitellä
+asynkronisen operaation tulosta tulee operaation valmistumiselle
+asettaa tapahtuman käsittelijä.
+Asynkronisten operaatioiden valmistumisten hallintaa varten
+on kehitetty abstraktioita kuten Future/Promise tai async/await.
+Nämä abstraktiot laajentavat Reactorin toimintaa osittain vastaamaan
+Proactoria, sillä ne tekevät valmistumistapahtumien käsittelemisestä
+luontevaa.
 
 Säiereservimalli on sovelluslogiikan kehittäjälle suoraviivainen,
 sillä useimmissa toteutuksilla reservin säikeet suorittavat
@@ -605,13 +636,13 @@ käsitteleviin malleihin yksinkertainen.
 Näistä syistä se on implementoitu useisiin
 kirjastoihin ja saavuttanut vakaan suosion.
 
-Reactor-mallin implentoivalla
+Reactor-mallin toteuttavalla
 kirjastolla voidaan kustannustehokkaasti
-toteuttaa palvelin, joka kykenee suoritutumaan
+toteuttaa palvelin, joka kykenee suoriutumaan
 tehtävistään palvelun alkutaipaleella. Jos
 käyttäjä määrät kasvavat ja skaalautuvuutta
 vaaditaan voidaan järjestelmä muuttaa SYMPED-järjestelmäksi
-joka todetusti skaalautuu hyvin resuresseihin.
+joka todetusti skaalautuu hyvin resursseihin.
 Node.js sovelluksesta voi luoda SYMPED järjestelmän
 cluster-kirjastolla.
 

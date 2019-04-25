@@ -11,6 +11,12 @@ in latex files.
 @licence GPL2
 """
 
+def removeCommentLines(line):
+    if "%" in line:
+        return line.split("%", 2)[0]
+    else:
+        return line
+
 def removeTexCommandsFromLine(line):
     line = re.sub('\\\\[\w[]*]*\*?(\{[\w -_:]*\})*', ' ', line)
     return line
@@ -21,6 +27,7 @@ def removePunctuationFromWord(word):
 
 def handleSpecialCharacters(line):
     words = []
+    line = removeCommentLines(line)
     line = removeTexCommandsFromLine(line)
     for word in line.split():
         for word2 in word.split("~"):
