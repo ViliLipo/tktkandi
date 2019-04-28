@@ -1,0 +1,86 @@
+\documentclass{beamer}
+\usetheme{Boadilla}
+
+
+
+\title{Rinnakkaisuus verkkopalvelinsovelluksessa}
+\subtitle{Kuinka opin rakastamaan vastakutsuja}
+\author{Vili Lipo}
+\institute{Helsingin Yliopisto}
+\date{\today}
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+\begin{frame}
+\frametitle{Esityksen rakenne}
+\tableofcontents
+\end{frame}
+\section{Johdanto}
+\begin{frame}
+\frametitle{Johdanto}
+ \begin{itemize}
+ \item Tutkielman tarkoitus oli selvittää miksi tapahtumavetoiset palvelimet
+ ovat niin suosittuja (Node.js).
+ \item Perehtyä niiden vahvuuksiin ja heikkouksiin
+ \item Selvittää minkälaista rinnakkaisuus on verkkopalvelinsovelluksessa
+ \end{itemize}
+\end{frame}
+\section{Verkkopalvelinsovellus}
+\subsection{Asiakas-palvelin malli}
+\begin{frame}
+    \frametitle{Asiakas-palvelin malli}
+    \begin{itemize}
+        \item Asiakasosa tarjoaa käyttöliittymän
+        \begin{itemize}
+            \item työpöytäohjelma
+            \item verkkosivu
+            \item komentoriviohjelma
+        \end{itemize}
+        \item Palvelin tarjoaa palveluita verkkoyhteyden yli
+            \begin{itemize}
+                \item Tiedostoja
+                \item Laskentaa
+                \item Dataa
+                \item Useille asiakkaille samanaikaisesti
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+\begin{frame}
+    \frametitle{Verkkopalvelinsovellus}
+    \begin{itemize}
+        \item Verkkopalvelinsovellus vastaa internetin selaamiseen liittyviin pyyntöihin.
+        \item HTTP-pyynnöt
+            \begin{itemize}
+                \item GET
+                \item POST
+                \item DELETE
+                \item etc..
+            \end{itemize}
+        \item Lähettää ja vastaanottaa tekstimuotoista dataa.
+        \item I/O-sidonnainen sovellus
+    \end{itemize}
+\end{frame}
+\subsection{Rinnakkaisuus}
+\begin{frame}
+    \frametitle{Rinnakkaisuus}
+    \begin{itemize}
+       \item Operaatioiden suorittamista samaan aikaan laitteistoa hyödyntäen
+        \begin{itemize}
+            \item Useita suorittimia yhdellä sirulla
+        \end{itemize}
+        \item Ongelmakohtaista
+            \begin{itemize}
+                \item Peräkkäisyys
+                \item Ahmdalin laki
+            \end{itemize}
+        \item Ongelmallista
+            \begin{itemize}
+                \item Lukkiutuminen
+                \item Kilpailutilanteet
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\end{document}

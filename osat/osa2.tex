@@ -8,7 +8,6 @@
 \usepackage{microtype}
 \usepackage{amsfonts,amsmath,amssymb,amsthm,booktabs,color,graphicx}
 \usepackage[pdftex,hidelinks]{hyperref}
-
 % Automatically set the PDF metadata fields
 \makeatletter
 \AtBeginDocument{\hypersetup{pdftitle = {\@title}, pdfauthor = {\@author}}}
@@ -109,7 +108,7 @@ joka on mielekästä toteuttaa moduulina tai kirjastona.
 Näin palvelimen sovelluslogiikka voidaan irroittaa rinnakkaisuutta
 käsittelevästä logiikasta ja käyttää uudelleen toisissa projekteissa.
 
-Vertailussa perehdytään Reactor-malliin ja sen jatkokehityksiin,
+Vertailussa perehdytään Reactor-malliin ja sen jatkokehityksiin kuten Proactor-malliin,
 sekä säiereservimalliin (threadpool-model).
 Vertailun keskeisimmät kriteerit ovat suorituskyky, luotettavuus, ja 
 sovelluslogiikan kehittämiseen liittyvät haasteet.
@@ -117,9 +116,12 @@ sovelluslogiikan kehittämiseen liittyvät haasteet.
 Yksinkertaisuudestaan huolimatta tehokkailla asynkronisilla
 kutsuilla varustettu Reactor-mallinen verkkopalvelinsovellus 
 kykenee vastaamaan suurenkin palvelun tarpeisiin, jos palvelun 
-pullonkaula on I/O-operaatiot. 
+pullonkaula on I/O-operaatiot.
+Proactor-mallilla voidaan tuoda kehittäjille edistyneempiä työkaluja
+asynkronisten kutsujen hallintaan.
+
 Tarvittaessa järjestelmän voi laajentaa moniprosessimallia noudattavaksi,
-jos Reactor-mallin skaalautuvuus ei muuten riitä.
+jos tapahtumaohjatunjärjestelmän skaalautuvuus ei muuten riitä.
 
 Säiereservimallin on hyvä vaihtoehto, jos palvelimen
 toimintaan liittyy enemmän laskentaa ja sen huipputeho ei ole I/O-sidonnainen.
@@ -298,7 +300,7 @@ suojatut tietorakenteet toimivat Esimerkin 1 resurssien tavoin.
 \begin{esim}
  Lukkiutuminen \\
  Prosessi A tarvitsee suorituksen aikana resursseja X ja Y. \\
- Prosessi B tarvitsee suoritiuksen aikan resursseja Y ja X. \\
+ Prosessi B tarvitsee suorituksen aikan resursseja Y ja X. \\
  Nyt käyttöjärjestelmän seuraavalla käyttöjärjestelmän aikataulutuksella.
  \begin{enumerate}
   \item A -> varaa X
@@ -306,7 +308,7 @@ suojatut tietorakenteet toimivat Esimerkin 1 resurssien tavoin.
   \item A -> odota Y
   \item B -> odota X 
  \end{enumerate}
- päädytään lukkiutumis tilanteeseen, jossa molemmat prosessit
+ päädytään lukkiutumiseen, jossa molemmat prosessit
  pitävät yhtä resurssia ja odottavat toista.
 \end{esim}
 \end{center}
@@ -315,7 +317,8 @@ Prosessien välisen lukkiutumisen ratkaisemiseksi tarvitaan
 käyttöjärjestelmän väliintuloa. Jotta väliintulo olisi mahdollinen pitää
 käyttöjärjestelmän havaita mahdollinen lukkiutumistilanne.
 Havaitseminen on laskennallisesti haastavaa, ja havaitun lukkiutumisen
-yksinkertaisin ja yleinen ratkaisu on tappaa toinen tai molemmat lukkiutuneista prosesseista.
+yksinkertaisin ja yleinen ratkaisu on tappaa toinen
+tai molemmat lukkiutuneista prosesseista~\cite{stallings_operating_2018}.
 Lukkiutumisen riski asettaa siis vakavan uhan moniprosessisen tai monisäikeisen
 järjestelmän vakaudelle.
 
@@ -372,23 +375,13 @@ ratkaisua pyyntöjen käsittelyn rinnakkaistamiseen tai rinnakkaisuus
 on toteutettu muualla järjestelmän arkkitehtuurissa, sopii Reactor-malli
 erottamaan sovelluksen ydinlogiikasta tapahtumienkäsittelyn
 rinnakkaistammiseen liittyvän logiikan~\cite{schmidt_reactor:_1995}.
+% Muuta koskemaan proactoria
+%----
 
-Modernissa verkkopalvelinsovelluksessa Reactor-mallin suosioon on
-monta syytä. RESTful-rajapinnan käyttäminen
-verkkopalvelinsovelluksessa viestien välitykseen,
-saa viestien koon pysymään pienenä ja viestien
-käsittelyyn kuluvan ajan lyhyempänä verrattuna
-HTML-tiedosto vastaukseen[lähde?]. % Etsi joku REST-lähde
-Monisäikeisyys ja rinnakkaistaminen
-voidaan järjestelmän arkkitehtuurissa siirtää tietokantamoottorin vastuulle,
-jolloin verkkopalvelin voi lähettää sille asynkronisia kyselyitä
-ja näin suorittaa useisiin pyyntöihin liittyviä tietokantakyselyitä
-samanaikaisesti.
-Tämänkaltaisella toteutuksella verkkopalvelimen käyttötapaus sopii
-hyvin yhteen Reactor-mallin määrittelyn kanssa tukeutuen
-mallin vahvuuksiin sekä peittäen sen heikkouksia.
+% ----
 
-Kuvassa 2.1 esitellään miten Reactor-mallin toteuttava verkkopalvelin
+
+Kuvassa 1 esitellään miten Reactor-mallin toteuttava verkkopalvelin
 vastaa pyyntöön.
 Reactor mallissa sovelluksen ohjaamisesta vastaa tapahtumasäie.
 Tapahtumasäie kutsuu tapahtumajonon jokaista tapahtumaa kohden, sille
@@ -399,10 +392,11 @@ Kun tapahtumankäsittelijä on valmis, se pyytää tapahtumasäiettä
 avaamaan kirjoitusyhteyden asiakkaalle. Kun yhteys aukeaa
 tapahtumasäie kutsuu tapahtumakäsittelijää ja se lähettää vastauksen
 asiakkaalle.
-\begin{center}
-    \caption{Kuva 2.1. Pyynnön käsittely Reactor-mallissa}
+\begin{figure}
+    \centering
+    \caption{Pyynnön käsittely Reactor-mallissa}
     \includegraphics[scale=0.5]{reactor.png}
-\end{center}
+\end{figure}
 
 Mallin tapahtumakäsittelijöissä rinnakkaisuuteen päästään
 vain I/O:n osalta, kun käytetään asynkronisia
@@ -419,20 +413,75 @@ kannattaa sitä varten luoda uusi prosessi tai säie. Tämä
 prosessi tai säie saattaa pyynnön loppuun rinnakkain
 Reactorin tapahtumasäikeen kanssa~\cite{schmidt_reactor:_1995}.
 
-Proactor mallissa on paljon yhtäläisyyksiä Reactor malliin, mutta siinä
-hyödynnetään käyttöjärjestelmän asynkronisia ominaisuuksia suorittamaan
+Reactor-malli on osa Proactor-mallia.
+Siinä hyödynnetään käyttöjärjestelmän asynkronisia ominaisuuksia suorittamaan
 operaatiota ennen pyynnön saapumista tapahtumasäikeelle~\cite{pyarali_proactor_1997}.
-Tapahtumasäie ohjaa tässä mallissa asynkronisten tapahtumien
+Reactor-mallinen osa ohjaa tässä mallissa asynkronisten tapahtumien
 valmistumistapahtumia niitä vastaaville tapahtumankäsittelijöille~\cite{pyarali_proactor_1997}.
-
 Proactor mallin tavoite on yksinkertaistaa asynkronisten ohjelmien kehitystä.
+Proactor-mallissa voidaan suoraviivaisesti suorittaa toisistaan riippuvaisia
+asynkronisia-operaatioita, asettamalla asynkronisten tapahtumien valmistumisille
+käsittelijöitä.
 
-Mikään ei kuitenkaan estä luomasta asynkronisten tapahtumien valmistumisille
-tapahtumakäsittelijöitä
-Reactor-mallissa ja näin tehdään monissa implementaatioissa Future-tai Promise nimisillä
-abstraktiolla.
+Proactor-mallia suositellaan käytettäväksi, jos sovellus vaatii
+asynkronisten operaatioiden kutsumista ja sovellus tarvitsee ilmoituksen
+asynkronisen operaation valmistumisesta.
+Pyyntöjen käsittely Proactor-mallissa käydään läpi kuvassa 2 ja
+esimerkissä \autoref{esim:proactor}.
+Kuva 2 noudattaa Proactorin~\cite{pyarali_proactor_1997} esittelyyn tehtyä
+kuvaa, jossa Proactor-palvelin käsittelee pyynnön, mutta kuvassa 2 
+korostetaan Proactoriin-sisältyvää Reactor-mallia.
+\begin{figure}
+    \caption{Pyynnön käsittely Proactor-mallissa~\cite{pyarali_proactor_1997}}
+\includegraphics[scale=0.5]{Proactor.png}
+\end{figure}
 
-Toinen Reactor mallin muunnelma on SEDA (Staged Event Driven Architecture)~\cite{welsh_seda_2001}.
+% ESIMERKIN LAINAAMINEN 
+    \begin{esim}\label{esim:proactor}
+        Pyynnön käsittely Proactor-mallisessa palvelimessa~\cite{pyarali_proactor_1997} \\
+        \begin{enumerate}
+            \item Asiakas lähettää HTTP GET pyynnön.
+            \item Käyttöjärjestelmä lukee pyyntöä sovittuun puskuriin ja ilmoittaa kun valmis.
+            \item Valmistumisohjaaja (Reactor) kutsuu HTTP-tapahtumakäsittelijää.
+                Kohdat 2 ja 3 toistuu kunnes koko pyyntö on luettu.
+            \item HTTP-tapahtumakäsittelijä jäsentää kutsun.
+            \item HTTP-tapahtumakäsittelijä lukee pyydetyn tiedoston.
+            \item HTTP-tapahtumankäsittelijä aloittaa asynkronisenoperaation 
+                kirjoittaakseen tiedoston datan asiakasyhteyteen, ja asettaa
+                itsensä tapahtumakäsittelijäksi kirjoituksen valmistumiselle.
+            \item Kun kirjoitusoperaatio on valmis käyttöjärjestelmä ilmoittaa
+                Valmistumisohjaajalle.
+            \item Valmistumisohjaaja huomauttaa HTTP-tapahtumakäsittelijää,
+                koska se asetti itsensä tapahtumankäsittelijäksi kirjoituksen 
+                valmistumiselle. Kohtia 6-8 toistetaan kunnes koko tiedosto on lähetetty. 
+        \end{enumerate}
+    \end{esim}
+
+Niin kuin Reactor-malli, Proactor ei myöskään sovellu laskennan samanaikaistamiseen.
+Proactorin muutokset rajoittuvat asynkronisten-operaatioden ohjaamisen 
+kehittämiseen. Malissa tapahtumasäie kutsuu tapahtumankäsittelijöitä, jolloin
+pitkäkestoisen laskennan suorittaminen tapahtumankäsittelijässä, johtaisi
+muiden pyyntöjen odotusajan kasvuun.
+
+Modernissa verkkopalvelinsovelluksessa Proactor-mallin suosioon on
+monta syytä. RESTful-rajapinnan käyttäminen
+verkkopalvelinsovelluksessa viestien välitykseen,
+saa viestien koon pysymään pienenä ja viestien
+käsittelyyn kuluvan ajan lyhyempänä verrattuna
+HTML-tiedosto vastaukseen[lähde?]. % Etsi joku REST-lähde
+Monisäikeisyys ja rinnakkaistaminen
+voidaan järjestelmän arkkitehtuurissa siirtää tietokantamoottorin vastuulle,
+jolloin verkkopalvelin voi lähettää sille asynkronisia kyselyitä
+ja näin suorittaa useisiin pyyntöihin liittyviä tietokantakyselyitä
+samanaikaisesti. Tämä vaatii Proactor-mallin sillä asynkronisen tietokantaoperaatioon
+pitää kytkeä vastakutsu tiedon käsittelyyn ja lähettämiseen.
+Tämänkaltaisella toteutuksella verkkopalvelimen käyttötapaus sopii
+hyvin yhteen Proactor-mallin määrittelyn kanssa tukeutuen
+mallin vahvuuksiin sekä peittäen sen heikkouksia.
+
+
+
+Toinen Reactor mallin laajennus on SEDA (Staged Event Driven Architecture)~\cite{welsh_seda_2001}.
 Siinä pyyntöjen käsittely jaetaan tasoiksi, joissa kaikissa on
 käytännössä reactor-mallin toteuttava rakenne. Jokaisella tasolla
 on oma tapahtumajono sekä tapahtumakäsittelijä, joka ohjaa työtä
@@ -449,8 +498,8 @@ SEDA-arkkitehtuurilla on mahdollista myös saavuttaa rinnakkaisuutta
 laskennallisesti vaativissa tehtävissä.
 
 Tässä tutkielmassa keskitytään erityisesti
-reactor-malliin, sillä se on sisäänrakennettu Node.js ohjelmaympäristöön ja
-täten paljon käytetty. Node.js:n reactor-mallin toteuttamisesta vastaa
+Proactor-malliin, sillä se on sisäänrakennettu Node.js ohjelmaympäristöön ja
+täten paljon käytetty. Node.js:n Proactor-mallin toteuttamisesta vastaa
 libuv-kirjasto~\cite{libuv_design_2019}. Suunnittelufilosofiassa
 libuv:lla on paljon yhteistä AMPED-mallin kanssa, sillä
 sen tarkoitus on taata aina asynkroniset I/O-operaatiot alustasta
@@ -459,7 +508,7 @@ jos alustalla ei ole tarjota asynkronista kutsua~\cite{libuv_design_2019}.
 Tämä toimintapa saa kutsun näyttämään tapahtumankäsittelijästä
 asynkroniselta.
 
-Reactor-mallia voi muunnella vielä kolmannella tavalla.
+Reactor-mallia voi laajentaa vielä kolmannella tavalla.
 Jos samaa Reactor-sovellusta ajaa yhdessä eri säikeillä tai prosesseilla
 ja jokin säie jakaa työn tasaisesti tapahtumasäikeiden välillä
 on kyseessä SYMPED-malli. Tämä malli mahdollistaa
@@ -521,7 +570,7 @@ reaaliaikaiseen tarpeeseen.
 Tunnettuja säiereservimallin toteutuksia ovat MySQL, sekä Apache Tomcat.
 
 SYMPED-malli ja säiereservimalli ovat samankaltaisia ja SYMPED onkin 
-säiereservimallin erikoistapaus, joissa jokainen reservin säie on Reactor-palvelin,
+säiereservimallin erikoistapaus, joissa jokainen reservin säie on Reactor/Proactor-palvelin,
 joiden välillä työ jaetaan. 
 
 \section{Mallien vertailu ja analyysi}
@@ -558,13 +607,15 @@ Palvelimen rinnakkaisuuden toteutusmalli vaikuttaa sen vakauteen, jos asiakkaide
 pyynnöt vaikuttavat toisiinsa tai jos rinnakkaistaminen voi aiheuttaa virhetiloja kuten
 lukkiutumista.
 
-Reactor-malliseen palvelimeen voi kohdistaa hyökkäyksiä, joilla pyritään
+Reactor/Proactor-malliseen palvelimeen voi kohdistaa hyökkäyksiä, joilla pyritään
 myrkyttämään sovelluksen tapahtumasäie. Reactor-mallin palvelin toteutuksissa
-osoitepolkujen tulkitseminen on tapahtumasäikeen vastuulla. Tulkinnan perusteella
-pyyntö osoitetaan oikealle tapahtumankäsittelijälle. Tämän työvaiheen takia
+osoitepolkujen jäsentäminen on saman säikeen vastuulla kuin sovelluksen ohjaaminen.
+Tämän työvaiheen takia
 tapahtumasäikeen myrkyttämiseen sopivat pyynnöt,
 joiden osoitepolun selvittämiseen liittyy kompleksista
 säännöllisten lauseiden käsittelyä~\cite{davis_case_2017}.
+Kuvassa 2 pysähdyttäisiin siis kohtaan 4: kutsun jäsentäminen, ja
+kaikki muut pyynnöt joutuvat odottamaan.
 Yksi pyyntö siis aiheuttaa suhteettoman suuren työtaakan 
 tapahtumasäikeelle, jolloin koko sovellus jää odottamaan sitä.
 Hyökkääjä lähettää näitä pyyntöjä niin paljon, että sovellus 
@@ -606,7 +657,6 @@ suoriutui vain noin 50ms viivellä. Menetelmien asetelma vaihtaa paikkaa
 palvelimen viive laski alle säiereservimallin arvon. Suuremmilla tiedostoilla
 ero korostui entisestään. Pienillä tiedostoilla säiereservimallilla oli suurempi
 volyymi, mutta myös tämä tilanne kääntyi tiedostokoon kasvaessa.
-
 
 
 Ivan Voras ja Mario Zagar testasivat~\cite{voras_characteristics_2009},
@@ -660,15 +710,12 @@ murehtimatta rinnakkaisuutta hallitsevasta osasta.
 Reactor-malli on yksinkertainen ja helpommin toteutettava
 kuin Proactor. Reactor-mallin onnistuu hyvin tavoitteessaan
 erottaa pyyntöjen samanaikaistamiseen liittyvä logiikka
-muusta sovelluslogiikasta, ja tämän takia
-se muodostaa ytimen useille tapahtumaohjatunarkkitehtuurin
-kirjastoille ja sovelluskehyksille.
-
+muusta sovelluslogiikasta.
 Tapahtumaohjatut sovellukset tuovat omat haasteensa
 ohjelmoijalle, sillä niistä virheiden löytäminen ja
 korjaaminen on usein työlästä, koska ohjelman
 suoritus ei kulje rivi riviltä, vaan järjestys
-muuttuu tapahtumakäsittelijöiden takaisinkutsujen mukaan.
+muuttuu tapahtumakäsittelijöiden ja vastakutsujen mukaan.
 
 Reactor-mallia käyttävässä palvelimessa kehittäjän
 pitää huolehtia siitä, että yksittäisen pyynnön
@@ -699,13 +746,33 @@ samaan aikaan. BSD-ytimessä vastaava toiminnallisuus on toteutettu $kqueue$
 kutsuun.
 % Yritä löytää onko kutsujen ominaisuudet muuttuneet parissa kymmenessä vuodessa
 Jos ohjelman tulee käsitellä
-asynkronisen operaation tulosta tulee operaation valmistumiselle
-asettaa tapahtumankäsittelijä.
-Asynkronisten operaatioiden valmistumisten hallintaa varten
-on kehitetty abstraktioita kuten Future/Promise tai async/await.
-Nämä abstraktiot laajentavat Reactorin toimintaa osittain vastaamaan
-Proactoria, sillä ne tekevät valmistumistapahtumien käsittelemisestä
-luontevaa.
+asynkronisen operaation tulosta tulee operaation valmistumiselle,
+asettaa tapahtumakäsittelijä. Tätä toimintatapaa kutsutaan vastakutsuksi (callback)
+Tässä tilanteessa Proactor-malli on erittäin hyödyllinen, sillä se
+kuvailee selkeästi miten asynkronisten tapahtumien valmistumisia tulisi käsitellä.
+
+Proactor-mallissa kuten Reactor-mallissa sovelluslogiikka ohjelmoidaan 
+tapahtumankäsittelijöihin, mutta Proactor-mallissa liittyy 
+mallille tyypillisesti vastakutsuja. Jos vastakutsuja ei tarvittaisi
+voitaisiin vain käyttää Reactor-mallia ja unohtaa Proactor kokonaan.
+Vastakutsut ovat haastava konsepti. Ne vaikeuttavat vianetsimistä
+sovelluksesta, koska sovelluksen kulku vaihtelee kehysinfrastructuurin
+ja tapahtumakäsittelijöiden logiikan välillä. Täten sovelluksen 
+kulkua on vaikea seurata askel askeleelta.
+
+Vastakutsujen abstraktioita ohjelmointikielissä ovat Promise, Future ja
+async/await. Ne auttavat kehittäjää hahmottamaan vastakutsujen 
+toimintaa korkealla tasolla.
+
+Proactor-mallissa kehittäjä on vaikeaa vaikuttaa sovelluksen
+aikataulutukseen~\cite{pyarali_proactor_1997},
+sillä asynkronisen operaatioiden luojalla
+ei ole mahdollisuutta ohjata operaatioiden valmistumisjärjestystä.
+Toteutuksen tulisikin siksi tarjota kehittäjälle mahdollisuuden
+priorisoida ja keskeyttää asynkronisia operaatioita.
+Jos kehittäjä olettaa asynkronisten kutsujen valmistuvan tietyssä järjestyksessä,
+voi se johtaa eräänlaiseen kilpailutilanteeseen, jossa
+oikea lopputulos on riippuvainen tietystä valmistumisjärjestyksestä.
 
 Säiereservimallissa ohjelmakoodi voidaan pitää yksinkertaisena ja
 hyvin luettavana. Kehittäjät voivat vapaasti käyttää intuitiivisia
@@ -758,13 +825,7 @@ tekstimuotoisen datan lähettäminen.
 Näiden tehtävien täyttämiseen Reactor-mallinen
 palvelin sopii hyvin.
 
-Proactor-malli siirtää vastuun asynkronisten tapahtumien suorittamisesta
-käyttöjärjestelmän vastuulle. Tämä toimintatapa ei kuitenkaan
-riitä luomaan mallille selvää kilpailuetua Reactor-malliin. Jos
-asynkronisten kutsujen tuki ei olisi kehittynyt riittävän
-nopeasti Proactor-malli olisi voinut saada enemmän kiinnostusta.
-
-Reactor-mallin toteuttavalla
+Reactor/Proactor-mallin toteuttavalla
 kirjastolla voidaan kustannustehokkaasti
 toteuttaa palvelin, joka kykenee suoriutumaan
 tehtävistään palvelun alkutaipaleella. Jos
