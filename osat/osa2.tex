@@ -137,7 +137,7 @@ asiakas-palvelin järjestelmää. Tässä luvussa kerrataan
 asiakas-palvelin malli ja rinnakkaisuuden keskeiset käsitteet.
 Sen jälkeen käydään läpi eri malleja rinnakkaisuuden edistämiseen
 verkkopalvelimissa. Erityisesti keskitytään I/O-operaatioiden suorittamiseen
-rinnakkain.
+samanaikaisesti.
 \subsection{Asiakas-palvelin malli}
 Asiakas-palvelin mallissa
 asiakasohjelma tarjoaa käyttäjälle käyttöliittymän sovellukseen. Palvelinohjelma
@@ -401,11 +401,6 @@ ratkaisua pyyntöjen käsittelyn rinnakkaistamiseen tai rinnakkaisuus
 on toteutettu muualla järjestelmän arkkitehtuurissa, sopii Reactor-malli
 erottamaan sovelluksen ydinlogiikasta tapahtumienkäsittelyn
 rinnakkaistammiseen liittyvän logiikan~\cite{schmidt_reactor:_1995}.
-% Muuta koskemaan proactoria
-%----
-
-% ----
-
 
 Kuvassa 1 esitellään miten Reactor-mallin toteuttava verkkopalvelin
 vastaa pyyntöön.
@@ -865,12 +860,6 @@ sivuvaikutuksia, jos pyynnöillä on mahdollisuus muokata sen sisältöä.
 
 \subsection{Johtopäätökset}
 
-Reactor-mallin rajallisuudet rinnakkaisuudessa
-eivät ole haitaksi, jos järjestelmässä on rinnakkaisuutta
-korkeammalla tasolla. Eli
-jos Reactor-mallisia palvelmia ajetaan useita rinnakkain
-ja näin luodaan SYMPED-järjestelmä.
-
 Reactor-mallin on erottaa
 selkeästi pyyntöjen käsittelyn
 samanaikaistamiseen liittyvän
@@ -879,6 +868,12 @@ Malli on myös suhteessa muihin samanaikaisuutta
 käsitteleviin malleihin yksinkertainen.
 Näistä syistä se on implementoitu useisiin
 kirjastoihin ja saavuttanut vakaan suosion.
+
+Reactor-mallin rajallisuudet rinnakkaisuudessa
+eivät ole haitaksi, jos järjestelmässä on rinnakkaisuutta
+korkeammalla tasolla. Eli
+jos Reactor-mallisia palvelmia ajetaan useita rinnakkain
+ja näin luodaan SYMPED-järjestelmä.
 
 Proactor-malli laajentaa Reactor-mallia merkittävällä,
 sillä sen avulla voidaan ketjuttaa asynkronisia
@@ -896,11 +891,16 @@ halutussa muodossa asiakkaalle.
 Todellisen rinnakkaisen työn
 suorittaa tässä käyttötapauksessa tietokantaohjelma.
 
-Verkkopalvelimen yleisimmät tehtävät ovat
-HTML-tiedostojen ja nykyään kasvavissa määrin
-tekstimuotoisen datan lähettäminen.
-Näiden tehtävien täyttämiseen Proactor-mallinen
-palvelin sopii hyvin.
+Proactor-malli ei paikkaa
+Reactor-mallin rajallisuutta laskennan rinnakkaistamisessa,
+sillä tapahtumakäsittelijöiden logiikka suoritetaan
+samalla säikeellä kuin sovelluksen kulun ohjaus.
+Laskennan rinnakkaistamiseksi tapahtumakäsittelijöihin
+tulee lisätä säikeiden käsittelyyn liittyvää logiikkaa.
+Malli ei siis vähennä laskennan rinnakkaistamiseen liittyviä
+haasteita, mutta on tehokas tapahtumien ja asynkronisten
+operaatioiden hallinnassa. Nämä ominaisuudet riittävät
+I/O-resurssien tehokkaaseen hyödyntämiseen.
 
 Reactor/Proactor-mallin toteuttavalla
 kirjastolla voidaan kustannustehokkaasti
@@ -912,16 +912,50 @@ joka todetusti skaalautuu hyvin resursseihin.
 Node.js sovelluksesta voi luoda SYMPED järjestelmän
 cluster-kirjastolla.
 
+Jos laskennan suorittaminen rinnakkain usealla suorittimella
+on ainoa väylä riittävän suorituskyvyn saavuttamiseksi,
+ovat säiereservimalli ja SEDA-malli parempia vaihtoehtoja.
+Proactor palvelimien tapahtumakäsittelijöihin
+voidaan ohjelmoida säikeiden käsittelyä, mutta tämä
+on täysin soveluslogiikan kehittäjän vastuulla.
+Tämänkaltainen menettely olisi hybridi
+SEDA-mallin ja Proactor-mallin välillä, jossa
+tapahtumankäsittelijällä on säiereservi, mutta tapahtumakäsittelijät
+eivät välttämättä muodosta selvää tasohierarkiaa.
+
+\section{Yhteenveto}
+
+Tapahtumaohjattu-malli mallintaa luontevasti verkkopalvelimen
+toimintaa. Reactor-malli esittää yksinkertaisen
+ratkaisun useista lähteistä tulevien tapahtumien käsittelyyn.
+
+Verkkopalvelimen yleisimmät tehtävät ovat
+HTML-tiedostojen ja nykyään kasvavissa määrin
+tekstimuotoisen datan lähettäminen.
+Näiden tehtävien suorituskyky on
+I/O-sidonnainen.
+Asynkronisilla luku-ja kirjoitusoperaatioilla samanaikaisuuden hallinta
+voidaan siirtää käyttöjärjestelmän vastuulle, jolloin
+verkkopalvelimen tehtävien täyttämiseen Proactor-mallinen
+palvelin sopii hyvin.
+Se esittää sopivat laajennukset Reactor-malliin, joilla
+asynkronisia operaatioita voidaan hallita joustavasti.
+Sillä voidaan suorittaa muista operaatioista riippuvaisia I/O-operaatioita
+samanaikaisesti, ketjuttamalla niitä takaisinkutsuilla.
+Asynkronisilla operaatioilla saavutetaan korkea I/O-resurssien
+käyttöaste.
+
 Jos palvelimen tarkoitus on suorittaa enemmän laskentaa kuin
 I/O-operaatioita ei Reactor-pohjainen vaihtoehto ole paras mahdollinen.
 Laskentariippuvaisessa käyttötapauksessa säiereservi tai SEDA-arkkitehtuuria
 noudattava toteutus takaa huomattavasti paremman suorituskyvyn kuin
 Reactor-mallia noudattava.
 
-\section{Yhteenveto}
+Proactor-tai Reactor-palvelimen voi laajentaa 
+usean prosessin toteutukseksi, jos skaalautuvuus
+yhdellä prosessilla ei ole riittävä palvelun tarpeisiin.
 
-Tapahtumaohjattu-malli mallintaa luontevasti verkkopalvelimen
-toiminta.
+
 \bibliographystyle{plain}
 \bibliography{kandi_zot}
 
