@@ -104,9 +104,9 @@ Verkkopalvelimen tehokkuuteen ja skaalautumiseen vaikuttaa olennaisesti
 sen samanaikaistamiskäytäntö (concurrency policy). Tässä
 tutkielmassa vertaillaan eri malleja palvelimen samanaikaistamiseen.
 
-Verkkopalvelimien samanaikastamismalli on osa sovellusta,
+Verkkopalvelimien samanaikaistamismalli on osa sovellusta,
 joka on mielekästä toteuttaa moduulina tai kirjastona.
-Näin palvelimen sovelluslogiikka voidaan irroittaa rinnakkaisuutta
+Näin palvelimen sovelluslogiikka voidaan irrottaa rinnakkaisuutta
 käsittelevästä logiikasta ja käyttää uudelleen toisissa projekteissa.
 
 Vertailussa perehdytään Reactor-malliin ja sen jatkokehityksiin kuten Proactor-malliin,
@@ -301,7 +301,7 @@ suojatut tietorakenteet toimivat Esimerkin 1 resurssien tavoin.
 \begin{esim}
  Lukkiutuminen \\
  Prosessi A tarvitsee suorituksen aikana resursseja X ja Y. \\
- Prosessi B tarvitsee suorituksen aikan resursseja Y ja X. \\
+ Prosessi B tarvitsee suorituksen aikana resursseja Y ja X. \\
  Nyt käyttöjärjestelmän seuraavalla käyttöjärjestelmän aikataulutuksella.
  \begin{enumerate}
   \item A -> varaa X
@@ -419,7 +419,7 @@ Itse Reactor-malli ei ota kantaa miten asynkroninen operaatio toteutetaan.
 Jos tapahtumakäsittelijässä tarvitaan pitkäkestoista laskentaa
 kannattaa sitä varten luoda uusi prosessi tai säie. Tämä
 prosessi tai säie saattaa pyynnön loppuun rinnakkain
-Reactorin tapahtumasäikeen kanssa~\cite{schmidt_reactor:_1995}.
+tapahtumasäikeen kanssa~\cite{schmidt_reactor:_1995}.
 
 Reactor-malli on osa Proactor-mallia.
 Siinä hyödynnetään käyttöjärjestelmän asynkronisia ominaisuuksia suorittamaan
@@ -460,7 +460,7 @@ korostetaan Proactoriin-sisältyvää Reactor-mallia.
                 Kohdat 2 ja 3 toistuu kunnes koko pyyntö on luettu.
             \item HTTP-tapahtumakäsittelijä jäsentää kutsun.
             \item HTTP-tapahtumakäsittelijä lukee pyydetyn tiedoston.
-            \item HTTP-tapahtumankäsittelijä aloittaa asynkronisenoperaation 
+            \item HTTP-tapahtumankäsittelijä aloittaa asynkronisen operaation 
                 kirjoittaakseen tiedoston datan asiakasyhteyteen, ja asettaa
                 itsensä tapahtumakäsittelijäksi kirjoituksen valmistumiselle.
             \item Kun kirjoitusoperaatio on valmis käyttöjärjestelmä ilmoittaa
@@ -541,7 +541,7 @@ Monisäikeisissä palvelinsovelluksissa hyödynnetään laitteiston
 rinnakkaisuutta tehokkaasti suorittamalla pyyntöjä usealla säikeellä rinnakkain.
 Suunnittelun keskeisenä tavoitteena on käsitellä mahdollisimman monta pyyntöä rinnakkain ja
 näin saavuttaa korkea volyymi. Mallin suorituskyky voi kuitenkin
-kärsiä synkronointiin ja säikeiden hallinointiin kuluvasta
+kärsiä synkronointiin ja säikeiden hallinnointiin kuluvasta
 suoritinajasta~\cite{pyarali_proactor_1997}.
 
 Pääsääntöisesti nämä mallit skaalautuvat hyvin laitteistoresursseihin,
@@ -559,7 +559,7 @@ säikeiden määrän johonkin järkevään arvoon, kuten fyysisten suorittimien
 määrään. Se käyttää samoja säikeitä uudestaan, eli se ei tuhoa säiettä
 pyynnön käsittelyn päätteeksi vaan jättää sen vapaaksi säikeeksi reserviin~\cite{ling_analysis_2000}. Rajattu säikeiden määrä saattaa kuitenkin aiheuttaa epäreiluutta
 pyyntöjen käsittelyyn, jos kaikki säikeet ovat jo käytössä pyynnön 
-saapuesssa palvelimelle. Tämä voi aiheuttaa yksittäiselle asiakkaale
+saapuessa palvelimelle. Tämä voi aiheuttaa yksittäiselle asiakkaalle
 huomattavan suuren viiveen~\cite{welsh_seda_2001}.
 
 Säiereservimallissa asiakkaan pyyntöjen käsittely tapahtuu seuraavasti.
@@ -634,7 +634,7 @@ työ siirtyy käyttöjärjestelmän vastuulle.
 
 TransmitFile-funktio aiheutti pienillä 500-tavuisilla tiedostoilla hyvin suuren viiveen
 pyynnöille, joka oli noin 200ms. Samalla tiedostokoolla säiereservimallin palvelin
-suoriutui vain noin 50ms viivellä. Menetelmien asetelma vaihtaa paikkaa
+suoriutui vain noin 50ms viiveellä. Menetelmien asetelma vaihtaa paikkaa
 50K-kokoisilla tiedostoilla, joilla Asynkronisia kutsuja käyttävän
 palvelimen viive laski alle säiereservimallin arvon. Suuremmilla tiedostoilla
 ero korostui entisestään. Pienillä tiedostoilla säiereservimallilla oli suurempi
@@ -642,7 +642,7 @@ volyymi, mutta myös tämä tilanne kääntyi tiedostokoon kasvaessa.
 
 
 Ivan Voras ja Mario Zagar testasivat~\cite{voras_characteristics_2009},
-verkkopalvimen rinnakkaistamismalleja mdcached keskusmuistitietokannan
+verkkopalvelimen rinnakkaistamismalleja mdcached keskusmuistitietokannan
 käyttötapauksessa. Käyttötapauksen erikoispiirre on että, siihen ei liity levy I/O:ta
 vaan järjestelmän suorituskyky on pääasiassa riippuvainen muistiväylän nopeudesta sekä
 käyttöjärjestelmäkutsujen nopeudesta.
@@ -666,7 +666,7 @@ SEDA-mallissa jokaisella käsittelyn vaiheella on omat apusäikeensä,
 joilla saadaan rinnakkaistettua vaiheeseen liittyvää estävää laskentaa. 
 Muistitietokannan käyttötapauksessa estävää laskentaa on vähäisesti.
 Kuitenkin vaiheesta toiseen siirtyminen aiheuttaa suoritinympäristön vaihdon,
-kun uuden vaiheen apusäie otetaan käytttöön. 
+kun uuden vaiheen apusäie otetaan käyttöön. 
 Apusäikeiden hyödyt
 tulisivat näkyviin selkeämmin käyttötapauksessa, jossa vaaditaan enemmän
 rinnakkaista estävää laskentaa, kun Muistitietokannan tapauksessa. 
@@ -674,7 +674,7 @@ rinnakkaista estävää laskentaa, kun Muistitietokannan tapauksessa.
 Samassa testissä AMPED-järjestelmä neljällä apuprosessilla
 kykeni 250 000 toimitukseen sekunnissa 120:nellä asiakkaalla. Mielenkiintoista on
 että heidän SEDA-implementaatio, jossa tapahtumasäikeiden ja apusäikeiden
-määrät asetettiin samaksi arvoksi suoritutui huomattavasti paremmin ja
+määrät asetettiin samaksi arvoksi suoritui huomattavasti paremmin ja
 saavutti 300 000 tapahtumaa sekunnissa 120:nellä asiakkaalla.
 Vertailun selkein voittaja skaalautuvuuden
 osalla oli SYMPED-järjestelmä, jossa on useita SPED-järjestelmiä
@@ -724,7 +724,7 @@ ei salli useamman säikeen odottaa saman tunnistejoukon tapahtumia.
 Tämä ominaisuus estää tehokkaan laitteiston rinnakkaisuuden hyödyntämisen.
 Asynkronisten kutsujen tuki on kuitenkin parantunut.
 Linux-ytimen versiossa
-2.4.44 sihen lisätiin $epoll$ järjestelmäkutsu~\cite{man_epoll}, joka
+2.4.44 siihen lisättiin $epoll$ järjestelmäkutsu~\cite{man_epoll}, joka
 mahdollistaa tapahtumapohjaisen I/O:n useammalla säikeellä
 samaan aikaan. BSD-ytimessä vastaava toiminnallisuus on toteutettu $kqueue$
 kutsuun.
@@ -740,7 +740,7 @@ tapahtumankäsittelijöihin, mutta Proactor-mallissa liittyy
 mallille tyypillisesti vastakutsuja. Jos vastakutsuja ei tarvittaisi
 voitaisiin vain käyttää Reactor-mallia ja unohtaa Proactor kokonaan.
 Vastakutsut ovat haastava konsepti. Ne vaikeuttavat vianetsimistä
-sovelluksesta, koska sovelluksen kulku vaihtelee kehysinfrastructuurin
+sovelluksesta, koska sovelluksen kulku vaihtelee kehysinfrastruktuurin
 ja tapahtumakäsittelijöiden logiikan välillä. Täten sovelluksen 
 kulkua on vaikea seurata askel askeleelta.
 
@@ -770,7 +770,7 @@ hyvin luettavana. Kehittäjät voivat vapaasti käyttää intuitiivisia
 peräkkäisiä operaatioita ja estäviä kutsuja, koska sovelluslogiikkaa
 suoritetaan erillisillä säikeillä~\cite{pyarali_proactor_1997}. Estävä kutsu pysäyttää vain
 sen säikeen, jonka käsittelyyn se liittyy, jolloin muiden
-pyyntöjen kästtely voi jatkua esteettä.
+pyyntöjen käsittely voi jatkua esteettä.
 
 Eri asiakkaiden pyynnöt liittyvät harvoin toisiinsa,
 jolloin niiden välillä ei ole merkittävästi jaettua tilatietoa ja
@@ -783,7 +783,7 @@ kun jokainen pyyntö on käsittelyssä omalla säikeellään.
 
 SEDA-mallissa rinnakkaisuuden hallintaa edistää,
 samaa tietoa käsittelevien säikeiden eristäminen samalle tasolle~\cite{welsh_seda_2001}.
-Samalla tasolla synkronisoisen ja kilpailutilanteiden ratkaiseminen on
+Samalla tasolla synkronisoiminen ja kilpailutilanteiden ratkaiseminen on
 yksinkertaisempaa kuin koko sovelluksen mittakaavassa, ja
 viesteihin perustuva sovelluksen kulku on helpommin seurattavissa kuin
 muissa tapahtumaohjatuissa malleissa.
@@ -833,7 +833,7 @@ Säiereservimallissa kilpailutilanteiden riski on hyvin pieni, jos pyyntöjen
 välillä ei ole jaettua tilatietoa. Jaetun tilatiedon kanssa voi tulla
 sivuvaikutuksia, jos pyynnöillä on mahdollisuus muokata sen sisältöä.
 
-\section{Johtopäätökset}
+\subsection{Johtopäätökset}
 
 Tapahtumaohjattu-malli on hyvä tapa mallintaa verkkopalvelimen
 toimintaa.
@@ -857,7 +857,7 @@ ketjuttamisen vastakutsuilla. Tämä ominaisuus
 tuo joustavuutta samanaikaisen sovelluslogiikan kehittämiseen.
 
 Verkkopalvelimen yleisimmät tehtävät ovat 
-html-tiedostojen ja nykyään kasvavissa määrin
+HTML-tiedostojen ja nykyään kasvavissa määrin
 tekstimuotoisen datan lähettäminen. 
 Näiden tehtävien täyttämiseen Proactor-mallinen
 palvelin sopii hyvin.
@@ -878,6 +878,7 @@ Laskentariippuvaisessa käyttötapauksessa säiereservi tai SEDA-arkkitehtuuria
 noudattava toteutus takaa huomattavasti paremman suorituskyvyn kuin
 Reactor-mallia noudattava.
 
+\section{Yhteenveto}
 
 \bibliographystyle{plain}
 \bibliography{kandi_zot}
