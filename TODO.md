@@ -1,5 +1,18 @@
-# TODO
-
-- Täsmennä
-- Laajenna
-
+- 114:  TODO: SEDAN-rooli tutkielmassa
+- 115:  TODO: Tutkimuskysymys selkeästi
+- 116:  TODO: Kerro lisää kriteereistä
+- 123:  TODO: Kappaleen hurjiin väitteisiin lähde
+- 158:  TODO: Verkkopalvelinsovellus osiota voi laajentaa
+- 236:  TODO: irrallinen kappale
+- 242:  TODO:KYSY: Onko HTTP-protokollan esittäminen oleellista?
+- 245:  TODO: Aseta lähteitä tarvittaessa väitteiden tueksi
+- 291:Nopea   TODO: selitä, perustele
+- 377:  TODO: ehkä seuraavan kappaleen siirto pääotsikon alle tai johdantoon
+- 462:  TODO: Säiereservi alkukappale on aika kuraa
+- 566:  TODO: AMPED esittely
+- 689:  TODO: Siirrä kaikkien mallien jälkeen ja lisää suhde säiereserviin
+- 739:  TODO: Lyhyt kuvaus arvioinin perusteista johdantoon
+- 740:  TODO: Tarkempi kuvaus ja metriikan laatu tähän
+- 977:  TODO: Selitä symped tarkemmin
+- 1024:  TODO: Lisää lähteitä johtopäätöksiin
+- 1025:  TODO: Erityisesti cluster-dokumentaatio
