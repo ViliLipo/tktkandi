@@ -48,11 +48,11 @@
 % The following commands define the information used to generate title and
 % abstract pages. The following entries should be always specified:
 
-\title{Rinnakkaisuus verkkopalvelinsovelluksessa}
+\title{Samanaikaisuus verkkopalvelinsovelluksessa}
 \author{Vili Lipo}
 \date{\today}
 \level{Kandidaatin tutkielma}
-\abstract{Tässä tutkielmassa vertaillaan verkkopalvelimien rinnakkaistamismalleja
+\abstract{Tässä tutkielmassa vertaillaan verkkopalvelimien suunnittelumalleja
   ja niiden suorituskykyä. Verkkopalvelin on ohjelma, joka vastaa useiden asiakkaiden pyyntöihin
   verkkosivuilla tai verkkosovelluksissa. Pyyntöihin vastaamiseen
   voi liittyä laskentaa, tietokantaoperaatioita tai muita toimenpiteitä.
@@ -61,7 +61,7 @@ Vertailuun valittiin tapahtumaohjattu Reactor-malli, SEDA-malli ja säiereservim
 
 % The following can be used to specify keywords and classification of the paper:
 
-\keywords{avainsana 1, avainsana 2, avainsana 3}
+\keywords{palvelin, tapahtumaohjattu, samanaikaisuus}
 
 % classification according to ACM Computing Classification System (http://www.acm.org/about/class/)
 % This is probably mostly relevant for computer scientists
@@ -102,30 +102,59 @@ yleispätevän verkkopalvelimen tulisi skaalautua saatavilla oleviin resursseihi
 Jos verkkopalvelimen käyttötarkoitus ei ole suorittaa laskennallisesti raskaista
 tehtäviä, sen
 kriittisimmät resurssit ovat I/O-resurssit.
-Verkkopalvelimen tehokkuuteen ja skaalautumiseen vaikuttaa olennaisesti
-sen samanaikaistamiskäytäntö (concurrency policy). Tässä
-tutkielmassa vertaillaan eri malleja palvelimen toimintojen samanaikaistamiseen.
 
-Verkkopalvelimien samanaikaistamismalli on osa palvelinsovellusta,
+Verkkopalvelimen tehokkuuteen ja skaalautumiseen vaikuttaa olennaisesti
+sen samanaikaistamismalli. Tässä
+tutkielmassa vertaillaan eri suunnittelumalleja palvelimen toimintojen samanaikaistamiseen.
+
+Samaikaisessa ohjelmassa ohjelman osat ovat näennäisesti samaan
+aikaan suorituksessa, mutta todellisuudessa ne suoritetaan peräkkäin.
+Käyttöjärjestelmä jakaa suoritusaikaa ohjelman eri osille,
+ja vuorottelemalla antaa vaikutelman samanaikaisuudesta.
+
+Rinnakkaisuudella tarkoitetaan tietojenkäsittelytieteessä useiden
+eri operaatioiden suorittamista järjestelmässä samaan aikaan useilla suorittimilla.
+Rinnakkaisuutta voi
+ajatella samanaikasuuden seuraavana asteena. Kun suorittimia
+on useita, käyttöjärjestelmä pystyy aikatauluttamaan toimintoja
+rinnakkain ja näin kaksi ohjelman osaa on todellisesti
+samaan aikaan suorituksessa.
+
+Verkkopalvelimen samanaikaistamismalli on osa palvelinsovellusta,
 joka on mielekästä toteuttaa moduulina tai kirjastona.
 Näin palvelimen sovelluslogiikka voidaan irrottaa rinnakkaisuutta
 käsittelevästä logiikasta ja käyttää uudelleen toisissa projekteissa.
+Tavoitteena on selvittää mikä suunnittelumalli edistää
+parhaiten verkkopalvelinsovelluksen suorituskykyä ja
+kehitystyötä.
 
-% TODO: SEDAN-rooli tutkielmassa
-% TODO: Tutkimuskysymys selkeästi
-% TODO: Kerro lisää kriteereistä
 Vertailussa perehdytään Reactor-malliin\cite{schmidt_reactor:_1995} ja sen jatkokehityksiin
-kuten Proactor-malliin~\cite{pyarali_proactor_1997},
-sekä säiereservimalliin (threadpool-model).
-Vertailun keskeisimmät kriteerit ovat suorituskyky, luotettavuus, ja
+kuten Proactor-malliin~\cite{pyarali_proactor_1997}, säiereservimalliin (threadpool-model)
+ja SEDA-malliin.
+Vertailun keskeisimmät kriteerit ovat suorituskyky, vakaus, ja
 sovelluslogiikan kehittämiseen liittyvät haasteet.
 
+Verkkopalvelinsovelluksen suorituskyky ja skaalautuvuus
+määrittävät palvelun laadun raskaan kuormituksen tilanteissa.
+Poikkeus-ja virhetilanteet vaikuttavat hyvin negatiivisesti
+palvelun laatuun. Jos poikkeustilanne johtaa
+palvelun kaatuamiseen, voivat seuraamukset olla vakavat
+palvelun ylläpitäjän ja asiakkaiden kannalta.
+Palvelimen suunnittelumalli voi vaikuttaa 
+sovelluskohtaisen logiikan kehittämiseen.
+Jos malli tekee kehitystyöstä hyvin, haastavaa
+nousee kehitystyön kustannukset.
+Suunnittelumallin tulisikin edistää
+samanaikaisuutta ja rinnakkaisuutta vaikeuttamatta
+sovelluslogiikan kehitystä suuremmin.
+
+Vertailun perusteella voidaan todeta että,
 % TODO: Kappaleen hurjiin väitteisiin lähde
-Yksinkertaisuudestaan huolimatta tehokkailla asynkronisilla
+yksinkertaisuudestaan huolimatta tehokkailla asynkronisilla
 kutsuilla varustettu Reactor-mallinen verkkopalvelinsovellus
 kykenee vastaamaan suurenkin palvelun tarpeisiin, jos palvelun
 pullonkaula on I/O-operaatiot.
-Proactor-mallilla voidaan antaa kehittäjille edistyneempiä työkaluja
+Proactor-mallilla voidaan tarjota kehittäjille edistyneempiä työkaluja
 asynkronisten operaatioiden hallintaan.
 
 Tarvittaessa järjestelmän voi laajentaa moniprosessimallia noudattavaksi,
@@ -133,12 +162,16 @@ jos tapahtumaohjatun järjestelmän skaalautuvuus ei muuten riitä.
 
 Säiereservimallin on hyvä vaihtoehto, jos palvelimen
 toimintaan liittyy enemmän laskentaa ja sen tehokkuus ei ole I/O-sidonnainen.
-Laskennallisesti raskaaseen palvelimeen voidaan myös soveltaa SEDA-mallia.
+Laskennallisesti raskaaseen palvelimeen voidaan myös soveltaa SEDA-mallia~\cite{welsh_seda_2001}.
+Siinä pyyntöjen käsittely jaetaan eri tasoille ja tasojen käsíttelyyn
+hyödynnetään säiereservejä.
 
-Luvussa 2 kerrotaan taustatietota asiakas-palvelin-mallista ja rinnakkaisuudesta sekä
-esitellään verkkopalvelimien samanaikaistamismalleja. Luvussa 3
-malleja vertaillaan ja analysoidaan. Luvussa 4 on yhteenveto aiheesta.
-\section{Verkkopalvelinsovellus}
+Luvussa~\ref{vps} kerrotaan taustatietota asiakas-palvelin-mallista, palvelinympäristöstä
+ja rinnakkaisuudesta.
+Luvussa~\ref{sec:SM} verkkopalvelimien suunnittelumalleja. Luvussa~\ref{sec:vertailu}
+malleja vertaillaan ja analysoidaan. Luvussa~\ref{sec:yhteenveto} on yhteenveto aiheesta.
+
+\section{Verkkopalvelinsovellus}\label{vps}
 Verkkopalvelinsovellus on osa internetsivuston tai palvelun tarjoavaa
 asiakas-palvelin-mallin toteutusta. 
 Sen tehtävä on vastata Internet-
@@ -155,7 +188,6 @@ suoritetaan samanaikaisesti. Mallien toimintaa havainnollistetaan
 esittämällä esimerkkejä asiakkaan pyynnön käsittelystä mallin
 toteuttavassa palvelimessa.
 
-% TODO: Verkkopalvelinsovellus osiota voi laajentaa
 \subsection{Asiakas-palvelin-malli}
 Asiakas-palvelin-mallissa
 asiakasohjelma tarjoaa käyttäjälle käyttöliittymän sovellukseen. Palvelinohjelma
@@ -235,11 +267,12 @@ voi sitten suorittaa laskentaa tietokannan tiedoilla.
 
 % TODO: irrallinen kappale
 
-HTML-näkymät voivat olla valmiina tiedostojärjestelmässä tai
+HTML-näkymät voivat olla valmiina tiedostojärjestelmässä eli staattisia tai
 palvelin voi täydentää merkkauskielellä kirjoitettuun pohjaan
-tietoja tietokannasta tai muusta sovelluksen tilatiedosta.
+tietoja tietokannasta tai muusta sovelluksen tilatiedosta. 
+Tilatietoa käyttäviä näkymiä kutsutaan dynaamiksiksi sivuiksi.
 
-% TODO:KYSY: Onko HTTP-protokollan esittäminen oleellista?
+% TODO:KYSY: Esitä oleelliset asiat HTTP-protokollasta
 
 \subsection{Palvelinympäristö}
 % TODO: Aseta lähteitä tarvittaessa väitteiden tueksi
@@ -318,25 +351,25 @@ Tiedonsiirtäminen eri laitteiden välillä on verkkopalvelinsovelluksen
 ydintoimintaa.
 Tämän takia verkkopalvelinsovellukselle erityisen tärkeitä resursseja ovat
 I/O-resurssit.
-Verkkopalvelinsovellus suorittaa pääasiassa verkko-ja levy-IO:ta.
+Verkkopalvelinsovellus suorittaa pääasiassa verkko-ja levy-I/O:ta.
 
-Verkko-IO on tomintaa, jossa ohjelma käyttää tietokoneen
+Verkko-I/O on tomintaa, jossa ohjelma käyttää tietokoneen
 verkkosovitinta kommunikoidakseen verkon muiden laitteiden kanssa.
-Verkkopalvelinsovellus käyttää verkko-IO:ta lukiessaan
+Verkkopalvelinsovellus käyttää verkko-I/O:ta lukiessaan
 asikkaan pyyntöjä ja kirjoittaessaan vastauksen asiakkaalle.
 Laitteiston verkkoliikennekapasiteetilla kuvataan maksimimäärää bittejä,
 jonka verkko tai verkkosovitin on kykenee siirtämään laiteteen ja muun
 verkon välillä.
 Verkkopalvelinsovellus voi olla yhteydessä tietokantamoottoriin
-verkonvälityksellä ja suorittaa tietokantakyselyitä verkko-IO:n läpi.
+verkonvälityksellä ja suorittaa tietokantakyselyitä verkko-I/O:n läpi.
 Kun palvelimen kuormitus on suuri sen tulisi pystyä hyödyntämään
 sen verkkoinfrastruuria tehokkaasti korkealla käyttöasteella. Eli
 pyyntöjen vastaanottamisen ja vastauksien lähettämisen käyttäisi
 lähes koko verkkoliikennekapasiteettia.
 
-Levy-IO:lla tarkoitetaan tiedon siirtämistä
+Levy-I/O:lla tarkoitetaan tiedon siirtämistä
 tietokoneen keskusmuistin ja massamuistin välillä.
-Verkkopalvelinsovellus käyttää levy-IO:ta lukiessaan
+Verkkopalvelinsovellus käyttää levy-I/O:ta lukiessaan
 asiakkaan pyyntöihin liittyviä vastaustiedostoja tiedostojärjestelmästä.
 Luettavat tiedostot voivat olla valmiita HTML-tiedostoja tai täytettäviä
 pohjia, jotka täytetään sovelluksen tilatiedon perusteella ennen
@@ -345,14 +378,28 @@ asiakkaalle lähettämistä.
 I/O-operaatiot vievät tietokoneen mittakaavassa paljon
 aikaa. Estävässä I/O-operaatiossa säie tai prosessi,
 joka kutsuu I/O-operaatiota, jää odottamaan I/O:n valmistumista
+tai suorittaa I/O:n itse,
 ennen suorituksen jatkamista. Tämä on suorituskyvyn kannalta huono
 asia, koska suoritin ei tee palvelun kannalta hyödyllistä
-työtä sillä aika, kun säie odottaa IO:n valmistumista.
+työtä sillä aika, kun säie odottaa I/O:n valmistumista.
+Estävät kutsut aiheuttavat vielä suuremman
+suorituskyvyn laskemisen, jos
+I/O-resurssi ei ole vapaa, kun sovellus kutsuu sitä.
+Tässä tilanteessa käyttöjärjestelmä muuttaa sovelluksen
+tilan suorittaa tilasta odottaa tilaan. Sovelluksen suoritus
+siis keskeytyy kokonaan kunnes I/O-laite vapautuu.
 Estävät kutsut ovat kehittäjälle yksikertaisia, sillä
 ne ovat luonteeltaan aivan tavallista peräkkäistä
 koodia.
 
-Tätä ongelmaa voi paikata asynkronisilla I/O-operaatioilla.
+Odottaa tilaan joutumista voi välttää tarkastamalla
+I/O-laitteen vapauden ennen operaation suorittamista.
+Sovellus siis tarkastaa I/O-laitteen tilan, jos
+I/O-laite on vapaa I/O-operaatio suoritetaan. Jos I/O-laite
+ei ole vapaa sovellus voi suorittaa muuta laskentaa tai I/O:ta
+toisella vapaalla laitteella.
+
+Estävien kutsujen ongelmia voi myös korjata asynkronisilla I/O-operaatioilla.
 Käyttöjärjestelmät tarjoavat asynkronisia I/O-operaatioita, joita kutsumalla
 sovellus voi jatkaa suoritustaan sillä aikaa kun käyttöjärjestelmä
 suorittaa tarvittua I/O-operaatiota. Näitä kutsuja käyttämällä voidaan
@@ -373,13 +420,6 @@ laitteiston resursseja. Laitteiston useiden suorittimien
 hyödyntämiseen ainut vaihtoehto on käyttää
 useita prosesseja tai säikeitä ohjelman rakenteessa.
 Silloin ohjelma on rinnakkainen.
-
-% TODO: ehkä seuraavan kappaleen siirto pääotsikon alle tai johdantoon
-
-Rinnakkaisuudella tarkoitetaan tietojenkäsittelytieteessä useiden
-eri operaatioiden suorittamista järjestelmässä samaan aikaan useilla suorittimilla.
-Rinnakkaisuutta voi
-ajatella samanaikasuuden seuraavana asteena.
 
 On täysin ongelmakohtaista kuinka tehokkaasti se voidaan ratkaista rinnakkain.
 Tähän vaikuttaa kuinka suuri osa tehtävästä on olemukseltaan peräkkäistä.
@@ -457,20 +497,78 @@ suoritus tapahtuu käyttöjärjestelmässä tai muussa kehysinfrastruktuurissa.
 Sovelluksen kehittäjälle ei siis ole suoria keinoja vaikuttaa
 niiden suoritusjärjestykseen.
 
+\section{Suunnittelumallit}\label{sec:SM}
+
+Verkkopalvelimen samanaikaisuuden suunnittelumallilla
+jäsennetään palvelimen samanaikaisuuteen ja rinnakkaisuuteen
+liittyvää logiikkaa. Suunnittelumallin tavoitteena on
+erottaa samanaikaisuuteen liittyvä logiikka 
+palvelimen sovelluslogiikasta.
+
+% TODO: HTTP:n selittämisen yhteydessä asiakas yhteys
+
+Perusmalli palvelimen rinnakkaistamiseen oli pitkään
+luoda jokaista käsiteltävää asiakas yhteyttä kohti
+oma prosessi. Moniprosessorilaitteistolla käyttöjärjestelmä
+aikatauluttaa näitä prosesseja rinnakkain ja verkkopalvelinsovelluksen
+suorituskyky oletetatavasti kasvaa. Tätä kutsutaan moniprosessimalliksi
+
+Moniprosessimallin suora kehitys on ollut vaihtaa prosessit säikeiksi.
+Säikeet vähentävät hallinnointiin kuluvaa aikaa, sekä
+voivat kommunikoida joustavammin kuin prosessit.
+
+Tapahtumaohjatussa palvelimessa yhdistetään
+käyttöliittymäohjelmoinnista lähtöisin oleva tapahtumaohjattu malli
+verkkopalvelimeen~\cite{pai_flash:_1999}. Tapahtumaohjattu malli sopii verkkopalvelinsovellukseen,
+sillä sen toiminnan rytmittää pyynnöt, jotka
+kuvautuvat mallissa tapahtumiksi~\cite{schmidt_reactor:_1995}.
+Prosesseihin perustuva asynkroninen AMPED\cite{pai_flash:_1999}
+oli erityisen siirrettävä aikana jona käyttöjärjestelmät
+eivät tukeneet säikeitä tai asynkronisia operaatioita.
+Myöhemmin näiden ominaisuuksien yleistyessä
+huomiota saaneita malleja ovat Reactor~\cite{schmidt_reactor:_1995}
+ja Proactor~\cite{pyarali_proactor_1997}, joissa
+rinnakkaisuus saavutetaan asynkronisilla I/O-operaatiolla
+ja säikeillä. Nämä mallit ovat yleisiä tapahtumaohjattuja malleja, jotka
+vastaavat sovelluksen samanaikaisuuskäytännöstä.
+Näitä voidaan soveltaa myös muuhunkin kuin palvelimiin.
+
+
+Tapahtumaohjattujen palvelinsovelluksien suunnittelun keskiössä
+ovat vasteajan pienentäminen.
+Tämä saavutetaan hyödyntämällä I/O-resursseja mahdollisimman tehokkaasti
+samanaikaisesti välttäen I/O:n odottamista ohjelman suorituksessa~\cite{pai_flash:_1999}.
+Palvelinsovelluksissa
+laitteiston verkkoliikennekapasiteetti on usein rajoittava tekijä ja tämän takia
+sen tehokas hyödyntäminen on kriittistä.
+Käyttämällä asynkronisia operaatioita verkkopalvelinsovellus
+antaa käyttöjärjestelmälle vastuun aikatauluttaa I/O-operaatioita.
+Käyttöjärjestelmä voi hyödyntää verkkoliikennekapasiteettia
+tehokkaasti, jos sillä on jonossa aina seuraava asynkroninen operaatio
+annettavaksi laiteistolle. Laitteisto ei siis jää odottamaan tehtävää
+palvelinsovellukselta, eikä palvelinsovelluksen tarvitse jäädä
+odottamaan resurssia. Käyttöjärjestelmä toimii
+puskurina näiden kahden välillä.
+I/O-resurssien asynkronisella hyödyntämisellä on todettu
+olevan suorituskykyä parantava vaikutus~\cite{hu_applying_1998}.
+
 
 \subsection{Säiereservimalli}
-% TODO: Säiereservi alkukappale on aika kuraa
+Moniprosesimallin toteutuksella pyyntöjä käsitellään
+usealla prosessilla samanaikaisesti tai rinnakkain riippuen laitteistosta.
+Kun ytimentasonsäikeiden tuki käyttöjärjestelmissä yleistyi, mukautettiin
+moniprosessorimalleista monisäikeisiämalleja.
 Monisäikeisiä palvelinmalleja on useita, mutta tässä tutkielmassa keskitytään säiereservimalliin.
-Monisäikeiset mallit ovat käytännössä syrjäyttäneet moniprosessimallin,
-sillä palvelimien käyttöjärjestelmät tukevat säikeitä, ja säikeiden hallinnointiin
-kuluu vähemmän resursseja kuin prosessien ja niiden välinen kommunikointi on sujuvampaa.
-Moniprosessimallia käytetään kuitenkin yhä, kun järjestelmä pitää
-saada skaalautumaan usealle laitteistolle.
+Monisäikeisillä malleilla on suorituskykyetu moniprosessimalleihin sillä säikeiden
+hallinnointiin
+kuluu vähemmän resursseja kuin prosessien ja säikeiden välinen kommunikointi on sujuvampaa.
+Moniprosessimallia käytetään kuitenkin yhä, kun toteutus pitää
+saada skaalautumaan usean laitteen hajautetuille järjestelmille.
 
 Monisäikeisissä palvelinsovelluksissa hyödynnetään laitteiston
 rinnakkaisuutta tehokkaasti suorittamalla pyyntöjä usealla säikeellä rinnakkain.
 Suunnittelun keskeisenä tavoitteena on käsitellä mahdollisimman monta pyyntöä rinnakkain ja
-näin saavuttaa korkea volyymi. Mallin suorituskyky voi kuitenkin
+näin saavuttaa suuri volyymi. Mallin suorituskyky voi kuitenkin
 kärsiä synkronointiin ja säikeiden hallinnointiin kuluvasta
 suoritinajasta~\cite{pyarali_proactor_1997}.
 
@@ -524,48 +622,11 @@ sovelletaan myös verkkopalvelimissa eri tasoilla. Esimerkiksi
 SEDA-mallissa~\cite{welsh_seda_2001}
 yksittäisen pyynnön käsittelyn tasoon sidotaan aina yksi säireservi.
 
-
-
-\subsection{Tapahtumaohjatut palvelimet}
-
-Tapahtumaohjatussa palvelimessa yhdistetään
-käyttöliittymäohjelmoinnista lähtöisin oleva tapahtumaohjattu malli
-verkkopalvelimeen~\cite{pai_flash:_1999}. Tapahtumaohjattu malli sopii verkkopalvelinsovellukseen,
-sillä sen toiminnan rytmittää pyynnöt, jotka
-kuvautuvat mallissa tapahtumiksi~\cite{schmidt_reactor:_1995}.
-Prosesseihin perustuva asynkroninen AMPED\cite{pai_flash:_1999}
-oli erityisen siirrettävä aikana jona käyttöjärjestelmät
-eivät tukeneet säikeitä tai asynkronisia operaatioita.
-Myöhemmin näiden ominaisuuksien yleistyessä
-huomiota saaneita malleja ovat Reactor~\cite{schmidt_reactor:_1995}
-ja Proactor~\cite{pyarali_proactor_1997}, joissa
-rinnakkaisuus saavutetaan asynkronisilla I/O-operaatiolla
-ja säikeillä. Nämä mallit ovat yleisiä tapahtumaohjattuja malleja, jotka
-vastaavat sovelluksen samanaikaisuuskäytännöstä.
-Näitä voidaan soveltaa myös muuhunkin kuin palvelimiin.
-
-
-Tapahtumaohjattujen palvelinsovelluksien suunnittelun keskiössä
-ovat vasteajan pienentäminen.
-Tämä saavutetaan hyödyntämällä I/O-resursseja mahdollisimman tehokkaasti
-samanaikaisesti välttäen I/O:n odottamista ohjelman suorituksessa~\cite{pai_flash:_1999}.
-Palvelinsovelluksissa
-laitteiston verkkoliikennekapasiteetti on usein rajoittava tekijä ja tämän takia
-sen tehokas hyödyntäminen on kriittistä.
-Käyttämällä asynkronisia operaatioita verkkopalvelinsovellus
-antaa käyttöjärjestelmälle vastuun aikatauluttaa I/O-operaatioita.
-Käyttöjärjestelmä voi hyödyntää verkkoliikennekapasiteettia
-tehokkaasti, jos sillä on jonossa aina seuraava asynkroninen operaatio
-annettavaksi laiteistolle. Laitteisto ei siis jää odottamaan tehtävää
-palvelinsovellukselta, eikä palvelinsovelluksen tarvitse jäädä
-odottamaan resurssia. Käyttöjärjestelmä toimii
-puskurina näiden kahden välillä.
-I/O-resurssien asynkronisella hyödyntämisellä on todettu
-olevan suorituskykyä parantava vaikutus~\cite{hu_applying_1998}.
-\subsection{AMPED}
-% TODO: AMPED esittely
-
 \subsection{Reactor}
+
+% TODO: selvennä että reactorin tärkein toiminto on I/O:n "ULKOTAKITUS"
+% TODO: Jos pyynnön käsittely blockkaisi, käsittele toista pyyntöä
+% TODO: selvennä että vastakutsu on yleinen tapahtumaohjatun ohjelmoinnin käsite
 Reactor-malli sopii käyttötapauksiin, joissa pyyntöjä voi saapua
 samanaikaisesti monista lähteistä ja estävästi
 pyyntöjen odottaminen näistä lähteistä olisi tehotonta~\cite{schmidt_reactor:_1995}.
@@ -574,7 +635,7 @@ lähettää ja vastaanottaa rajoitetun kokoisia viestejä
 tarvitsematta estävää I/O:ta.
 Näiden pyyntöjen käsittelyn
 pitäisi tapahtua suhteellisen lyhyessä ajassa~\cite{schmidt_reactor:_1995}.
-Tässä mallissa pyyntöjä ei käsitellä rinnakkain joten muut
+Tässä mallissa pyyntöjä ei käsitellä rinnakkain, joten muut
 pyynnöt odottavat toisen valmistumista.
 Tästä seuraa, että käsittelyajan pituus on kriittinen järjestelmän
 suorituskyvylle.
@@ -616,12 +677,30 @@ Jos tapahtumakäsittelijässä tarvitaan pitkäkestoista laskentaa
 kannattaa sitä varten luoda uusi prosessi tai säie. Tämä
 prosessi tai säie saattaa pyynnön loppuun rinnakkain
 tapahtumasäikeen kanssa~\cite{schmidt_reactor:_1995}.
+
+Reactor-toteutuksissa tapahtumiksi mallinnetaaan I/O-väylien
+valmiutta suorittaa luku-tai kirjoitusoperaatioita~\cite{schmidt_reactor:_1995}.
+Kun I/O-väylä
+vapautuu tapahtumasäie viestii tapahtumakäsittelijälle, että 
+I/O-operaation voi suorittaa. Sovellus siis toisinsanoen
+reagoi I/O-laitteen vapautumiseen ja tästä nimi Reactor juontuu.
+Näin käyttöjärjestelmä ei aseta
+verkkopalvelinsovellusta odottaa tilaan I/O-operaatioiden takia.
+
+
 \subsection{Proactor}
+
 Reactor-malli on osa Proactor-mallia.
 Siinä hyödynnetään käyttöjärjestelmän asynkronisia ominaisuuksia suorittamaan
 operaatiota ennen pyynnön saapumista tapahtumasäikeelle~\cite{pyarali_proactor_1997}.
 Reactor-mallinen osa ohjaa tässä mallissa asynkronisten tapahtumien
 valmistumistapahtumia niitä vastaaville tapahtumankäsittelijöille~\cite{pyarali_proactor_1997}.
+
+Toisin kuin Reactor-mallinen palvelin, joka reagoi I/O-laitteen vapautumiseen,
+Proactor-mallinen palvelin reagoi vasta kun, käyttäjärjestelmä
+on suorittanut I/O:n asynkronisesti sen puolesta. Tästä käytetään nimitystä
+proaktiivinen I/O semantiikka, josta nimi proactor juontuu ~\cite{pyarali_proactor_1997}.
+
 Proactor mallin tavoite on yksinkertaistaa asynkronisten ohjelmien kehitystä.
 Proactor-mallissa voidaan suoraviivaisesti suorittaa toisistaan riippuvaisia
 asynkronisia operaatioita, asettamalla asynkronisten tapahtumien valmistumisille
@@ -635,9 +714,9 @@ pyyntöjen käsittelyä.
 Proactor-mallia suositellaan käytettäväksi, jos sovellus vaatii
 asynkronisten operaatioiden kutsumista ja sovellus tarvitsee ilmoituksen
 asynkronisen operaation valmistumisesta.
-Pyyntöjen käsittely Proactor-mallissa käydään läpi kuvassa \ref{fig:proactor}.
-Kuva \ref{fig:proactor} noudattaa Proactorin~\cite{pyarali_proactor_1997} esittelyyn tehtyä
-kuvaa, jossa Proactor-palvelin käsittelee pyynnön, mutta kuvassa \ref{fig:proactor}
+Pyyntöjen käsittely Proactor-mallissa käydään läpi kuvassa~\ref{fig:proactor}.
+Kuva~\ref{fig:proactor} noudattaa Proactorin~\cite{pyarali_proactor_1997} esittelyyn tehtyä
+kuvaa, jossa Proactor-palvelin käsittelee pyynnön, mutta kuvassa~\ref{fig:proactor}
 korostetaan Proactoriin-sisältyvää Reactor-mallia.
 \begin{figure}
   \caption{Pyynnön käsittely Proactor-mallissa~\cite{pyarali_proactor_1997}}
@@ -669,6 +748,7 @@ kehittämiseen. Mallissa tapahtumasäie kutsuu tapahtumankäsittelijöitä, joll
 pitkäkestoisen laskennan suorittaminen tapahtumankäsittelijässä, johtaisi
 muiden pyyntöjen odotusajan kasvuun. Malliin pitää siis
 lisätä muita mekanismeja laskennan rinnakkaistamiseksi.
+% TODO: lisää proactor-paperissa esitettyjä mekanismeja
 
 Modernissa verkkopalvelinsovelluksessa Proactor-mallin suosioon on
 monta syytä. RESTful-rajapinnan käyttäminen
@@ -686,7 +766,20 @@ Tämänkaltaisella toteutuksella verkkopalvelimen käyttötapaus sopii
 hyvin yhteen Proactor-mallin määrittelyn kanssa tukeutuen
 mallin vahvuuksiin sekä peittäen sen heikkouksia.
 
+\subsection{AMPED}
+
+AMPED on asynkroninen tapahtumaohjattu malli, jossa
+tapahtumasäie suorittaa suurimman osan prosessoinnista. 
+Sen erikoispiirre on, että estävät I/O-kutsut
+siiretään apulaisten vastuulle, jolloin
+ne ei estä tapahtumasäiettä. Apulaiset voivat
+olla joko prosesseja tai ytimentasonsäikeitä.
+Tällä mekaninsmilla muutetaan käyttöjärjestelmän
+estävät pyynnöt tapahtumasäikeen näkökulmasta
+asynkronisiksi.
+
 % TODO: Siirrä kaikkien mallien jälkeen ja lisää suhde säiereserviin
+% TODO: Onko libuv enää oleellista
 Tässä tutkielmassa keskitytään erityisesti
 Proactor-malliin, sillä se on sisäänrakennettu Node.js ohjelmaympäristöön ja
 täten paljon käytetty. Node.js:n Proactor-mallin toteuttamisesta vastaa
@@ -722,7 +815,7 @@ ja jokin säie jakaa työn tasaisesti tapahtumasäikeiden välillä
 on kyseessä SYMPED-malli. Näin Reactor-toteutuksen
 skaalautuvuutta voidaan jälkikäteen parantaa.
 
-\section{Mallien vertailu ja analyysi}
+\section{Mallien vertailu ja analyysi}\label{sec:vertailu}
 Seuraavaksi esitellään arviointikriteerit,
 joilla malleja vertaillaan.
 Vertailu perustuu aiempaan kirjallisuuteen, niissä
@@ -736,8 +829,7 @@ nostamatta sovelluslogiikan kehitystyön haastavuutta
 sietämättömälle tasolle.
 
 \subsection{Arviontikriteerit}
-% TODO: Lyhyt kuvaus arvioinin perusteista johdantoon
-% TODO: Tarkempi kuvaus ja metriikan laatu tähän
+
 Palvelimen roolin kannalta olisi toivottavaa, että
 se pystyisi käsittelemään mahdollisimman paljon pyyntöjä
 ajan yksikössä. Pyyntöjen volyymia voidaan
@@ -748,7 +840,7 @@ luotettavasti eli lopulta kaikki pyynnöt käsitellään ja niihin vastataan.
 
 Yksittäiselle asiakkaalle tärkein suorituskyvyn mittari on se kuinka kauan
 yksittäiseen pyyntöön vastaaminen vie.
-Pyynnön matala viive saa
+Pyynnön pieni viive saa
 palvelun käyttökokemuksen tuntumaan sujuvammalta.
 Viivettä mitataan millisekunteina.
 Pyyntöjen keskimääräinen viive ja käsiteltyjen pyyntöjen
@@ -806,7 +898,7 @@ kun taas säiereservi-toteutus käytti estävää I/O:ta.
 
 Tästä tuloksesta voidaan huomata,
 että suurilla tiedostoilla asynkroniset kutsut
-pitävät I/O-resurssien käyttöasteen hyvin korkeana.
+pitävät I/O-resurssien käyttöasteen hyvin suurena.
 Käyttöjärjestelmä pystyy siis tehokkaasti hallitsemaan
 suurten asynkronisten operaatioiden aikataulutusta
 I/O-laitteilla.
@@ -826,11 +918,13 @@ toteutetut asynkroniset kutsut suoriutuisivat
 vastaavassa kokeessa.
 
 Ivan Voras ja Mario Zagar testasivat~\cite{voras_characteristics_2009},
-verkkopalvelimen rinnakkaistamismalleja mdcached keskusmuistitietokantaan.
+palvelimen rinnakkaistamismalleja mdcached keskusmuistitietokantaan.
 Testissä oli mukana SPED eli reactor-toteutus, SEDA-toteutus ja AMPED-toteutus.
 Keskusmuistitietokannan erikoispiirre on että, siihen ei liity lainkaan levy I/O:ta
 vaan toteutuksen suorituskyky on pääasiassa riippuvainen muistiväylän nopeudesta sekä
-käyttöjärjestelmäkutsujen nopeudesta.
+käyttöjärjestelmäkutsujen nopeudesta. Tämä eroaa tavanomaisesta
+verkkopalvelin sovelluksesta, jossa usein tarvitaan levy-I/O:ta 
+eri tiedostojen lukemiseen.
 
 Toteutuksista mitattiin operaatioiden (transaction) määrä sekunnissa vaihtuvilla tietyillä
 asiakasmäärillä. Kaikki mallit testattiin samalla laitteistolla.
@@ -975,13 +1069,12 @@ viesteihin perustuva sovelluksen kulku on helpommin seurattavissa kuin
 muissa tapahtumaohjatuissa malleissa.
 
 % TODO: Selitä symped tarkemmin
-SYMPED-malli on rakenteeltaan monimutkainen suhteessa muihin malleihin.
-Sen vahvuus kehitystyön näkökulmasta piilee kuitenkin siinä, että
-jos yksiprosessisen Reactor-palvelimen skaalautuvuus ei riitä palvelemaan
+Jos Reactor-palvelimen skaalautuvuus ei riitä palvelemaan
 järjestelmän tarpeita, voidaan järjestelmän sovelluslogiikka
-sovittaa suoraviivaisesti osaksi SYMPED-järjestelmää. Molemmissa malleissa
-sovelluslogiikka ohjelmoidaan tapahtumankäsittelijöihin, ja nämä voidaan siirtää
-suoraan SYMPED-toteutukseen tarpeen vaatiessa.
+sovittaa suoraviivaisesti osaksi SYMPED-järjestelmää. SYMPED-toteutus
+voidaan rakentaa reactor eli SPED toteutuksen ympärille. Tämä
+tekee SYMPED-toteutuksesta mielekkään jatkosuunnitelman kehittäjälle,
+jonka huolet skaalautuvuudesta koskavat pääasiassa palvelun tulevaisuutta.
 
 \subsection{Vakaus}
 Palvelimen vakaudella tarkoitetaan sen kykyä vastustaa hyökkäyksiä ja
@@ -1086,7 +1179,7 @@ SEDA-mallin ja Proactor-mallin välillä, jossa
 tapahtumankäsittelijällä on säiereservi, mutta tapahtumakäsittelijät
 eivät välttämättä muodosta selvää tasohierarkiaa.
 
-\section{Yhteenveto}
+\section{Yhteenveto}\label{sec:yhteenveto}
 
 Verkkopalvelimen voi esittää luontevasti
 tapahtumaohjattuna mallina. Reactor-malli esittää yksinkertaisen
@@ -1105,7 +1198,7 @@ Se esittää sopivat laajennukset Reactor-malliin, joilla
 asynkronisia operaatioita voidaan hallita joustavasti.
 Sillä voidaan suorittaa muista operaatioista riippuvaisia I/O-operaatioita
 samanaikaisesti, ketjuttamalla niitä takaisinkutsuilla.
-Asynkronisilla operaatioilla saavutetaan korkea I/O-resurssien
+Asynkronisilla operaatioilla saavutetaan suuri I/O-resurssien
 käyttöaste.
 
 Jos palvelimen tarkoitus on suorittaa enemmän laskentaa kuin

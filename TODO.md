@@ -1,18 +1,15 @@
-- 114:  TODO: SEDAN-rooli tutkielmassa
-- 115:  TODO: Tutkimuskysymys selkeästi
-- 116:  TODO: Kerro lisää kriteereistä
-- 123:  TODO: Kappaleen hurjiin väitteisiin lähde
-- 158:  TODO: Verkkopalvelinsovellus osiota voi laajentaa
-- 236:  TODO: irrallinen kappale
-- 242:  TODO:KYSY: Onko HTTP-protokollan esittäminen oleellista?
-- 245:  TODO: Aseta lähteitä tarvittaessa väitteiden tueksi
-- 291:Nopea   TODO: selitä, perustele
-- 377:  TODO: ehkä seuraavan kappaleen siirto pääotsikon alle tai johdantoon
-- 462:  TODO: Säiereservi alkukappale on aika kuraa
-- 566:  TODO: AMPED esittely
-- 689:  TODO: Siirrä kaikkien mallien jälkeen ja lisää suhde säiereserviin
-- 739:  TODO: Lyhyt kuvaus arvioinin perusteista johdantoon
-- 740:  TODO: Tarkempi kuvaus ja metriikan laatu tähän
-- 977:  TODO: Selitä symped tarkemmin
-- 1024:  TODO: Lisää lähteitä johtopäätöksiin
-- 1025:  TODO: Erityisesti cluster-dokumentaatio
+- 152:  TODO: Kappaleen hurjiin väitteisiin lähde
+- 268:  TODO: irrallinen kappale
+- 275:  TODO:KYSY: Esitä oleelliset asiat HTTP-protokollasta
+- 278:  TODO: Aseta lähteitä tarvittaessa väitteiden tueksi
+- 324:Nopea   TODO: selitä, perustele
+- 508:  TODO: HTTP:n selittämisen yhteydessä asiakas yhteys
+- 627:  TODO: selvennä että reactorin tärkein toiminto on I/O:n "ULKOTAKITUS"
+- 628:  TODO: Jos pyynnön käsittely blockkaisi, käsittele toista pyyntöä
+- 629:  TODO: selvennä että vastakutsu on yleinen tapahtumaohjatun ohjelmoinnin käsite
+- 751:  TODO: lisää proactor-paperissa esitettyjä mekanismeja
+- 781:  TODO: Siirrä kaikkien mallien jälkeen ja lisää suhde säiereserviin
+- 782:  TODO: Onko libuv enää oleellista
+- 1071:  TODO: Selitä symped tarkemmin
+- 1117:  TODO: Lisää lähteitä johtopäätöksiin
+- 1118:  TODO: Erityisesti cluster-dokumentaatio
