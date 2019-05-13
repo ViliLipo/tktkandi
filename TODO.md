@@ -1,15 +1,8 @@
-- 152:  TODO: Kappaleen hurjiin väitteisiin lähde
-- 268:  TODO: irrallinen kappale
-- 275:  TODO:KYSY: Esitä oleelliset asiat HTTP-protokollasta
-- 278:  TODO: Aseta lähteitä tarvittaessa väitteiden tueksi
-- 324:Nopea   TODO: selitä, perustele
-- 508:  TODO: HTTP:n selittämisen yhteydessä asiakas yhteys
-- 627:  TODO: selvennä että reactorin tärkein toiminto on I/O:n "ULKOTAKITUS"
-- 628:  TODO: Jos pyynnön käsittely blockkaisi, käsittele toista pyyntöä
-- 629:  TODO: selvennä että vastakutsu on yleinen tapahtumaohjatun ohjelmoinnin käsite
-- 751:  TODO: lisää proactor-paperissa esitettyjä mekanismeja
-- 781:  TODO: Siirrä kaikkien mallien jälkeen ja lisää suhde säiereserviin
-- 782:  TODO: Onko libuv enää oleellista
-- 1071:  TODO: Selitä symped tarkemmin
-- 1117:  TODO: Lisää lähteitä johtopäätöksiin
-- 1118:  TODO: Erityisesti cluster-dokumentaatio
+- 154:  TODO: Kappaleen hurjiin väitteisiin lähde
+- 226:  TODO: REST-lähde
+- 275:  TODO: irrallinen kappale
+- 277:  TODO: Esitä oleelliset asiat HTTP-protokollasta
+- 279:  TODO: REST-rajapinta
+- 282:  TODO: Aseta lähteitä tarvittaessa väitteiden tueksi
+- 440:  TODO: mieti tämä kappale uudestaan, sidosta lukkiutumiseen paremmin
+- 1160:  TODO: Lisää lähteitä johtopäätöksiin

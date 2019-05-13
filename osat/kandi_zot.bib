@@ -188,13 +188,14 @@
 }
 
 
-@book{stallings_operating_2018,
+@inbook{stallings_operating_2018,
 	edition = {Ninth edition, Global edition},
 	title = {Operating systems : internals and design principles},
 	shorttitle = {Operating systems},
 	publisher = {Pearson},
 	author = {Stallings, William},
 	year = {2018},
+    pages = "177-331",
 	file = {Operating systems | Helka-kirjastot | Helka:/home/vili/Zotero/storage/2JMW3HRL/helka.html:text/html}
 }
 
@@ -291,4 +292,56 @@
 	url = {http://man7.org/linux/man-pages/man7/epoll.7.html},
 	urldate = {2019-04-27},
 	file = {epoll(7) - Linux manual page:/home/vili/Zotero/storage/UKWBV6TM/epoll.7.html:text/html}
+}
+
+@misc{noauthor_cluster_nodate,
+	title = {Cluster {\textbar} {Node}.js v12.2.0 {Documentation}},
+	url = {https://nodejs.org/api/cluster.html#cluster_cluster},
+	urldate = {2019-05-13},
+	file = {Cluster | Node.js v12.2.0 Documentation:/home/vili/Zotero/storage/D24QMY2S/cluster.html:text/html}
+}
+
+@inproceedings{harji_comparing_2012,
+	address = {Haifa, Israel},
+	title = {Comparing high-performance multi-core web-server architectures},
+	isbn = {978-1-4503-1448-0},
+	url = {http://dl.acm.org/citation.cfm?doid=2367589.2367591},
+	doi = {10.1145/2367589.2367591},
+	abstract = {In this paper, we study how web-server architecture and implementation affect performance when trying to obtain high throughput on a 4-core system servicing static content. We focus on static content as a growing numbers of servers are dedicated to workloads comprised of songs, photos, software, and videos chunked for HTTP downloads. Two representative static-content workloads are used: one serviced entirely from the ﬁle-system cache and the other requires signiﬁcant disk I/O. We focus on 4-core systems as: 1) it is a widely used conﬁgurations in data-centers and cloud services, 2) recent studies show large SMP systems may operate more efﬁciently when subdivided into smaller subsystems, 3) understanding performance with a smaller number of cores is essential before scaling to a larger number of cores, 4) and 4-cores may be sufﬁcient for many web servers. Two high-performance web-servers, with event-driven (µserver) and pipelined (WatPipe) architectures, are developed and tested for a multi-core environment. By carefully implementing and tuning the two web-servers, both achieve performance comparable to running independent copies of the server on each processor (N-copy). The new web-servers achieve high throughput (4,000–6,000 Mbps) with 40,000 to 70,000 connects/second; performance in all cases is better than nginx, lighttpd, and Apache. We conclude that implementation and tuning of web servers is perhaps more important than server architecture. We also ﬁnd it is better to use blocking rather than non-blocking calls to sendﬁle, when the requested ﬁles do not all ﬁt in the ﬁle-system cache.},
+	language = {en},
+	urldate = {2019-05-13},
+	booktitle = {Proceedings of the 5th {Annual} {International} {Systems} and {Storage} {Conference} on - {SYSTOR} '12},
+	publisher = {ACM Press},
+	author = {Harji, Ashif S. and Buhr, Peter A. and Brecht, Tim},
+	year = {2012},
+	pages = {1--12},
+	file = {Harji et al. - 2012 - Comparing high-performance multi-core web-server a.pdf:/home/vili/Zotero/storage/BANCJTRJ/Harji et al. - 2012 - Comparing high-performance multi-core web-server a.pdf:application/pdf}
+}
+
+@misc{leach_hypertext,
+	title = {Hypertext {Transfer} {Protocol} -- {HTTP}/1.1},
+	url = {https://tools.ietf.org/html/rfc2616},
+	language = {en},
+	urldate = {2019-05-13},
+	author = {Leach, Paul J. and Berners-Lee, Tim and Mogul, Jeffrey C. and Masinter, Larry and Fielding, Roy T. and Gettys, James},
+	file = {Snapshot:/home/vili/Zotero/storage/6LWUHJZF/rfc2616.html:text/html}
+}
+
+@article{battle_bridging_2008,
+	series = {Semantic {Web} and {Web} 2.0},
+	title = {Bridging the semantic {Web} and {Web} 2.0 with {Representational} {State} {Transfer} ({REST})},
+	volume = {6},
+	issn = {1570-8268},
+	url = {http://www.sciencedirect.com/science/article/pii/S1570826807000510},
+	doi = {10.1016/j.websem.2007.11.002},
+	abstract = {Semantic Web technologies must integrate with Web 2.0 services for both to leverage each others strengths. We argue that the REST-based design methodologies [R.T. Fielding, R.N. Taylor, Principled design of the modern web architecture, ACM Trans. Internet Technol. (TOIT) 2 (2) (2002) 115–150] of the web present the ideal mechanism through which to align the publication of semantic data with the existing web architecture. We present the design and implementation of two solutions that combine REST-based design and RDF [D. Beckett (Ed.), RDF/XML Syntax Specification (Revised), W3C Recommendation, February 10, 2004] data access: one solution for integrating existing web services and one server-side solution for creating RDF REST services. Both of these solutions enable SPARQL [E. Prud’hommeaux, A. Seaborne (Eds.), SPARQL Query Language for RDF, W3C Working Draft, March 26, 2007] to be a unifying data access layer for aligning the Semantic Web and Web 2.0.},
+	number = {1},
+	urldate = {2019-05-13},
+	journal = {Journal of Web Semantics},
+	author = {Battle, Robert and Benson, Edward},
+	month = feb,
+	year = {2008},
+	keywords = {Representational State Transfer, Semantic Web, Web 2.0, Web Services},
+	pages = {61--69},
+	file = {ScienceDirect Snapshot:/home/vili/Zotero/storage/P5ZGC8BY/S1570826807000510.html:text/html}
 }
