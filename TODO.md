@@ -1,8 +1,7 @@
-- 154:  TODO: Kappaleen hurjiin väitteisiin lähde
-- 226:  TODO: REST-lähde
-- 275:  TODO: irrallinen kappale
+- 153:  TODO: Kappaleen hurjiin väitteisiin lähde
+- 229:  TODO: REST-lähde
 - 277:  TODO: Esitä oleelliset asiat HTTP-protokollasta
-- 279:  TODO: REST-rajapinta
-- 282:  TODO: Aseta lähteitä tarvittaessa väitteiden tueksi
-- 440:  TODO: mieti tämä kappale uudestaan, sidosta lukkiutumiseen paremmin
-- 1160:  TODO: Lisää lähteitä johtopäätöksiin
+- 308:  TODO: REST-rajapinta
+- 311:  TODO: Aseta lähteitä tarvittaessa väitteiden tueksi
+- 470:  TODO: mieti tämä kappale uudestaan, sidosta lukkiutumiseen paremmin
+- 1190:  TODO: Lisää lähteitä johtopäätöksiin

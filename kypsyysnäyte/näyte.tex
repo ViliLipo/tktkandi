@@ -1,0 +1,167 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[finnish]{babel}
+
+\author{ Vili Lipo}
+\title{Kypsyysnäyte: Rinnakkaisuuden pääperiaatteet}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\newpage
+% Muodosta   aloitus, käsittely ja lopetus.
+
+% Samanaikaisuus vs. rinnakkaisuus
+Termejä samanaikaisuus ja rinnakkaisuus käytetään
+usein samoissa asiayhteyksissä vaikka niillä on erilliset merkitykset.
+Samanaikaisuus kuvaa järjestelmän ominaisuutta pitää useita
+tehtäviä suorituksessa samaan aikaan. Niitä ei kuitenkaan välttämättä
+suoriteta samalla hetkellä vaan yhtä prosessia suoritetaan kerrallaan
+ja käyttöjärjestelmä jakaa suoritinaikaa siten, että useiden
+tehtävien samanaikainen suoritus on ihmisnäkökulmasta mahdollista.
+Rinnakkaisuudessa useat konekäskyt ovat
+oikeasti suorituksessa täsmälleen samalla hetkellä.
+Tämä vaatii rinnakkaisuutta laitteistotasolla.
+
+% Motivaatio
+Rinnakkaisuutta tarvitaan ohjelmistojärjestelmien
+suorituskyvyn kehittämisessä, sillä yhtä suoritinta
+ei voi nopeuttaa rajatta. Rinnakkaisuuden hallinnalla
+työtä voi jakaa useille suorittimelle ja näin 
+parantaa ohjelmistojärjestelmän suorituskykyä.
+
+% Rakenne
+Rinnakkaisuuden voi mieltää ilmentyvän tietokonejärjestelmässä
+kolmella tasolla. Nämä tasot ovat laitteisto-, käyttöjärjestelmä,-ja sovellustasot.
+Tasojen rinnakkaisuus rakentuu päällekkäin, sillä käyttöjärjestelmän rinnakkaisuus
+on riippuvainen laitteiston rinnakkaisuudesta ja taas sovelluksien rinnakkaisuus
+on riippuvainen käyttöjärjestelmän rinnakkaisuudesta.
+
+% Laitteiston kuvaus
+Jotta rinnakkaisuutta voisi olla järjestelmän sovelluksissa tai käyttöjärjestelmässä,
+pitää laitteistossa olla useita suorittimia.
+Myös usean laitteen hajautetuissa järjestelmissä kyseessä on rinnakkaisuus.
+Rinnakkaista laskentaa suoritetaan usealla laitteella
+esimerkiksi palvelinkeskuksissa.
+
+
+Nykyisissä suoritinarkkitehtuureissa on yhdellä sirulla useita suorittimia,
+joita kutsutaan ytimiksi. Jokaisessa ytimessä on kaksi laitteistotason
+säiettä.
+Laitteistotason säikeet on toteutettu kahdentamalla suorittimen rekisterit.
+Kun toinen ytimen säikeistä päätyy tilanteeseen, jossa vaaditaan muistinouto, suoritin
+vaihtaa käyttöön toisen säikeen rekisterit ja jatkaa sen suorittamista 
+muistinoudon rinnalla. Hidas muistinouto-operaatio 
+ei siten tuhlaa kellopulsseja.
+Laitteisto esittää käyttöjärjestelmälle jokaisen säikeen loogisena suorittimena.
+% Käyttöjärjestelmän kuvaus
+
+Käyttöjärjestelmäytimen tehtävä on olla rajapinta laitteiston ja muiden ohjelmistojen 
+välillä, siksi on luonnollista, että laitteiston rinnakkaisuudesta vastaaminen
+on käyttöjärjestelmän vastuulla. Käyttöjärjestelmät ovat jo hyvin pitkään
+aikatauluttaneet useita prosesseja ja ydintason säikeitä samanaikaisesti myös 
+järjestelmissä, joissa on 
+vain yksi suoritin.
+Ydintason säikeet ovat käyttöjärjestelmän konsepti, jotka
+eivät suorasti liity laitteiston säikeisiin. 
+Jatkossa
+säikeillä tarkoitetaan ohjelmistotason konseptia 
+eikä laitteistotason toteutusta.
+
+%prosessi ja säikeet
+
+Prosessit ja säikeet kuvastavat ajossa olevia
+ohjelmia järjestelmässä. Ne sisältävät tietorakenteet,
+joita käyttöjärjestelmä tarvitsee ohjelmien hallinnointiin.
+Prosessissa on yksi tai useampia säikeitä.
+Säikeet voivat olla käyttäjätason tai ydintason. Käyttäjätason 
+säikeiden aikataulutuksesta vastaa käyttäjätason ohjelmisto
+esimerkiksi säiekirjasto tai muu kehysympäristö.
+Käyttöjärjestelmä ei ole tietoinen käyttäjätason säikeistä
+ja täten ei voi aikatauluttaa niitä, joten saman
+prosessin käyttäjätason säikeet eivät voi olla
+suorituksessa rinnakkain. 
+Käyttöjärjestelmä jakaa ydintason säikeille suoritinaikaa samaan
+tapaan kuin prosesseille.
+
+% Vuoronanto
+
+Yksiprosessorijärjestelmissä käyttöjärjestelmä vuorottelee
+ajossa olevien säikeiden välillä. Prosessit
+ovat siis näennäisesti samanaikaisesti suorituksessa,
+mutta todellisuudessa käyttöjärjestelmä suorittaa
+niitä vuorotellen peräkkäin. Yksittäisen prosessin
+suoritus voi keskeytyä missä vain kohtaa suoritusta, 
+ja käyttöjärjestelmä vaihtaa toisen prosessin suoritukseen.
+Prosessi palaa suoritukseen vuorollaan.
+Prosessien suoritusjärjestys ei ole ennalta määrätty, mutta
+käyttöjärjestelmän aikataulutusalgoritmiin liittyy yleensä
+tapoja priorisoida tiettyjä prosesseja.
+
+% Rinnakkaisuus käytännössä
+
+Kun laitteistossa on useita suorittimia, käyttöjärjestelmä
+voi aikatauluttaa prosesseja rinnakkain niillä kaikilla.
+Käyttöjärjestelmässä tapahtuu yhä
+vuorottelua prosessien välillä, sillä normaalissa
+järjestelmässä suoritettavien prosessien määrä on suurempi
+kuin laitteiston suorittimien määrä.
+
+Sovelluksissa voidaan hyödyntää käyttöjärjestelmän
+rinnakkaisuutta suorittamalla sovelluksen osia useilla säikeillä.
+Rinnakkaisuuden jäsentämiseen sovellustasolla on useita
+menetelmiä. 
+Hajota ja hallitse tyylisiä 
+algoritmeja voi jakaa usean säikeen
+toteutettavaksi.
+Suosittu suunnittelumalli on myös
+tuottaja-kuluttaja malli, jossa tuottaja täyttää
+puskuriin käsittelemäänsä tietoa, josta kuluttaja siirtää
+sen jatkokäsittelyyn.
+
+% Ongelmien kuvaus
+
+Samanaikaisuuden ja rinnakkaisuuden hallintaan liittyy kekseisiä ongelmia
+kuten kilpailutilanteet ja lukkiutumiset.
+Kilpailutilanteet ovat ohjelmointivirheitä,
+joissa oletetaan, että eri säikellä tehtävä työ
+valmistuu tietyssä järjestyksessä. Säikeiden
+aikataulutus on kuitenkin käyttöjärjestelmän vastuulla
+ja täten muiden ohjelmien näkökulmasta lähes mielivaltainen.
+Ohjelman tulisikin tuottaa oikea tulos
+kaikissa mahdollisissa suoritusjärjestyksissä.
+Kilpailutilanne voi olla vaikeaa löytää
+ohjelmasta, koska virheen syntyminen
+on riippuvainen käyttöjärjestelmästä eikä käytetystä syötteestä.
+
+% Lukkiutuminen
+
+Lukkiutuminen on järjestelmän resurssien varaamiseen liittyvä
+ongelma. Lukkiutumisessa kaksi tai useampia prosesseja
+tarvitsee samoja resursseja. Jos resurssien varausjärjestys
+on epäonninen yksi prosessi on varannut resurssin mitä toinen
+tarvitsee, mutta toinen on varannut jo resurssin mitä ensimmäinen
+tarvitsee seuraavaksi. Nyt molemmat pitävät yhtä resurssia ja odottavat toista.
+Tästä seuraa lukkiutuminen.
+Lukkiutumisen purkaminen vaatii käyttöjärjestelmän väliintuloa,
+koska prosesseilla ei ole valtaa puuttua toisen prosessin resursseihin.
+
+Rinnakkaisuus ohjelmistojärjestelmässä on 
+toivottavaa suorituskyvyn kannalta.
+Se kuitenkin esittää useita haasteita
+ja sudenkuoppia kehitystyölle.
+Koska yksittäisen suorittimen nopeuden kasvattaminen
+on ollut jo vuosia
+haastavaa, suoritinvalmistajat keskittyvät mahduttamaan
+yhä enemmän ytimiä yhdelle sirulle. Rinnakkaisuuden merkitys
+ohjelmistojen suorituskyvylle tulee tämän perusteella kasvamaan entisestään.
+Sovelluskehittäjän onneksi ohjelmointikielisässä ja kehysympäristöissä
+on jo pitkään kehitetty rinnakkaiseen ohjelmointiin
+sopivia tietorakenteita ja toimintoja.
+
+
+
+
+
+\end{document}

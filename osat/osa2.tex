@@ -131,7 +131,7 @@ parhaiten verkkopalvelinsovelluksen suorituskykyä ja
 kehitystyötä.
 
 Vertailussa perehdytään säiereservimalliin (threadpool-model), Reactor-malliin\cite{schmidt_reactor:_1995} ja sen jatkokehityksiin
-kuten Proactor-malliin~\cite{pyarali_proactor_1997}, SYMPED-malliin ja SEDA-malliin.
+kuten Proactor-malliin~\cite{pyarali_proactor_1997}, SYMPED-malliin ja SEDA-malliin~\cite{welsh_seda_2001}.
 Vertailun keskeisimmät kriteerit ovat suorituskyky, vakaus, ja
 sovelluslogiikan kehittämiseen liittyvät haasteet.
 
@@ -283,7 +283,7 @@ Yhteydellä tarkoitetaan virtuaalista yhteyttä, jonka asiakas ja palvelin muodo
 HTTP-versioon 1.1 lisättiin pysyvät yhteydet, joilla pyritään
 vähentämään yhteyden muodostamiseen tarvittavia pyyntöjä ja paketteja verkon
 käytössä. Versiosta 1.1 eteenpäin pysyvät yhteydet ovat protokollan
-ominaiskäytöstä. Yhteys suljetaan, jos asiakas tai palvelin lähettää
+oletuskäytöstä. Yhteys suljetaan, jos asiakas tai palvelin lähettää
 viestin, jossa on käsky sulkea yhteys~\cite{leach_hypertext}.
 
 HTTP-protokolla on pyyntö-vastaus protokolla~\cite{leach_hypertext}. Asiakas lähettää
@@ -370,6 +370,7 @@ kaksi saman prosessin käyttäjätason säiettä ei voi olla suorituksessa
 samaan aikaan. Täten ytimentason säikeet palvelevat rinnakkaisuuden tavoitteita
 paremmin, mutta niiden hallinnointi on raskaampaa~\cite{stallings_operating_2018}.
 
+
 Prosessit ja säikeet voivat olla suorituksessa samanaikaisesti
 yhden suorittimen laitteella. Käyttöjärjestelmä suorittaa useaa prosessia
 samaan aikaan, ja jakaa yhden suorittimen suoritinaikaa prosessien välillä.
@@ -411,7 +412,7 @@ asiakkaalle lähettämistä.
 
 I/O-operaatiot vievät tietokoneen mittakaavassa paljon
 aikaa. Estävässä I/O-operaatiossa säie tai prosessi,
-joka kutsuu I/O-operaatiota, suorittaa I/O:n itse.
+joka kutsuu I/O-operaatiota suorittaa I/O:n itse.
 Estävät kutsut aiheuttavat suorituskykyongelmia, jos
 I/O-resurssi ei ole vapaa, kun sovellus kutsuu sitä.
 Tässä tilanteessa käyttöjärjestelmä muuttaa sovelluksen
@@ -475,7 +476,7 @@ suorittaminen rinnakkain, eikä yhden pyynnön laskennan
 suorittaminen rinnakkain.
 Käsiteltävät pyynnöt eivät yleisesti ole riippuvaisia
 toisistaan ja niiden täyttäminen pääsääntöisesti vaatii I/O-laitteiden odottamista.
-Näistä syistä verkkopalvelinsovellus on hyvä kohde rinnakkaistamiselle.
+Näistä syistä verkkopalvelinsovellus on hyvä kohde soveltaa rinnakkaisuutta.
 
 Yleisesti verkkopalvelimet toteutetaan käyttäen valmista sovelluskehystä eli kirjastoa,
 joka toteuttaa palvelinmallin, ja tarjoaa rajapinnat sovelluslogiikan
@@ -515,7 +516,8 @@ Lukkiutumisen riski asettaa siis vakavan uhan moniprosessisen tai monisäikeisen
 järjestelmän vakaudelle.
 
 Kilpailutilanteissa sovelluksen tuloksen oikeellisuus riippuu sen,
-säikeiden suoritusjärjestyksestä. Kilpailutilanteet johtavat siis
+säikeiden suoritusjärjestyksestä~\cite{stallings_operating_2018}.
+Kilpailutilanteet johtavat siis
 virheellisiin tuloksiin, jos käyttöjärjestelmä aikatauluttaa
 säikeitä sellaisessa järjestyksessä jota kehittäjä ei ennakoinut.
 Kilpailutilanne ohjelmassa on ohjelmointivirhe.
@@ -535,7 +537,7 @@ liittyvää logiikkaa. Suunnittelumallin tavoitteena on
 erottaa samanaikaisuuteen liittyvä logiikka 
 palvelimen sovelluslogiikasta.
 
-Perusmalli palvelimen rinnakkaistamiseen oli pitkään
+Perusmalli palvelimen samanaikaistamiseen oli pitkään
 luoda jokaista käsiteltävää asiakas yhteyttä kohti
 oma prosessi. Moniprosessorilaitteistolla käyttöjärjestelmä
 aikatauluttaa näitä prosesseja rinnakkain ja verkkopalvelinsovelluksen
@@ -559,7 +561,7 @@ ja Proactor~\cite{pyarali_proactor_1997}, joissa
 rinnakkaisuus saavutetaan asynkronisilla I/O-operaatiolla
 ja säikeillä. Nämä mallit ovat yleisiä tapahtumaohjattuja malleja, jotka
 vastaavat sovelluksen samanaikaisuuskäytännöstä.
-Näitä voidaan soveltaa myös muuhunkin kuin palvelimiin.
+Niitä voidaan soveltaa myös muuhunkin kuin palvelimiin.
 
 
 Tapahtumaohjattujen palvelinsovelluksien suunnittelun keskiössä
@@ -587,10 +589,10 @@ käyttöjärjestelmä ilmoittaa jollakin mekanismilla sovellukselle tapahtumasta
 
 
 \subsection{Säiereservimalli}
-Moniprosesimallin toteutuksella pyyntöjä käsitellään
+Moniprosessimallin toteutuksella pyyntöjä käsitellään
 usealla prosessilla samanaikaisesti tai rinnakkain riippuen laitteistosta.
 Kun ytimentasonsäikeiden tuki käyttöjärjestelmissä yleistyi, mukautettiin
-moniprosessorimalleista monisäikeisiä malleja.
+moniprosessimalleista monisäikeisiä malleja.
 Monisäikeisiä palvelinmalleja on useita, mutta tässä tutkielmassa keskitytään säiereservimalliin.
 Monisäikeisillä malleilla on suorituskykyetu moniprosessimalleihin sillä säikeiden
 hallinnointiin
@@ -709,11 +711,11 @@ kannattaa sitä varten luoda uusi prosessi tai säie. Tämä
 prosessi tai säie saattaa pyynnön loppuun rinnakkain
 tapahtumasäikeen kanssa~\cite{schmidt_reactor:_1995}.
 
-Reactor-toteutuksissa tapahtumiksi mallinnetaaan I/O-väylien
+Reactor-toteutuksissa tapahtumiksi mallinnetaan I/O-väylien
 valmiutta suorittaa luku-tai kirjoitusoperaatioita~\cite{schmidt_reactor:_1995}.
 Kun I/O-väylä
 vapautuu tapahtumasäie viestii tapahtumakäsittelijälle, että 
-I/O-operaation voi suorittaa. Sovellus siis toisinsanoen
+I/O-operaation voi suorittaa. Sovellus siis toisin sanoen
 reagoi I/O-laitteen vapautumiseen ja tästä nimi Reactor juontuu.
 Näin käyttöjärjestelmä ei aseta
 verkkopalvelinsovellusta odottaa tilaan I/O-operaatioiden takia.
@@ -738,7 +740,7 @@ Proactor-mallissa voidaan suoraviivaisesti suorittaa toisistaan riippuvaisia
 asynkronisia operaatioita, asettamalla asynkronisten tapahtumien valmistumisille
 käsittelijöitä. Eli toisin sanottuna asynkronisten operaatioiden vastakutsuista
 voi kutsua uusia vastakutsuja. Näin voidaan rakentaa riippuvaisten
-asynkronisten operaatioden ketjuja. Ketjuilla voidaan
+asynkronisten operaatioiden ketjuja. Ketjuilla voidaan
 rakentaa peräkkäistä I/O-logiikkaa estämättä muiden asiakkaiden
 pyyntöjen käsittelyä.
 
@@ -777,10 +779,10 @@ Proactorin muutokset rajoittuvat asynkronisten-operaatioden ohjaamisen
 kehittämiseen. Mallissa tapahtumasäie kutsuu tapahtumankäsittelijöitä, jolloin
 pitkäkestoisen laskennan suorittaminen tapahtumankäsittelijässä, johtaisi
 muiden pyyntöjen odotusajan kasvuun. Malliin pitää siis
-lisätä muita mekanismeja laskennan rinnakkaistamiseksi.
+lisätä muita mekanismeja laskennan suorittamiseen rinnakkain.
 
 Moniprosessorikoneella Proactor-mallin toteutukseen
-ehdotetaan~\cite{pyarali_proactor_1997}, että valmistusmistapahtumia suorittaisi säiereservi-totetutus
+ehdotetaan~\cite{pyarali_proactor_1997}, että valmistumistapahtumia suorittaisi säiereservitoteutus
 eikä Reactor-toteutus. Näin laitteiston useita suorittimia voisi hyödyntää.
 
 Modernissa verkkopalvelinsovelluksessa Proactor-mallin suosioon on
@@ -829,7 +831,7 @@ Proactor-malli tekee.
 
 Toinen Reactor mallin laajennus on SEDA (Staged Event Driven Architecture)~\cite{welsh_seda_2001}.
 Siinä pyyntöjen käsittely jaetaan tasoiksi, joissa kaikissa on
-käytännössä reactor-mallin toteuttava rakenne. Jokaisella tasolla
+käytännössä Reactor-mallin toteuttava rakenne. Jokaisella tasolla
 on oma tapahtumajono sekä tapahtumakäsittelijä, joka ohjaa työtä
 apusäikeille. Tasoilla ei ole tapahtumasäiettä, sillä
 jokaisella tasolla on vain yksi tapahtumakäsittelijä.
