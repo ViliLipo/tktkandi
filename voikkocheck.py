@@ -58,13 +58,15 @@ def analyzeWords( words):
     v.terminate()
     return errors
 
-def cliOutput(errorDictionaries, printSuggestions=True, onlywithSuggestions=False):
+def cliOutput(errorDictionaries, printSuggestions=True, onlywithSuggestions=False, onlyWords=False):
     print("---------\n------\n---")
     print("Found " + str(len(errorDictionaries)) + " errors.")
     for word in errorDictionaries:
         if onlywithSuggestions and len(word["suggestions"]) == 0:
             continue
-        if(printSuggestions):
+        if(onlyWords):
+            print(str(word['value']))
+        elif(printSuggestions):
             print(str(word["linenumber"]) + " error: " + word["value"] + " suggestions: " + str(word["suggestions"]))
         else:
             print(str(word["linenumber"]) + " error: " + word["value"])
@@ -81,6 +83,7 @@ if __name__ == "__main__":
         exit(0)
     misspellings = analyzeWords(readWords(filename))
     printSugs = "-s" in sys.argv
-    onlySugs = "-o"  in sys.argv
-    cliOutput(misspellings, printSuggestions=printSugs, onlywithSuggestions=onlySugs)
+    onlySugs = "-o" in sys.argv
+    onlyWords = "-l" in sys.argv
+    cliOutput(misspellings, printSuggestions=printSugs, onlywithSuggestions=onlySugs, onlyWords=onlyWords)
 

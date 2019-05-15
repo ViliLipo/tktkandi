@@ -33,9 +33,9 @@ parantaa ohjelmistojärjestelmän suorituskykyä.
 
 % Rakenne
 Rinnakkaisuuden voi mieltää ilmentyvän tietokonejärjestelmässä
-kolmella tasolla. Nämä tasot ovat laitteisto-, käyttöjärjestelmä,-ja sovellustasot.
-Tasojen rinnakkaisuus rakentuu päällekkäin, sillä käyttöjärjestelmän rinnakkaisuus
-on riippuvainen laitteiston rinnakkaisuudesta ja taas sovelluksien rinnakkaisuus
+kolmella tasolla. Nämä tasot ovat laitteisto-, käyttöjärjestelmä,-ja sovellustaso.
+Tasojen rinnakkaisuus rakentuu kerroksittain, sillä käyttöjärjestelmän rinnakkaisuus
+on riippuvainen laitteiston rinnakkaisuudesta ja sovelluksien rinnakkaisuus
 on riippuvainen käyttöjärjestelmän rinnakkaisuudesta.
 
 % Laitteiston kuvaus
@@ -57,7 +57,7 @@ ei siten tuhlaa kellopulsseja.
 Laitteisto esittää käyttöjärjestelmälle jokaisen säikeen loogisena suorittimena.
 % Käyttöjärjestelmän kuvaus
 
-Käyttöjärjestelmäytimen tehtävä on olla rajapinta laitteiston ja muiden ohjelmistojen 
+Käyttöjärjestelmäytimen tehtävä on olla rajapinta laitteiston ja ohjelmistojen 
 välillä, siksi on luonnollista, että laitteiston rinnakkaisuudesta vastaaminen
 on käyttöjärjestelmän vastuulla. Käyttöjärjestelmät ovat jo hyvin pitkään
 aikatauluttaneet useita prosesseja ja ydintason säikeitä samanaikaisesti myös 
@@ -115,9 +115,10 @@ menetelmiä.
 Hajota ja hallitse tyylisiä 
 algoritmeja voi jakaa usean säikeen
 toteutettavaksi.
-Suosittu suunnittelumalli on myös
-tuottaja-kuluttaja malli, jossa tuottaja täyttää
-puskuriin käsittelemäänsä tietoa, josta kuluttaja siirtää
+Tuottaja-kuluttaja malli on myös
+suosittu suunnittelumalli.
+Siinä tuottajasäie täyttää
+puskuriin käsittelemäänsä tietoa, josta kuluttajasäie siirtää
 sen jatkokäsittelyyn.
 
 % Ongelmien kuvaus
@@ -143,7 +144,10 @@ tarvitsee samoja resursseja. Jos resurssien varausjärjestys
 on epäonninen yksi prosessi on varannut resurssin mitä toinen
 tarvitsee, mutta toinen on varannut jo resurssin mitä ensimmäinen
 tarvitsee seuraavaksi. Nyt molemmat pitävät yhtä resurssia ja odottavat toista.
-Tästä seuraa lukkiutuminen.
+Tästä seuraa lukkiutuminen. Kun resurssien ja 
+säikeiden määrä järjestelmässä on suuri, 
+lukkiutumisten estäminen ja havaitseminen
+on haastavaa.
 Lukkiutumisen purkaminen vaatii käyttöjärjestelmän väliintuloa,
 koska prosesseilla ei ole valtaa puuttua toisen prosessin resursseihin.
 
@@ -156,8 +160,8 @@ on ollut jo vuosia
 haastavaa, suoritinvalmistajat keskittyvät mahduttamaan
 yhä enemmän ytimiä yhdelle sirulle. Rinnakkaisuuden merkitys
 ohjelmistojen suorituskyvylle tulee tämän perusteella kasvamaan entisestään.
-Sovelluskehittäjän onneksi ohjelmointikielisässä ja kehysympäristöissä
-on jo pitkään kehitetty rinnakkaiseen ohjelmointiin
+Sovelluskehittäjän onneksi ohjelmointikielissä ja kehysympäristöissä
+on jo pitkään kehitetty turvalliseen rinnakkaiseen ohjelmointiin
 sopivia tietorakenteita ja toimintoja.
 
 

@@ -4,4 +4,4 @@
 - 308:  TODO: REST-rajapinta
 - 311:  TODO: Aseta lähteitä tarvittaessa väitteiden tueksi
 - 470:  TODO: mieti tämä kappale uudestaan, sidosta lukkiutumiseen paremmin
-- 1190:  TODO: Lisää lähteitä johtopäätöksiin
+- 1191:  TODO: Lisää lähteitä johtopäätöksiin
