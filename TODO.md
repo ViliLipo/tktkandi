@@ -1,7 +1,2 @@
-- 153:  TODO: Kappaleen hurjiin väitteisiin lähde
-- 229:  TODO: REST-lähde
-- 277:  TODO: Esitä oleelliset asiat HTTP-protokollasta
-- 308:  TODO: REST-rajapinta
-- 311:  TODO: Aseta lähteitä tarvittaessa väitteiden tueksi
-- 470:  TODO: mieti tämä kappale uudestaan, sidosta lukkiutumiseen paremmin
-- 1191:  TODO: Lisää lähteitä johtopäätöksiin
+- 1314:  TODO: Kysy proactor paperista, konferenssista, mutta julkaistu teknisenä raporttina??
+- 1316: TODO: Hu_applying - en löydä sivunumeroita

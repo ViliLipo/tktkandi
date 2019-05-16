@@ -33,34 +33,20 @@
 	annote = {Tietoturva kohtainen, mutta lähteet arvokkaat myös minulle.},
 	file = {ACM Full Text PDF:/home/vili/Zotero/storage/DX3958A8/Davis et al. - 2017 - The Case of the Poisoned Event Handler Weaknesses.pdf:application/pdf}
 }
-
-@inproceedings{pai_flash:_1999,
-	title = {Flash: {An} {Efficient} and {Portable} {Web} {Server}},
-	abstract = {This paper presents the design of a new Web server architecture called the asymmetric multi-process eventdriven (AMPED) architecture, and evaluates the performance of an implementation of this architecture, the Flash Web server. The Flash Web server combines the high performance of single-process event-driven servers on cached workloads with the performance of multiprocess and multi-threaded servers on disk-bound workloads. Furthermore, the Flash Web server is easily portable since it achieves these results using facilities available in all modern operating systems.},
-	language = {en},
-	booktitle = {Usenix Annual Technical conference 1999},
-	author = {Pai, Vivek S and Druschel, Peter and Zwaenepoel, Willy},
-	year = {1999},
-	file = {Pai et al. - Flash An Efficient and Portable Web Server.pdf:/home/vililipo/Zotero/storage/HPGGC7AP/Pai et al. - Flash An Efficient and Portable Web Server.pdf:application/pdf}
-}
-@inproceedings{madsen_static_2015,
-	address = {New York, NY, USA},
-	series = {{OOPSLA} 2015},
-	title = {Static {Analysis} of {Event}-driven {Node}.{Js} {JavaScript} {Applications}},
-	isbn = {978-1-4503-3689-5},
-	url = {http://doi.acm.org/10.1145/2814270.2814272},
-	doi = {10.1145/2814270.2814272},
-	abstract = {Many JavaScript programs are written in an event-driven style. In particular, in server-side Node.js applications, operations involving sockets, streams, and files are typically performed in an asynchronous manner, where the execution of listeners is triggered by events. Several types of programming errors are specific to such event-based programs (e.g., unhandled events, and listeners that are registered too late). We present the event-based call graph, a program representation that can be used to detect bugs related to event handling. We have designed and implemented three analyses for constructing event-based call graphs. Our results show that these analyses are capable of detecting problems reported on StackOverflow. Moreover, we show that the number of false positives reported by the analysis on a suite of small Node.js applications is manageable.},
-	urldate = {2019-02-21},
-	booktitle = {Proceedings of the 2015 {ACM} {SIGPLAN} {International} {Conference} on {Object}-{Oriented} {Programming}, {Systems}, {Languages}, and {Applications}},
-	publisher = {ACM},
-	author = {Madsen, Magnus and Tip, Frank and Lhoták, Ondřej},
-	year = {2015},
-	note = {event-place: Pittsburgh, PA, USA},
-	keywords = {event-based systems, JavaScript, static analysis},
-	pages = {505--519},
-	file = {ACM Full Text PDF:/home/vili/Zotero/storage/JFUW953C/Madsen et al. - 2015 - Static Analysis of Event-driven Node.Js JavaScript.pdf:application/pdf}
-}
+@inproceedings{pai_flash_1999,
+ author = {Pai, Vivek S. and Druschel, Peter and Zwaenepoel, Willy},
+ title = {Flash: An Efficient and Portable Web Server},
+ booktitle = {Proceedings of the Annual Conference on USENIX Annual Technical Conference},
+ series = {ATEC '99},
+ year = {1999},
+ location = {Monterey, California},
+ pages = {15--15},
+ numpages = {1},
+ url = {http://dl.acm.org/citation.cfm?id=1268708.1268723},
+ acmid = {1268723},
+ publisher = {USENIX Association},
+ address = {Berkeley, CA, USA},
+} 
 
 @article{praphamontripong_analytical_2007,
 	title = {An {Analytical} {Approach} to {Performance} {Analysis} of an {Asynchronous} {Web} {Server}},
@@ -99,7 +85,7 @@
 @inproceedings{hu_applying_1998,
 	title = {Applying {The} {Proactor} {Pattern} {To} {High}-{Performance} {Web} {Servers}},
 	abstract = {Modern operating systems provide multiple concurrency mechanisms to develop high-performance Web servers. Synchronous multi-threading is a popular mechanism for developing Web servers that must perform multiple operations simultaneously to meet their performance requirements. In addition, an increasing number of operating systems support asynchronous mechanisms that provide the benefits of concurrency, while alleviating much of the performance overhead of synchronous multi-threading. This paper provides two contributions to the study of high-performance Web servers. First, it examines how synchronous and asynchronous event dispatching mechanisms impact the design and performance of JAWS, which is our high-performance Web server framework. The results reveal significant performance improvements when a proactive concurrency model is used to combine lightweight concurrency with asynchronous event dispatching. In general, however, the complexity of the proactive concurrency model makes it ...},
-	booktitle = {In {Proceedings} of the 10th {International} {Conference} on {Parallel} and {Distributed} {Computing} and {Systems}},
+	booktitle = {{Proceedings} of the 10th {International} {Conference} on {Parallel} and {Distributed} {Computing} and {Systems}},
 	author = {Hu, James and Pyarali, Irfan and Schmidt, Douglas C.},
 	year = {1998},
 	file = {Citeseer - Full Text PDF:/home/vililipo/Zotero/storage/59DS4828/Hu et al. - 1998 - Applying The Proactor Pattern To High-Performance .pdf:application/pdf;Citeseer - Snapshot:/home/vililipo/Zotero/storage/LJS9NUTX/summary.html:text/html}
@@ -125,35 +111,46 @@
 }
 
 @article{sinha_client-server_1992,
-	title = {Client-server computing},
-	volume = {35},
-	issn = {00010782},
-	url = {http://portal.acm.org/citation.cfm?doid=129902.129908},
-	doi = {10.1145/129902.129908},
-	language = {en},
-	number = {7},
-	urldate = {2019-03-28},
-	journal = {Communications of the ACM},
-	author = {Sinha, Alok},
-	month = jul,
-	year = {1992},
-	pages = {77--98},
-	file = {Sinha - 1992 - Client-server computing.pdf:/home/vililipo/Zotero/storage/F3PT88VM/Sinha - 1992 - Client-server computing.pdf:application/pdf}
+ author = {Sinha, Alok},
+ title = {Client-server Computing},
+ journal = {Commun. ACM},
+ issue_date = {July 1992},
+ volume = {35},
+ number = {7},
+ month = jul,
+ year = {1992},
+ issn = {0001-0782},
+ pages = {77--98},
+ numpages = {22},
+ url = {http://doi.acm.org/10.1145/129902.129908},
+ doi = {10.1145/129902.129908},
+ acmid = {129908},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {client-server computing},
 }
 
+@incollection{schmidt_reactor:_1995,
+ author = {Schmidt, Douglas C.},
+ chapter = {Reactor: An Object Behavioral Pattern for Concurrent Event Demultiplexing and Event Handler Dispatching},
+ title = {Pattern Languages of Program Design},
+ editor = {Coplien, James O. and Schmidt, Douglas C.},
+ year = {1995},
+ isbn = {0-201-60734-4},
+ pages = {529--545},
+ numpages = {17},
+ url = {http://dl.acm.org/citation.cfm?id=218662.218705},
+ acmid = {218705},
+ publisher = {ACM Press/Addison-Wesley Publishing Co.},
+ address = {New York, NY, USA},
+} 
 
-@article{schmidt_reactor:_1995,
-	title = {Reactor: {An} {Object} {Behavioral} {Pattern} for {Concurrent} {Event} {Demultiplexing} and {Dispatching}},
-	shorttitle = {Reactor},
-	abstract = {Factory design patterns [9]), and advanced operating system mechanisms (such as explicit dynamic linking and multi-threading [10]).  9 Sample Code  The following code illustrates an example of the Reactor object behavioral pattern. The example implements a portion of the logging server described in Section 2. This example also illustrates the use of an object creational pattern called the Accepter (described in [7]). The Accepter pattern decouples the act of establishing a connection from the service(s) provided once a connection is established. This pattern is useful for simplifying the development of connection-oriented network services (such as file transfer, remote login, distributed logging, and video-on-demand). The Accepter pattern enables the application-specific portion of a service to be modified independently of the mechanism used to establish the connection.  The code shown below implements the ClientAccepter class. This class performs the steps necessary to accept connecti...},
-	author = {Schmidt, Douglas C.},
-	year = {1995},
-	file = {Citeseer - Full Text PDF:/home/vililipo/Zotero/storage/QRI64KF2/Schmidt - 1995 - Reactor An Object Behavioral Pattern for Concurre.pdf:application/pdf;Citeseer - Snapshot:/home/vililipo/Zotero/storage/7PD2GE5V/summary.html:text/html}
-}
+
 
 @misc{libuv_design_2019,
 	title = {Design overview — libuv documentation},
 	url = {http://docs.libuv.org/en/v1.x/design.html},
+  howpublished = {\url{http://docs.libuv.org/en/v1.x/design.html}},
 	urldate = {2019-03-28},
 	author = {libuv},
 	file = {Design overview — libuv documentation:/home/vililipo/Zotero/storage/5J8RL67K/design.html:text/html}
@@ -176,15 +173,6 @@
 	year = {2000},
 	pages = {42--55},
 	file = {Ling et al. - 2000 - Analysis of optimal thread pool size.pdf:/home/vililipo/Zotero/storage/HYG48C4U/Ling et al. - 2000 - Analysis of optimal thread pool size.pdf:application/pdf}
-}
-
-
-@inproceedings{pyarali_proactor_1997,
-	title = {Proactor - {An} {Object} {Behavioral} {Pattern} for {Demultiplexing} and {Dispatching} {Handlers} for {Asynchronous} {Events}},
-	abstract = {Modern operating systems provide multiple mechanisms for developing concurrent applications. Synchronous multithreading is a popular mechanism for developing applications that perform multiple operations simultaneously. However, threads often have high performance overhead and require deep knowledge of synchronization patterns and principles. Therefore, an increasing number of operating systems support asynchronous mechanisms that provide the benefits of concurrency while alleviating much of the overhead and complexity of multi-threading. The Proactor pattern presented in this paper describes how to structure applications and systems that effectively utilize asynchronous mechanisms supported by operating systems. When an application invokes an asynchronous operation, the OS performs the operation on behalf of the application. This allows the application to have multiple operations running simultaneously without requiring the application to have a corresponding number of threads. Theref...},
-	author = {Pyarali, Irfan and Harrison, Tim and Schmidt, Douglas C. and Jordan, Thomas D.},
-	year = {1997},
-	file = {Citeseer - Full Text PDF:/home/vili/Zotero/storage/ZF99HDCK/Pyarali et al. - 1997 - Proactor - An Object Behavioral Pattern for Demult.pdf:application/pdf;Citeseer - Snapshot:/home/vili/Zotero/storage/L9E3VUN8/summary.html:text/html}
 }
 
 
@@ -286,18 +274,21 @@
 
 
 
-@manual{man_epoll,
+@misc{man_epoll,
 	title = {epoll(7) - {Linux} manual page},
     author = { Free Software Foundation },
-	url = {http://man7.org/linux/man-pages/man7/epoll.7.html},
-	urldate = {2019-04-27},
+	url = {http://man7.org/linux/man-pages/man7/epoll.7.html}, 
+	note = { Luettu: 27.04.2019 },
+  howpublished = {\url{http://man7.org/linux/man-pages/man7/epoll.7.html}},
 	file = {epoll(7) - Linux manual page:/home/vili/Zotero/storage/UKWBV6TM/epoll.7.html:text/html}
 }
 
 @misc{noauthor_cluster_nodate,
 	title = {Cluster {\textbar} {Node}.js v12.2.0 {Documentation}},
-	url = {https://nodejs.org/api/cluster.html#cluster_cluster},
+	url = {https://nodejs.org/api/cluster.html}, 
+	howpublished = {\url{https://nodejs.org/api/cluster.html}},
 	urldate = {2019-05-13},
+  note = {Luettu: 13.5.2019},
 	file = {Cluster | Node.js v12.2.0 Documentation:/home/vili/Zotero/storage/D24QMY2S/cluster.html:text/html}
 }
 
@@ -321,8 +312,10 @@
 @misc{leach_hypertext,
 	title = {Hypertext {Transfer} {Protocol} -- {HTTP}/1.1},
 	url = {https://tools.ietf.org/html/rfc2616},
+  howpublished = {\url{https://tools.ietf.org/html/rfc2616}},
 	language = {en},
 	urldate = {2019-05-13},
+  note = {Luettu: 13.5.2019},
 	author = {Leach, Paul J. and Berners-Lee, Tim and Mogul, Jeffrey C. and Masinter, Larry and Fielding, Roy T. and Gettys, James},
 	file = {Snapshot:/home/vili/Zotero/storage/6LWUHJZF/rfc2616.html:text/html}
 }
@@ -344,4 +337,15 @@
 	keywords = {Representational State Transfer, Semantic Web, Web 2.0, Web Services},
 	pages = {61--69},
 	file = {ScienceDirect Snapshot:/home/vili/Zotero/storage/P5ZGC8BY/S1570826807000510.html:text/html}
+}
+
+@techreport{pyarali_proactor_1997,
+	title = {An {Object} {Behavioral} {Pattern} for {Demultiplexing} and {Dispatching} {Handlers} for {Asynchronous} {Events}},
+	abstract = {Modern operating systems provide multiple mechanisms for developing concurrent applications. Synchronous multithreading is a popular mechanism for developing applications that perform multiple operations simultaneously. However, threads often have high performance overhead and require deep knowledge of synchronization patterns and principles. Therefore, an increasing number of operating systems support asynchronous mechanisms that provide the beneﬁts of concurrency while alleviating much of the overhead and complexity of multi-threading.},
+  institution = {Deparment of Computer Science Washington University St. Louis},
+	language = {en},
+	author = {Pyarali, Irfan and Harrison, Tim and Schmidt, Douglas C and Jordan, Thomas D},
+	month = sep,
+	year = {1997},
+	file = {Pyarali et al. - An Object Behavioral Pattern for Demultiplexing an.pdf:/home/vililipo/Zotero/storage/IDWQA3GY/Pyarali et al. - An Object Behavioral Pattern for Demultiplexing an.pdf:application/pdf}
 }
