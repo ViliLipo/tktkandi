@@ -1,2 +1,2 @@
-- 1314:  TODO: Kysy proactor paperista, konferenssista, mutta julkaistu teknisenä raporttina??
-- 1316: TODO: Hu_applying - en löydä sivunumeroita
+- 893:  TODO: Lisää esimerkkejä mallien esittelyyn
+- 909:  TODO: Kriteereille lähteet
