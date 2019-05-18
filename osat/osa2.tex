@@ -1,4 +1,4 @@
-\documentclass[finnish]{tktltiki2}
+\documentclass[finnish]{tktltiki2}% {{{
 
 % --- General packages ---
 
@@ -17,9 +17,9 @@
 %
 % these should be modified according to your language
 
-% babelbib for non-english bibliography using bibtex
+% babelbib for non-english bibliography using bibtef
 \usepackage[fixlanguage]{babelbib}
-\selectbiblanguage{finnish}
+\selectbiblanguage{finnish}%{{{
 
 % add bibliography to the table of contents
 \usepackage[nottoc]{tocbibind}
@@ -47,7 +47,6 @@
 %
 % The following commands define the information used to generate title and
 % abstract pages. The following entries should be always specified:
-
 \title{Samanaikaisuus verkkopalvelinsovelluksessa}
 \author{Vili Lipo}
 \date{\today}
@@ -89,7 +88,7 @@ $\rightarrow$ Software system structures $\rightarrow$ Distributed systems organ
 % \faculty{Matemaattis-luonnontieteellinen}
 % \department{Tietojenkäsittelytieteen laitos}
 % \subject{Tietojenkäsittelytiede}
-%
+% }}}
 \begin{document}
 \frontmatter      % roman page numbering for front matter
 
@@ -112,8 +111,9 @@ tehtäviä, sen
 kriittisimmät resurssit ovat I/O-resurssit.
 
 Verkkopalvelimen tehokkuuteen ja skaalautumiseen vaikuttaa olennaisesti
-sen samanaikaistamismalli. Tässä
+sen suunnittelumalli. Tässä
 tutkielmassa vertaillaan eri suunnittelumalleja palvelimen toimintojen samanaikaistamiseen.
+Kirjallisuudessa suunnittelumallista käytetään myös nimeä palvelinarkkitehtuuri.
 
 Samanaikaisessa ohjelmassa ohjelman osat ovat näennäisesti samaan
 aikaan suorituksessa, mutta todellisuudessa ne suoritetaan peräkkäin.
@@ -127,7 +127,7 @@ on useita, käyttöjärjestelmä pystyy aikatauluttamaan toimintoja
 rinnakkain ja näin kaksi ohjelman osaa on todellisesti
 samalla hetkellä suorituksessa.
 
-Verkkopalvelimen samanaikaistamismalli on osa palvelinsovellusta,
+Verkkopalvelimen suunnittelumalli on osa palvelinsovellusta,
 joka on mielekästä toteuttaa moduulina tai kirjastona.
 Näin palvelimen sovelluslogiikka voidaan irrottaa rinnakkaisuutta
 käsittelevästä logiikasta. Yleispätevät
@@ -182,6 +182,9 @@ Luvussa~\ref{sec:SM} verkkopalvelimien suunnittelumalleja. Luvussa~\ref{sec:vert
 malleja vertaillaan ja analysoidaan. Luvussa~\ref{sec:yhteenveto} on yhteenveto aiheesta.
 
 \section{Verkkopalvelinsovellus}\label{vps}
+
+Tässä luvussa kerrataan
+asiakas-palvelin-malli, palvelinympäristö ja rinnakkaisuuden keskeiset käsitteet.
 Verkkopalvelinsovellus on osa internetsivuston tai palvelun tarjoavaa
 asiakas-palvelin-mallin toteutusta. 
 Sen tehtävä on vastata Internet-
@@ -189,18 +192,26 @@ sivuston tai palvelun toteuttamiseen
 liittyviin pyyntöihin eli lähettämään tietyn HTTP-pyynnön
 perusteella oikea HTML-tiedosto~\cite{Berners-Lee_1994}
 , tekstimuotoinen datatiedosto, tai kuvatiedosto.
+Asiakas-palvelin-mallin jälkeen esitetään
+HTTP-protokollan perustoiminta ja REST-rajapinnan yleiset periaatteet.
 
-Tässä luvussa kerrataan
-asiakas-palvelin-malli, palvelinympäristö ja rinnakkaisuuden keskeiset käsitteet.
-Malleista tutkitaan erityisesti miten I/O-operaatioita
-suoritetaan samanaikaisesti. Mallien toimintaa havainnollistetaan
-esittämällä esimerkkejä asiakkaan pyynnön käsittelystä mallin
-toteuttavassa palvelimessa.
 
-Yleisesti verkkopalvelimet toteutetaan käyttäen valmista sovelluskehystä eli kirjastoa,
-joka toteuttaa palvelinmallin ja tarjoaa rajapinnat sovelluslogiikan
-kehittämistä varten. Tähän sovelluskehykseen on hyvä sijoittaa
-palvelimen samanaikaisuuteen liittyvä logiikka.
+Verkkopalvelinsovelluksen suorituskyvyn kannalta
+on tärkeää hyödyntää laitteston resurssit mahdollisimman hyvin.
+Käyttöjärjestelmä toimii ympäristössä rajapintana
+laitteistolle ja vaikuttaa suuresti resurssien
+käyttämiseen. Laitteiston useiden
+suorittimien hyödyntämiseen sovelluksessa tarvitaan useita
+prosesseja tai säikeitä, jolloin käyttöjärjestelmä
+pystyy aikatauluttamaan niitä kaikilla suorittimilla.
+
+Samanaikaisuuteen ja rinnakkaisuuteen liittyy
+ohjelmointiongelmia, joiden kertaaminen
+auttaa hahmottamaan paremmin tutkielmassa
+esitettäviä malleja. Ongelmista
+oleellisimpia on kilpailutilanteet ja lukkiutuminen.
+Luvun kolmannessa osassa
+keskitytään näihin ongelmiin.
 
 \subsection{Asiakas-palvelin-malli}
 Asiakas-palvelin-mallissa
@@ -234,14 +245,14 @@ siis vastaa selaimen pyyntöön lähettämällä kokonaisen HTML-tiedoston.
 HTML-näkymät voivat olla valmiina tiedostojärjestelmässä eli staattisia tai
 palvelin voi täydentää merkkauskielellä kirjoitettuun pohjaan
 tietoja tietokannasta tai muusta sovelluksen tilatiedosta. 
-Tilatietoa käyttäviä näkymiä kutsutaan dynaamisiksi sivuiksi.
+Tilatietoa käyttäviä näkymiä kutsutaan dynaamisiksi sivuiksi~\cite{pai_flash_1999}.
 
 Nykyisten selaimien JavaScript suoritustuen ansiosta yhä
 monimutkaisempia asiakasohjelmia voidaan toteuttaa
 selaimella saavutettavilla verkkosovelluksina.
 Nykyään palvelimen ja asiakkaan
 välisessä tiedonvälityksessä on muodikasta käyttää REST-rajapintaa, jossa
-yksittäisen dataresurssin saavuttaminen on helppoa.
+yksittäisen dataresurssin saavuttaminen on helppoa~\cite{battle_bridging_2008}.
 Asiakasohjelma pyytää vain haluamansa resurssit, ja ne saatuaan piirtää
 niiden pohjalta
 itsenäisesti käyttöliittymän näkymän.
@@ -274,7 +285,7 @@ löytää haavoittuvuus sen rajapinnasta. Näin mahdollisuuksia
 toteuttaa hyökkäys on huomattavasti vähemmän kuin sovelluksella, jota
 suoritetaan hyökkääjien omalla laitteistolla.
 
-Palvelin vastaa myös tunnistautumisesta sekä käyttöoikeuksien hallinnasta.
+Palvelin vastaa myös tunnistautumisesta sekä käyttöoikeuksien hallinnasta~\cite{pai_flash_1999}.
 Monen palvelun toteuttamisen kannalta on kriittistä, että
 tiedon käyttöoikeuksia voidaan rajata käyttäjän tunnistautumisen perusteella.
 
@@ -375,10 +386,10 @@ samaan aikaan~\cite{stallings_operating_2018}.
 
 % TODO: I/O-lähteet
 Tiedonsiirtäminen eri laitteiden välillä on verkkopalvelinsovelluksen
-ydintoimintaa.
+ydintoimintaa~\cite{pai_flash_1999}.
 Tämän takia verkkopalvelinsovellukselle erityisen tärkeitä resursseja ovat
 I/O-resurssit.
-Verkkopalvelinsovellus suorittaa pääasiassa verkko-ja levy-I/O:ta.
+Verkkopalvelinsovellus suorittaa pääasiassa verkko-ja levy-I/O:ta~\cite{pai_flash_1999}.
 Käyttöjärjestelmä vastaa I/O-operaatioiden toteuttamisesta,
 jotta I/O:n käyttäminen sovelluksissa on samanlaista
 riippumatta laitteistosta.
@@ -386,7 +397,8 @@ riippumatta laitteistosta.
 Verkko-I/O on toimintaa, jossa ohjelma käyttää tietokoneen
 verkkosovitinta kommunikoidakseen verkon muiden laitteiden kanssa.
 Verkkopalvelinsovellus käyttää verkko-I/O:ta lukiessaan
-asiakkaan pyyntöjä ja kirjoittaessaan vastauksen asiakkaalle.
+asiakkaan pyyntöjä ja kirjoittaessaan HTTP-otsakkeen ja
+vastauksen asiakkaalle~\cite{pai_flash_1999}.
 Laitteiston verkkoliikennekapasiteetilla kuvataan maksimimäärää bittejä,
 jonka verkko tai verkkosovitin on kykenee siirtämään laitteen ja muun
 verkon välillä.
@@ -400,34 +412,37 @@ lähes koko verkkoliikennekapasiteettia.
 Levy-I/O:lla tarkoitetaan tiedon siirtämistä
 tietokoneen keskusmuistin ja massamuistin välillä.
 Verkkopalvelinsovellus käyttää levy-I/O:ta lukiessaan
-asiakkaan pyyntöihin liittyviä vastaustiedostoja tiedostojärjestelmästä.
+asiakkaan pyyntöihin liittyviä tiedostoja tiedostojärjestelmästä~\cite{pai_flash_1999}.
 Luettavat tiedostot voivat olla valmiita HTML-tiedostoja tai täytettäviä
 pohjia, jotka täytetään sovelluksen tilatiedon perusteella ennen
 asiakkaalle lähettämistä.
 
 I/O-operaatiot vievät tietokoneen mittakaavassa paljon
-aikaa. Estävässä I/O-operaatiossa säie tai prosessi,
+aikaa~\cite{pai_flash_1999}. Estävässä I/O-operaatiossa säie tai prosessi,
 joka kutsuu I/O-operaatiota suorittaa I/O:n itse.
 Estävät kutsut aiheuttavat suorituskykyongelmia, jos
 I/O-resurssi ei ole vapaa, kun sovellus kutsuu sitä.
 Tässä tilanteessa käyttöjärjestelmä muuttaa sovelluksen
-tilan suorittaa tilasta odottaa tilaan. Sovelluksen suoritus
-siis keskeytyy kokonaan kunnes I/O-laite vapautuu.
+tilan suorittaa tilasta odottaa tilaan~\cite{stallings_operating_2018}.
+Sovelluksen suoritus
+siis keskeytyy kokonaan, kunnes I/O-laite vapautuu ja käyttöjärjestelmä
+herättää sovelluksen.
 Estävät kutsut ovat kuitenkin kehittäjälle yksikertaisia, sillä
 ne ovat luonteeltaan aivan tavallista peräkkäistä
 koodia.
 
 Odottaa tilaan joutumista voi välttää tarkastamalla
-I/O-laitteen vapauden ennen operaation suorittamista.
-Sovellus siis tarkastaa I/O-laitteen tilan, jos
-I/O-laite on vapaa I/O-operaatio suoritetaan. Jos I/O-laite
-ei ole vapaa sovellus voi suorittaa muuta laskentaa tai I/O:ta
+I/O-laitteen vapauden ennen operaation suorittamista~\cite{schmidt_reactor:_1995}.
+Jos
+I/O-laite on vapaa, I/O-operaatio suoritetaan. Jos I/O-laite
+ei ole vapaa, sovellus voi suorittaa muuta laskentaa tai I/O:ta
 toisella vapaalla laitteella.
 
 Estävien kutsujen ongelmia voi myös korjata asynkronisilla I/O-operaatioilla.
 Käyttöjärjestelmät tarjoavat asynkronisia I/O-operaatioita, joita kutsumalla
 sovellus voi jatkaa suoritustaan sillä aikaa, kun käyttöjärjestelmä
-suorittaa tarvittua I/O-operaatiota. Näitä kutsuja käyttämällä voidaan
+suorittaa tarvittua I/O-operaatiota~\cite{schmidt_reactor:_1995}.
+Näitä kutsuja käyttämällä voidaan
 lisätä sovelluksen samanaikasuutta lisäämättä säikeitä
 tai prosesseja ohjelman rakenteeseen.
 
@@ -551,6 +566,13 @@ liittyvää logiikkaa. Suunnittelumallin tavoitteena~\cite{hu_applying_1998} on
 erottaa samanaikaisuuteen liittyvä logiikka 
 palvelimen sovelluslogiikasta.
 
+
+Malleista tutkitaan erityisesti miten I/O-operaatioita
+suoritetaan samanaikaisesti. Mallien toimintaa havainnollistetaan
+esittämällä esimerkkejä asiakkaan pyynnön käsittelystä mallin
+toteuttavassa palvelimessa.
+
+
 Perusmalli palvelimen samanaikaistamiseen oli pitkään
 luoda jokaista käsiteltävää asiakasyhteyttä kohti
 oma prosessi. Moniprosessorilaitteistolla käyttöjärjestelmä
@@ -579,7 +601,7 @@ Niitä voidaan soveltaa myös muuhunkin kuin palvelimiin.
 
 
 Tapahtumaohjattujen palvelinsovelluksien suunnittelun keskiössä
-ovat vasteajan pienentäminen.
+ovat viiveen pienentäminen.
 Tämä saavutetaan hyödyntämällä I/O-resursseja mahdollisimman tehokkaasti
 samanaikaisesti välttäen I/O:n odottamista ohjelman suorituksessa~\cite{pai_flash_1999}.
 Palvelinsovelluksissa
